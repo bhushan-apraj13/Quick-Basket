@@ -10,6 +10,14 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+			brandOrange: "#FF8C42",
+        brandGreen: "#007F5F",
+        accentYellow: "#FFD166",
+        backgroundLight: "#F9F9F9",
+        textPrimary: "#2B2D42",
+        textSecondary: "#6D6D6D",
+        success: "#4CAF50",
+        error: "#D72638",
 			orange: "var(--button)",
 			hoverOrange: "var(--hoverButtonColor)",
   			background: 'hsl(var(--background))',

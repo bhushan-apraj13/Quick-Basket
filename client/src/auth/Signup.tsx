@@ -1,27 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Loader2, LockKeyhole, Mail } from "lucide-react";
+import { Loader2, LockKeyhole, Mail, Phone, User2 } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 
-type LoginInputState = {
+type SignupInputState = {
+    fullname: string;
     email: string;
     password: string;
+    contact: string;
 };
 
-const Login = () => {
-        const [input, setInput] = useState <LoginInputState>({
+const Signup = () => {
+    const [input, setInput] = useState<SignupInputState>({
+        fullname: "",
         email: "",
         password: "",
+        contact: "",
     });
-    const changeEventHandler = (e:ChangeEvent<HTMLInputElement>) => {
+    const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setInput({ ...input, [name]: value });
     };
-    const loginSubmitHandler = (e:FormEvent) => {
-       e.preventDefault();
-       console.log(input);
+    const loginSubmitHandler = (e: FormEvent) => {
+        e.preventDefault();
+        console.log(input);
     };
     const loading = false
 
@@ -33,6 +37,34 @@ const Login = () => {
                 <div className="mb-4">
                     <h1 className="font-bold text-2xl text-textPrimary">QuickBasket</h1>
                 </div>
+                {/* Full name Input */}
+                <div className="mb-4">
+                    <div className="relative">
+                        <Input
+                            type="text"
+                            name="fullname"
+                            placeholder="Enter your full name"
+                            value={input.fullname}
+                            onChange={changeEventHandler}
+                            className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
+                        />
+                        <User2 className="absolute inset-y-2 left-2 text-textSecondary pointer-events-none" />
+                    </div>
+                </div>
+                {/* Contact Input */}
+                <div className="mb-4">
+                    <div className="relative">
+                        <Input
+                            type="text"
+                            name="contact"
+                            placeholder="Enter your contact number"
+                            value={input.contact}
+                            onChange={changeEventHandler}
+                            className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
+                        />
+                        <Phone className="absolute inset-y-2 left-2 text-textSecondary pointer-events-none" />
+                    </div>
+                </div>
 
                 {/* Email Input */}
                 <div className="mb-4">
@@ -41,7 +73,7 @@ const Login = () => {
                             type="email"
                             name="email"
                             placeholder="Enter your email"
-                            value = {input.email}
+                            value={input.email}
                             onChange={changeEventHandler}
                             className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
                         />
@@ -56,7 +88,7 @@ const Login = () => {
                             type="password"
                             name="password"
                             placeholder="Enter your password"
-                            value = {input.password}
+                            value={input.password}
                             onChange={changeEventHandler}
                             className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
                         />
@@ -70,19 +102,19 @@ const Login = () => {
                         loading ? <Button disabled className="w-full bg-brandOrange text-white py-2 rounded-md hover:bg-opacity-90 transition border-transparent focus-visible:outline-noner-transparent">
                             <Loader2 className="animate-spin h-4 w-4" /> Please wait...
                         </Button> : (
-                            <Button type="submit" className="w-full bg-brandOrange text-white py-2 rounded-md hover:bg-opacity-90 transition border-transparent focus-visible:outline-noner-transparent">Login</Button>
+                            <Button type="submit" className="w-full bg-brandOrange text-white py-2 rounded-md hover:bg-opacity-90 transition border-transparent focus-visible:outline-noner-transparent">Signup</Button>
                         )
                     }
 
                 </div>
                 <Separator />
                 {/* Additional Links (Forgot Password, Sign Up) */}
-                <p className="m-2">Dont have an account?{" "}
+                <p className="m-2">Already have an account?{" "}
                     <Link
-                        to="/signup"
+                        to="/login"
                         className="text-brandGreen text-sm no-underline hover:no-underline hover:text-brandGreen"
                     >
-                        Sign Up
+                        Login
                     </Link>
                 </p>
             </form>
@@ -90,4 +122,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Signup;
