@@ -1,16 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { SignupInputState, userSignupSchema } from "@/schema/userSchema";
 import { Loader2, LockKeyhole, Mail, Phone, User2 } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
 
-type SignupInputState = {
-    fullname: string;
-    email: string;
-    password: string;
-    contact: string;
-};
+// type SignupInputState = {
+//     fullname: string;
+//     email: string;
+//     password: string;
+//     contact: string;
+// };
 
 const Signup = () => {
     const [input, setInput] = useState<SignupInputState>({
@@ -19,12 +20,21 @@ const Signup = () => {
         password: "",
         contact: "",
     });
+    const [errors, setErrors] = useState<Partial<SignupInputState>>({});
     const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setInput({ ...input, [name]: value });
     };
     const loginSubmitHandler = (e: FormEvent) => {
         e.preventDefault();
+        // form validation check start
+        const formData = userSignupSchema.safeParse(input);
+        if (!formData.success) {
+            const fieldErrors = formData.error.formErrors.fieldErrors;
+            setErrors(fieldErrors as Partial<SignupInputState>);
+            return;
+        }
+        // login API Implementation
         console.log(input);
     };
     const loading = false
@@ -33,7 +43,7 @@ const Signup = () => {
 
         <div className="flex items-center justify-center min-h-screen">
 
-            <form onSubmit={loginSubmitHandler} className="md:p-8 w-full max-w-md rounded-lg md:border border-backgroundLight mx-4 bg-white shadow-md">
+            <form onSubmit={loginSubmitHandler} className="md:p-8 w-full max-w-md  rounded-lg md:border border-gray-200 mx-4 ">
                 <div className="mb-4">
                     <h1 className="font-bold text-2xl text-textPrimary">QuickBasket</h1>
                 </div>
@@ -49,6 +59,9 @@ const Signup = () => {
                             className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
                         />
                         <User2 className="absolute inset-y-2 left-2 text-textSecondary pointer-events-none" />
+                         {
+                            errors && <span className="text-xs text-error">{errors.fullname}</span>
+                         }
                     </div>
                 </div>
                 {/* Contact Input */}
@@ -63,6 +76,9 @@ const Signup = () => {
                             className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
                         />
                         <Phone className="absolute inset-y-2 left-2 text-textSecondary pointer-events-none" />
+                        {
+                            errors && <span className="text-xs text-error">{errors.contact}</span>
+                         }
                     </div>
                 </div>
 
@@ -78,6 +94,9 @@ const Signup = () => {
                             className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
                         />
                         <Mail className="absolute inset-y-2 left-2 text-textSecondary pointer-events-none" />
+                        {
+                            errors && <span className="text-xs text-error">{errors.email}</span>
+                         }
                     </div>
                 </div>
 
@@ -93,6 +112,9 @@ const Signup = () => {
                             className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
                         />
                         <LockKeyhole className="absolute inset-y-2 left-2 text-textSecondary pointer-events-none" />
+                        {
+                            errors && <span className="text-xs text-error">{errors.password}</span>
+                         }
                     </div>
                 </div>
 
