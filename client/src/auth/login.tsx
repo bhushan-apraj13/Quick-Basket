@@ -12,26 +12,26 @@ import { Link } from "react-router-dom";
 // };
 
 const Login = () => {
-        const [input, setInput] = useState <LoginInputState>({
+    const [input, setInput] = useState<LoginInputState>({
         email: "",
         password: "",
     });
     const [errors, setErrors] = useState<Partial<LoginInputState>>({});
-    const changeEventHandler = (e:ChangeEvent<HTMLInputElement>) => {
+    const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setInput({ ...input, [name]: value });
     };
-    const loginSubmitHandler = (e:FormEvent) => {
-       e.preventDefault();
-       // form validation check start
-               const formData = userLoginSchema.safeParse(input);
-               if (!formData.success) {
-                   const fieldErrors = formData.error.formErrors.fieldErrors;
-                   setErrors(fieldErrors as Partial<LoginInputState>);
-                   return;
-               }
-               // login API Implementation
-       console.log(input);
+    const loginSubmitHandler = (e: FormEvent) => {
+        e.preventDefault();
+        // form validation check start
+        const formData = userLoginSchema.safeParse(input);
+        if (!formData.success) {
+            const fieldErrors = formData.error.formErrors.fieldErrors;
+            setErrors(fieldErrors as Partial<LoginInputState>);
+            return;
+        }
+        // login API Implementation
+        console.log(input);
     };
     const loading = false
 
@@ -39,7 +39,7 @@ const Login = () => {
 
         <div className="flex items-center justify-center min-h-screen">
 
-            <form onSubmit={loginSubmitHandler}  className="md:p-8 w-full max-w-md  rounded-lg md:border border-gray-200 mx-4 ">
+            <form onSubmit={loginSubmitHandler} className="md:p-8 w-full max-w-md  rounded-lg md:border border-gray-200 mx-4 ">
                 <div className="mb-4">
                     <h1 className="font-bold text-2xl text-textPrimary">QuickBasket</h1>
                 </div>
@@ -51,14 +51,14 @@ const Login = () => {
                             type="email"
                             name="email"
                             placeholder="Enter your email"
-                            value = {input.email}
+                            value={input.email}
                             onChange={changeEventHandler}
                             className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
                         />
                         <Mail className="absolute inset-y-2 left-2 text-textSecondary pointer-events-none" />
                         {
                             errors && <span className="text-xs text-error">{errors.email}</span>
-                         }
+                        }
                     </div>
                 </div>
 
@@ -69,14 +69,14 @@ const Login = () => {
                             type="password"
                             name="password"
                             placeholder="Enter your password"
-                            value = {input.password}
+                            value={input.password}
                             onChange={changeEventHandler}
                             className="pl-10 border border-gray-300 focus:ring-1 focus:ring-brandOrange text-textPrimary bg-backgroundLight"
                         />
                         <LockKeyhole className="absolute inset-y-2 left-2 text-textSecondary pointer-events-none" />
                         {
                             errors && <span className=" text-xs text-error">{errors.password}</span>
-                         }
+                        }
                     </div>
                 </div>
 
@@ -89,6 +89,11 @@ const Login = () => {
                             <Button type="submit" className="w-full bg-brandOrange text-white py-2 rounded-md hover:bg-opacity-90 transition border-transparent focus-visible:outline-noner-transparent">Login</Button>
                         )
                     }
+                    <div className="mt-2">
+                        <Link to="/forgotpassword" className="text-brandGreen text-sm no-underline hover:no-underline hover:text-brandGreen">
+                            Forgot Password?
+                        </Link>
+                    </div>
 
                 </div>
                 <Separator />
