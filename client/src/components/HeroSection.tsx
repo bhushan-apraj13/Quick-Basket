@@ -11,7 +11,7 @@ const HeroSection = () => {
             <div className="flex flex-col gap-6 md:w-2/3 ">
                 <div className="flex flex-col gap-3">
                     <h1 className="font-bold md:font-extrabold md:text-4xl text-3xl">
-                    Bringing What You Need, Exactly When You Need
+                        Bringing What You Need, Exactly When You Need
                     </h1>
                     <p className="text-textSecondary">Fast, fresh, and at your doorstep!</p>
                 </div>
@@ -31,7 +31,7 @@ const HeroSection = () => {
                 </div>
             </div>
             <div>
-               <img src={HeroImage} alt="" className="object-cover w-full max-h-[800px]"/> 
+                <img src={HeroImage} alt="" className="object-cover w-full max-h-[600px]" />
             </div>
         </div>
     );

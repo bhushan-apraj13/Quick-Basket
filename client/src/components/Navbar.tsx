@@ -6,23 +6,21 @@ import { History, ListChecks, ListTodo, Loader2, LogOut, LucideShoppingCart, Men
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
-import { Label } from "./ui/label";
-import { Input } from "./ui/input";
 import { Separator } from "./ui/separator";
 
 const Navbar = () => {
     const admin = true;
     const loading = false;
     return (
-        <div className="fixed top-2 left-0 w-full bg-white  z-50">
-            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between h-16">
+        <div className="max-w-7xl mx-auto w-full ">
+            <div className="flex items-center justify-between h-16 w-full" style={{ gap: "25rem" }}>
                 {/* Left-aligned Brand Logo */}
                 <Link to="/"><h1 className="text-brandOrange font-extrabold text-3xl
-                md:text-4x1 hover:text-brandGreen">QuickBasket</h1>
+                md:text-4xl hover:text-brandGreen">QuickBasket</h1>
                 </Link>
 
                 {/* Right-aligned Navbar Links */}
-                <div className="hidden md:flex items-center gap-8">
+                <div className="hidden md:flex items-center gap-4">
                     <div className="hidden md:flex items-center gap-6">
                         <Link to="/" className="text-textPrimary hover:text-brandGreen transition">
                             Home
@@ -70,7 +68,7 @@ const Navbar = () => {
                         <div>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="icon" className="h-10 w-10 flex items-center justify-center">
+                                    <Button variant="outline" size="icon">
                                         <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                                         <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                                         <span className="sr-only">Toggle theme</span>
@@ -84,15 +82,15 @@ const Navbar = () => {
                         </div>
 
                         {/* Cart Icon */}
-                        <Link to="/cart" className="relative cursor-pointer text-textPrimary hover:text-brandGreen transition flex items-center">
+                        <Link to="/cart" className="relative cursor-pointer text-textPrimary hover:text-brandGreen">
                             <LucideShoppingCart className="h-6 w-6" />
-                            <div className="absolute -top-2 -right-2 text-[10px] font-bold flex items-center justify-center rounded-full h-5 w-5 bg-brandGreen text-white">
+                            <Button size={'icon'} className="absolute -inset-y-3 left-2 text-xs font-bold rounded-full h-4 w-2 bg-brandGreen text-white">
                                 1
-                            </div>
+                            </Button>
                         </Link>
 
                         {/* Avatar (Properly Aligned & Visible) */}
-                        <div className="relative flex items-center">
+                        <div >
                             <Avatar className="h-9 w-9border border-gray-300">
                                 <AvatarImage />
                                 <AvatarFallback className="flex items-center justify-center h-full w-full text-sm font-medium">CN</AvatarFallback>
@@ -102,7 +100,7 @@ const Navbar = () => {
                         {/* Logout Button (Fixed Size) */}
                         <div>
                             {loading ? (
-                                <Button disabled className="w-28 h-10 bg-brandOrange text-white rounded-md hover:bg-opacity-90 transition border-transparent flex items-center justify-center gap-2">
+                                <Button disabled className="w-28 h-10 bg-brandOrange text-white rounded-md hover:bg-opacity-90 transition border-transparent gap-2">
                                     <Loader2 className="animate-spin h-4 w-4" /> Please wait...
                                 </Button>
                             ) : (
@@ -113,7 +111,8 @@ const Navbar = () => {
                         </div>
                     </div>
                 </div>
-                <div className="md:hidden lg:hidden">
+
+                <div className="absolute right-4 md:hidden lg:hidden">
                     {/* Mobile Respond */}
                     <MobileNavbar />
                 </div>
@@ -125,7 +124,7 @@ const Navbar = () => {
 export default Navbar;
 
 const MobileNavbar = () => {
-    
+
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -229,10 +228,10 @@ const MobileNavbar = () => {
                 </SheetDescription>
 
                 <SheetFooter>
-                        
-                            <SheetClose asChild>
-                                <Button type="submit" className="bg-brandOrange text-white hover:bg-opacity-90 transition">Logout <LogOut></LogOut></Button>
-                            </SheetClose>
+
+                    <SheetClose asChild>
+                        <Button type="submit" className="bg-brandOrange text-white hover:bg-opacity-90 transition">Logout <LogOut></LogOut></Button>
+                    </SheetClose>
                 </SheetFooter>
             </SheetContent>
         </Sheet>
