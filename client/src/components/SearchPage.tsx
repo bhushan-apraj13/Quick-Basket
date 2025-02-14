@@ -47,7 +47,7 @@ const SearchPage = () => {
                         {/*Shop cards*/}
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                             {
-                                [1, 2, 3, 4, 5, 6].map((item: number, index: number) => (
+                                [1, 2].map((item: number, index: number) => (
                                     <Card key={index} className="bg-white dark:bg-gray-800 shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
                                         <div className="relative">
                                             <AspectRatio ratio={16 / 9}>
