@@ -10,6 +10,7 @@ import MainLayout from './Layout/MainLayout'
 import Profile from './components/Profile'
 import SearchPage from './components/SearchPage'
 import ShopDetails from './components/ShopDetails'
+import Cart from './components/Cart'
 
 
 
@@ -33,6 +34,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/shop/:id",
         element: <ShopDetails />
+      },
+      {
+        path: "/cart",
+        element: <Cart />
       },
 
     ]

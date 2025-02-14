@@ -134,9 +134,6 @@ const MobileNavbar = () => {
             </SheetTrigger>
             <SheetContent className="flex flex-col pl-2">
                 {/* Override the default close button */}
-                <SheetClose className="absolute right-8 top-6 text-textPrimary  transition focus:outline-none p-0 bg-transparent border-none shadow-none">
-                    <X className="h-6 w-6" />
-                </SheetClose>
                 <SheetHeader className="flex  flex-row items-center justify-betweeen mt-2">
                     <div className="absolute top-5">
                         <SheetTitle>Quick Basket</SheetTitle>
@@ -189,7 +186,7 @@ const MobileNavbar = () => {
                         <span>Orders</span>
                     </Link>
                     <Link
-                        to="/profile"
+                        to="/Cart"
                         className="flex items-center gap-4 px-3 py-2 rounded-lg cursor-pointer transition 
              text-textPrimary hover:bg-[#EAEAEA] active:bg-[#EAEAEA] hover:text-brandGreen 
              active:text-brandGreen"
