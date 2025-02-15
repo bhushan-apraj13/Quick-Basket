@@ -4,21 +4,36 @@ import { useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
+import { ProfileInputState, userProfileSchema } from "@/schema/userSchema";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Profile = () => {
+    {/* Profile Data State */ }
     const [profileData, setProfileData] = useState<any>({
         fullname: "",
         email: "",
-        phone: "",
+        contact: "",
         address: "",
         city: "",
         profileImage: "",
     });
 
+    {/* Navigate Handler */ }
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    {/* Form Errors State */ }
+    const [errors, setErrors] = useState<Partial<ProfileInputState>>({});
+
+    {/* Success Message State */ }
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+    {/* Image Upload State */ }
     const imageRef = useRef<HTMLInputElement | null>(null);
     const [selectedFile, setSelectedFile] = useState<string>("");
     const loading = false;
 
+    {/* Image Upload Handler */ }
     const fileChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -35,13 +50,29 @@ const Profile = () => {
         }
     };
 
+    {/* Form Data Change Handler */ }
     const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setProfileData({ ...profileData, [name]: value });
     };
 
+    {/* Form Submit Handler */ }
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const formData = userProfileSchema.safeParse(profileData);
+        if (!formData.success) {
+            setErrors(formData.error.formErrors.fieldErrors as Partial<ProfileInputState>);
+            return;
+        }
+
+        // Check if the user navigated from "/cart"
+        if (location.state?.from === "/cart") {
+            navigate("/cart", { state: { successMessage: "Profile updated successfully! ✅" } });
+
+        } else {
+            setSuccessMessage("Profile saved successfully! ✅");
+            setTimeout(() => setSuccessMessage(null), 3000); // Hide message after 3 sec
+        }
         console.log(profileData);
     };
 
@@ -84,6 +115,9 @@ const Profile = () => {
                         placeholder="Enter Full Name"
                         className="w-full border-b border-gray-400 outline-none focus:ring-0"
                     />
+                    {
+                        errors && <span className="text-xs text-error">{errors.fullname}</span>
+                    }
                 </div>
             </div>
 
@@ -103,6 +137,9 @@ const Profile = () => {
                         placeholder="Enter Email"
                         className="w-full border-b border-gray-400 outline-none focus:ring-0"
                     />
+                    {
+                        errors && <span className="text-xs text-error">{errors.email}</span>
+                    }
                 </div>
 
                 {/* Phone Field */}
@@ -113,12 +150,15 @@ const Profile = () => {
                     </div>
                     <Input
                         type="text"
-                        name="phone"
-                        value={profileData.phone}
+                        name="contact"
+                        value={profileData.contact}
                         onChange={changeHandler}
                         placeholder="Enter Phone Number"
                         className="w-full border-b border-gray-400 outline-none focus:ring-0"
                     />
+                    {
+                        errors && <span className="text-xs text-error">{errors.contact}</span>
+                    }
                 </div>
 
                 {/* Address Field */}
@@ -135,6 +175,9 @@ const Profile = () => {
                         placeholder="Enter Address"
                         className="w-full border-b border-gray-400 outline-none focus:ring-0"
                     />
+                    {
+                        errors && <span className="text-xs text-error">{errors.address}</span>
+                    }
                 </div>
 
                 {/* City Field */}
@@ -151,6 +194,9 @@ const Profile = () => {
                         placeholder="Enter City"
                         className="w-full border-b border-gray-400 outline-none focus:ring-0"
                     />
+                    {
+                        errors && <span className="text-xs text-error">{errors.city}</span>
+                    }
                 </div>
             </div>
 
@@ -173,6 +219,12 @@ const Profile = () => {
                     </Button>
                 )}
             </div>
+             {/* Success Alert */}
+             {successMessage && (
+                <div className="mt-4 p-2 bg-green-100 text-green-700 rounded">
+                    {successMessage}
+                </div>
+            )}
         </form>
     );
 };

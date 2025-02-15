@@ -3,8 +3,10 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle } f
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
+    {/* User Data State */ }
     const [UserData, getUserData] = useState({
         fullname: "",
         contact: "",
@@ -12,11 +14,16 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
         city: "",
     });
 
+    {/* Checkout Handler */ }
     const CheckoutHandler = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         //api implemnetation starts here
         console.log(UserData);
     };
+
+    {/* Navigate Handler */ }
+    const navigate = useNavigate();
+
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="p-4 space-y-2">
@@ -25,8 +32,9 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                     Please verify your details and order summary before proceeding.
                 </DialogDescription>
 
+                
                 {/* User Info */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 ">
                     <div>
                         <Label className="block text-sm font-semibold">Full Name</Label>
                         <p className="text-gray-700">John Doe</p>
@@ -43,6 +51,11 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                         <Label className="block text-sm font-semibold">City</Label>
                         <p className="text-gray-700">Mumbai</p>
                     </div>
+                </div>
+
+                {/* Edit Button */}
+                <div className="flex justify-end h-4 mr-4">
+                 <span className="text-brandGreen bg-white hover:bg-white hover:text-brandGreen/80 font-semibold" onClick={() => navigate(`/profile`, { state: { from: "/cart" } })}>Edit</span>
                 </div>
 
                 <Separator className="my-4" />
@@ -73,6 +86,7 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
             </DialogContent>
         </Dialog>
     );
+
 };
 
 export default CheckoutConfirm;

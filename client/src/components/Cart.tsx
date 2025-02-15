@@ -1,11 +1,27 @@
-import { Minus, Plus, Trash2, X } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import { Button } from "./ui/button";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "./ui/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CheckoutConfirm from "./CheckoutConfirm";
+import { useLocation } from "react-router-dom";
 
 const Cart = () => {
     const [open, setOpen] = useState<boolean>(false);
+
+    const location = useLocation();
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+    // Set success message from navigation state (if available)
+    useEffect(() => {
+        if (location.state?.successMessage) {
+            setSuccessMessage(location.state.successMessage);
+
+            // Clear message after 3 seconds
+            setTimeout(() => setSuccessMessage(null), 3000);
+        }
+    }, [location.state]);
+
+
     return (
         <div className="max-w-7xl mx-auto mt-12 px-4">
             {/* Cart Table */}
@@ -67,6 +83,12 @@ const Cart = () => {
                     Clear All
                 </Button>
             </div>
+            {/* Success Alert */}
+            {successMessage && (
+                <div className="mt-4 p-2 bg-green-100 text-green-700 rounded">
+                    {successMessage}
+                </div>
+            )}
 
             <CheckoutConfirm open={open} setOpen={setOpen} />
         </div>
