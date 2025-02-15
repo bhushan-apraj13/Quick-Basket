@@ -41,7 +41,7 @@ const Navbar = () => {
                                         </MenubarTrigger>
 
                                         <MenubarContent className="bg-white shadow-lg rounded-md">
-                                            <Link to="/admin/shops">
+                                            <Link to="/admin/store">
                                                 <MenubarItem className="px-3 py-2 text-textPrimary hover:bg-brandOrange hover:text-white transition">
                                                     Store
                                                 </MenubarItem>
@@ -204,7 +204,7 @@ const MobileNavbar = () => {
                         <span>Products</span>
                     </Link>
                     <Link
-                        to="/profile"
+                        to="/admin/store"
                         className="flex items-center gap-4 px-3 py-2 rounded-lg cursor-pointer transition 
              text-textPrimary hover:bg-[#EAEAEA] active:bg-[#EAEAEA] hover:text-brandGreen 
              active:text-brandGreen"

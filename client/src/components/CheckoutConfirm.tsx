@@ -36,19 +36,19 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                 {/* User Info */}
                 <div className="grid grid-cols-2 gap-4 ">
                     <div>
-                        <Label className="block text-sm font-semibold">Full Name</Label>
+                        <Label className="block text-sm text-gray-700 font-semibold">Full Name</Label>
                         <p className="text-gray-700">John Doe</p>
                     </div>
                     <div>
-                        <Label className="block text-sm font-semibold">Contact</Label>
+                        <Label className="block text-sm text-gray-700 font-semibold">Contact</Label>
                         <p className="text-gray-700">+91 98765 43210</p>
                     </div>
                     <div>
-                        <Label className="block text-sm font-semibold">Address</Label>
+                        <Label className="block text-sm text-gray-700 font-semibold">Address</Label>
                         <p className="text-gray-700">123, Green Avenue, Mumbai</p>
                     </div>
                     <div>
-                        <Label className="block text-sm font-semibold">City</Label>
+                        <Label className="block text-sm text-gray-700 font-semibold">City</Label>
                         <p className="text-gray-700">Mumbai</p>
                     </div>
                 </div>

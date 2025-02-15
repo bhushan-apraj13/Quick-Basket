@@ -11,6 +11,7 @@ import Profile from './components/Profile'
 import SearchPage from './components/SearchPage'
 import ShopDetails from './components/ShopDetails'
 import Cart from './components/Cart'
+import Store from './admin/Store'
 
 
 
@@ -38,6 +39,10 @@ const appRouter = createBrowserRouter([
       {
         path: "/cart",
         element: <Cart />
+      },
+      {
+        path: "/admin/store",
+        element: <Store />
       },
 
     ]

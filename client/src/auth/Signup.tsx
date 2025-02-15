@@ -20,7 +20,10 @@ const Signup = () => {
         password: "",
         contact: "",
     });
+
     const [errors, setErrors] = useState<Partial<SignupInputState>>({});
+
+    
     const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setInput({ ...input, [name]: value });
