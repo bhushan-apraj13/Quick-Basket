@@ -1,6 +1,5 @@
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
-import Image from "@/assets/shopImage1.jpg";
 import { Skeleton } from "./ui/skeleton";
 
 const AvailableProducts = () => {

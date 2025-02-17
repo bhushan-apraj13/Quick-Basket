@@ -46,12 +46,12 @@ const Navbar = () => {
                                                     Store
                                                 </MenubarItem>
                                             </Link>
-                                            <Link to="/admin/Menu">
+                                            <Link to="/admin/products">
                                                 <MenubarItem className="px-3 py-2 text-textPrimary hover:bg-brandOrange hover:text-white transition">
                                                     Products
                                                 </MenubarItem>
                                             </Link>
-                                            <Link to="/admin/orders">
+                                            <Link to="/admin/storeOrders">
                                                 <MenubarItem className="px-3 py-2 text-textPrimary hover:bg-brandOrange hover:text-white transition">
                                                     Orders
                                                 </MenubarItem>
@@ -195,7 +195,7 @@ const MobileNavbar = () => {
                         <span>Cart</span>
                     </Link>
                     <Link
-                        to="/profile"
+                        to="/admin/products"
                         className="flex items-center gap-4 px-3 py-2 rounded-lg cursor-pointer transition 
              text-textPrimary hover:bg-[#EAEAEA] active:bg-[#EAEAEA] hover:text-brandGreen 
              active:text-brandGreen"
@@ -213,7 +213,7 @@ const MobileNavbar = () => {
                         <span>My Store</span>
                     </Link>
                     <Link
-                        to="/profile"
+                        to="/admin/storeOrders"
                         className="flex items-center gap-4 px-3 py-2 rounded-lg cursor-pointer transition 
              text-textPrimary hover:bg-[#EAEAEA] active:bg-[#EAEAEA] hover:text-brandGreen 
              active:text-brandGreen"

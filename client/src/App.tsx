@@ -12,6 +12,8 @@ import SearchPage from './components/SearchPage'
 import ShopDetails from './components/ShopDetails'
 import Cart from './components/Cart'
 import Store from './admin/Store'
+import AddProducts from './admin/AddProducts'
+import StoreOrders from './admin/StoreOrders'
 
 
 
@@ -43,6 +45,14 @@ const appRouter = createBrowserRouter([
       {
         path: "/admin/store",
         element: <Store />
+      },
+      {
+        path: "/admin/products",
+        element: <AddProducts />
+      },
+      {
+        path: "/admin/storeOrders",
+        element: <StoreOrders />
       },
 
     ]
