@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from "./ui/menubar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { History, ListChecks, ListTodo, Loader2, LogOut, LucideShoppingCart, Menu, Moon, ShoppingCartIcon, Store, Sun, User, X } from "lucide-react";
+import { History, ListChecks, ListTodo, Loader2, LogOut, LucideShoppingCart, Menu, Moon, ShoppingCartIcon, Store, Sun, User, } from "lucide-react";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";

@@ -14,6 +14,7 @@ import Cart from './components/Cart'
 import Store from './admin/Store'
 import AddProducts from './admin/AddProducts'
 import StoreOrders from './admin/StoreOrders'
+import OrderPage from './components/OrderPage'
 
 
 
@@ -42,6 +43,13 @@ const appRouter = createBrowserRouter([
         path: "/cart",
         element: <Cart />
       },
+      {
+        path: "/order/status",
+        element: <OrderPage />
+      },
+
+      {/* Admin Routes */},
+
       {
         path: "/admin/store",
         element: <Store />
