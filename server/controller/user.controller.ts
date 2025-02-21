@@ -1,43 +1,49 @@
-import { Request, Response } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { User } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import cloudinary from "../utils/cloudinary";
+import { genVerificationCode } from "../utils/genVerificationCode";
+import { generateToken } from "../utils/generatToken";
+import { sendResetPasswordEmail, sendSuccessResetPasswordEmail, sendVerificationEmail, sendWellcomeEmail } from "../mailtrap/email";
 
 {/* for sign up */ }
-export const signUp = async (req: Request, res: Response) => {
+export const signUp = async (req: Request, res: Response): Promise<void>=> {
     try {
         const { fullname, email, password, contact } = req.body;
 
         let user = await User.findOne({ email });
         if (user) {
-            return res.status(400).json({ message: "User already exists" });
+            res.status(400).json({ message: "User already exists" });
+            return;
         }
         const hashedPassword = await bcrypt.hash(password, 10);
-        //
-        //const verificationToken = generateVerificationToken();
+        
+        const verificationToken = genVerificationCode();
 
         user = await User.create({
             fullname,
             email,
             password: hashedPassword,
             contact: Number(contact),
-            //verificationToken,
+            verificationToken,
             verificationTokenExpires: Date.now() + 60 * 60 * 1000,
         });
 
-        //generateToken(res,user);
+        generateToken(res,user);
 
-        //await sendVerificationEmail(email, verificationToken);
+        await sendVerificationEmail(email, verificationToken);
 
         const userWithoutPassword = await User.findOne({ email }).select("-password");
 
-        return res.status(201).json({ success: true, message: "Account created successfully", user: userWithoutPassword });
+        res.status(201).json({ success: true, message: "Account created successfully", user: userWithoutPassword });
+        return;
 
     }
     catch (error) {
         console.log(error);
-        return res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Internal Server Error" });
+        return;
 
     }
 };
@@ -58,7 +64,7 @@ export const Login = async (req: Request, res: Response) => {
             return res.status(400).json({ success: false, message: "Incorrect email or password" });
         }
 
-        //generateToken(res, user);
+        generateToken(res, user);
         user.lastLogin = new Date();
         await user.save();
 
@@ -87,7 +93,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
         await user.save();
 
         // send welcome Email
-        //await sendWellcomeEmail(user.email, user.fullname);
+        await sendWellcomeEmail(user.email, user.fullname);
 
         return res.status(200).json({ success: true, message: "Email verified successfully!", user, });
 
@@ -132,7 +138,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
         await user.save();
 
         //send reset password email
-        //await sendResetPasswordEmail(user.email, `${process.env.FRONTEND_URL}reset-password?token=${token}`);
+        await sendResetPasswordEmail(user.email, `${process.env.FRONTEND_URL}reset-password?token=${resetToken}`);
 
         return res.status(200).json({ success: true, message: "Password reset link sent successfully" });
 
@@ -160,7 +166,7 @@ export const resetPassword = async (req: Request, res: Response) => {
         await user.save();
 
         //send Success Email
-        //await sendSuccessResetPasswordEmail(user.email);
+        await sendSuccessResetPasswordEmail(user.email);
 
         return res.status(200).json({ success: true, message: "Password reset successfully" });
         
@@ -207,11 +213,6 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 
         const user = await User.findByIdAndUpdate(userId,updatedData,{new:true}).select("-password");
         return res.status(200).json({ success: true, message: "Profile updated successfully", user });
-
-
-
-
-
         
     } catch (error) {
         console.log(error);
