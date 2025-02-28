@@ -2,8 +2,8 @@ import { Request, Response } from "express";
 import { Shop } from "../models/shop.model";
 import { Multer } from "multer";
 import uploadImageOnCloudinary from "../utils/imageUpload";
-import ordersModel from "../models/orders.model";
 import { User } from "../models/user.model";
+import { Order } from "../models/orders.model";
 
 {/*for creating shop*/}
 export const createShop = async (req: Request, res: Response): Promise<void> => {
@@ -100,7 +100,7 @@ export const getShopOrder = async (req: Request, res: Response): Promise<void> =
             res.status(404).json({ success: false, message: "Shop not found" });
             return;
         };
-        const shopOrder = await ordersModel.find({ shop: shop._id }).populate("shop").populate("user");
+        const shopOrder = await Order.find({ shop: shop._id }).populate("shop").populate("user");
 
         res.status(200).json({ success: true, message: "Shop orders", shopOrder });
         return;
@@ -117,7 +117,7 @@ export const updateOrderStatus = async (req: Request, res: Response): Promise<vo
     try {
         const {orderId} = req.params;
         const {status} = req.body;
-        const shopOrder = await ordersModel.findById(orderId);
+        const shopOrder = await Order.findById(orderId);
         if (!shopOrder) {
             res.status(404).json({ success: false, message: "Order not found" });
             return;

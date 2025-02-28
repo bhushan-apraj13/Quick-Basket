@@ -16,7 +16,7 @@ type CartItems = {
     quantity: number;
 }
 
-export interface Order extends mongoose.Document {
+export interface IOrder extends mongoose.Document {
     user: mongoose.Schema.Types.ObjectId;
     shop: mongoose.Schema.Types.ObjectId;
     deliveryDetails: DeliveryDetails;
@@ -25,10 +25,11 @@ export interface Order extends mongoose.Document {
     status: "pending" | "confirmed" | "preparing" | "outfordelivery" | "delivered";
 }
 
-const OrderSchema = new mongoose.Schema<Order>({
+const OrderSchema = new mongoose.Schema<IOrder>({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
+        required: true
     },
     shop: {
         type: mongoose.Schema.Types.ObjectId,
@@ -90,5 +91,5 @@ const OrderSchema = new mongoose.Schema<Order>({
 
 }, { timestamps: true });
 
-export default mongoose.model("Order", OrderSchema);
+export const Order = mongoose.model("Order", OrderSchema);
 
