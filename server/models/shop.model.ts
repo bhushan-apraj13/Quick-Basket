@@ -1,17 +1,17 @@
 import mongoose from "mongoose";
 
-export interface Shop {
+export interface IShop {
     userId: mongoose.Types.ObjectId;
-    Shopname: string;
+    storeName: string;
     description: string;
     city: string;
     deliveryTime: Number;
     productCategory: string;
-    imageURL: string;
+    storeBanner: string;
     products: mongoose.Schema.Types.ObjectId[]
 }
 
-export interface ShopDocument extends Shop, mongoose.Document {
+export interface ShopDocument extends IShop, mongoose.Document {
     createdAt: Date;
     updatedAt: Date;
 }
@@ -22,7 +22,7 @@ const shopSchema = new mongoose.Schema<ShopDocument>({
         ref: "User",
         required: true,
     },
-    Shopname: {
+    storeName: {
         type: String,
         required: true,
     },
@@ -30,7 +30,7 @@ const shopSchema = new mongoose.Schema<ShopDocument>({
         type: String,
         required: true,
     },
-    imageURL: {
+    storeBanner: {
         type: String,
         required: true,
 

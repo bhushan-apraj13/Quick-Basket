@@ -8,7 +8,7 @@ import { User } from "../models/user.model";
 {/*for creating shop*/}
 export const createShop = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {Shopname,city,deliveryTime,productCategory} = req.body;
+        const {storeName,city,deliveryTime,productCategory} = req.body;
         const file = req.file;
 
         const shop = await Shop.findOne({ userId: req.id });
@@ -23,14 +23,14 @@ export const createShop = async (req: Request, res: Response): Promise<void> => 
             return;
         }
 
-        const imageURL = await uploadImageOnCloudinary(file as Express.Multer.File);
+        const storeBanner = await uploadImageOnCloudinary(file as Express.Multer.File);
         await Shop.create({
             userId: req.id,
-            Shopname,
+            storeName,
             city,
             deliveryTime,
             productCategory:JSON.parse(productCategory),
-            imageURL,
+            storeBanner,
         });
         res.status(201).json({ success: true, message: "Shop Added successfully" });
         return;
@@ -63,7 +63,7 @@ export const getShop = async (req: Request, res: Response): Promise<void> => {
 {/*for updating shop info*/}
 export const updateShop = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {Shopname,city,price,deliveryTime,productCategory} = req.body;
+        const {storeName,city,price,deliveryTime,productCategory} = req.body;
         const file = req.file;
         const shop = await Shop.findOne({ userId: req.id });
         if (!shop) {
@@ -71,14 +71,14 @@ export const updateShop = async (req: Request, res: Response): Promise<void> => 
             return;
         };
 
-        shop.Shopname = Shopname;
+        shop.storeName = storeName;
         shop.city = city;
         shop.deliveryTime = deliveryTime;
         shop.productCategory = JSON.parse(productCategory);
 
         if (file) {
             const imageURL = await uploadImageOnCloudinary(file as Express.Multer.File);
-            shop.imageURL = imageURL;
+            shop.storeBanner = imageURL;
         }
 
         await shop.save();

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface User {
+export interface IUser {
     fullname: string;
     email: string;
     password: string;
@@ -17,7 +17,7 @@ export interface User {
     verificationTokenExpires?: Date;
 }
 
-export interface UserDocument extends User, mongoose.Document {
+export interface UserDocument extends IUser, mongoose.Document {
     createdAt: Date;
     updatedAt: Date;
 }
