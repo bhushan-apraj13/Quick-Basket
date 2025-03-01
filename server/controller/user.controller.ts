@@ -72,7 +72,7 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
 
         {/*send User without password*/ }
         const userWithoutPassword = await User.findOne({ email }).select("-password");
-        res.status(200).json({ success: true, message: "Welcome back $(user.fullname)", user: userWithoutPassword });
+        res.status(200).json({ success: true, message: `Welcome back ${user.fullname}`, user: userWithoutPassword });
         return;
 
     } catch (error) {

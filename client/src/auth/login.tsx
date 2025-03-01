@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { LoginInputState, userLoginSchema } from "@/schema/userSchema";
+import { useUserStore } from "@/zustand/useUserStore";
 import { Loader2, LockKeyhole, Mail } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
@@ -17,11 +18,12 @@ const Login = () => {
         password: "",
     });
     const [errors, setErrors] = useState<Partial<LoginInputState>>({});
+    const {loading,login} = useUserStore();
     const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setInput({ ...input, [name]: value });
     };
-    const loginSubmitHandler = (e: FormEvent) => {
+    const loginSubmitHandler = async(e: FormEvent) => {
         e.preventDefault();
         // form validation check start
         const formData = userLoginSchema.safeParse(input);
@@ -31,9 +33,10 @@ const Login = () => {
             return;
         }
         // login API Implementation
-        console.log(input);
+        
+        await login(input);
     };
-    const loading = false
+    
 
     return (
 
