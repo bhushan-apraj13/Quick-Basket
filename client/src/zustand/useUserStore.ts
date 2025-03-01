@@ -64,7 +64,26 @@ export const useUserStore = create<any>()(persist((set) => ({
             toast.error(error.response.data.message);
             set({ loading: false });
         }
-    }
+    },
+
+    //verify email api implementation
+    verifyEmail: async (verificationCode: string) => {
+        try {
+            set({loading:true});
+            const response = await axios.post(`${API_END_POINT}/verifyemail`,{verificationCode},{
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (response.data.success) {
+                toast.success(response.data.message);
+                set({loading:false,user:response.data.user,isAuthenticated:true});
+            }
+        } catch (error:any) {
+            toast.error(error.response.data.message);
+            set({loading:false});
+        }
+    },
 
 }),
     {

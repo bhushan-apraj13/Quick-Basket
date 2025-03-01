@@ -86,6 +86,11 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
 export const verifyEmail = async (req: Request, res: Response): Promise<void>=> {
     try {
         const { verificationCode } = req.body;
+        if (!verificationCode) {
+            res.status(400).json({ success: false, message: "Verification code is required!" });
+            return;
+        }
+
         const user = await User.findOne({ verificationToken: verificationCode, verificationTokenExpires: { $gt: Date.now() } }).select("-password");
 
         if (!user) {
