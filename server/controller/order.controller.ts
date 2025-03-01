@@ -46,7 +46,7 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
             return;
         };
 
-        const order = new Order({
+        const order: any = new Order({
             shop: shop._id,
             user: req.id,
             deliveryDetails: checkoutSessionRequest.deliveryDetails,
@@ -68,7 +68,7 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
             success_url: `${process.env.FRONTEND_URL}/order/status`,
             cancel_url: `${process.env.FRONTEND_URL}/cart`,
             metadata:{
-                //orderId: order._id.toString(),
+                orderId: order._id.toString(),
                 images: JSON.stringify(productItems.map((item:any) => item.image))
             }
         });

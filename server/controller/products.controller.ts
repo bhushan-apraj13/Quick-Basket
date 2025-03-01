@@ -13,7 +13,7 @@ export const addProduct = async (req: Request, res: Response): Promise<void> => 
             return;
         };
         const imageURL = await uploadImageOnCloudinary(file as Express.Multer.File);
-        const product = await Product.create({
+        const product:any = await Product.create({
             title,
             description,
             price,
@@ -21,7 +21,7 @@ export const addProduct = async (req: Request, res: Response): Promise<void> => 
         });
         const shop = await Shop.findOne({ userId: req.id });
         if (shop) {
-            //(shop.products as mongoose.Schema.Types.ObjectId[]).push(product._id);
+            (shop.products as mongoose.Schema.Types.ObjectId[]).push(product._id);
             await shop.save();
         }
         res.status(201).json({ success: true, message: "Product added successfully", product });

@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { SignupInputState, userSignupSchema } from "@/schema/userSchema";
+import { useUserStore } from "@/zustand/useUserStore";
 import { Loader2, LockKeyhole, Mail, Phone, User2 } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Link } from "react-router-dom";
@@ -23,12 +24,14 @@ const Signup = () => {
 
     const [errors, setErrors] = useState<Partial<SignupInputState>>({});
 
-    
+    const signup = useUserStore((state) => state.signup);
+    const loading = useUserStore((state) => state.loading);
+
     const changeEventHandler = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setInput({ ...input, [name]: value });
     };
-    const loginSubmitHandler = (e: FormEvent) => {
+    const loginSubmitHandler = async(e: FormEvent) => {
         e.preventDefault();
         // form validation check start
         const formData = userSignupSchema.safeParse(input);
@@ -38,9 +41,9 @@ const Signup = () => {
             return;
         }
         // login API Implementation
-        console.log(input);
+        await signup(input);
     };
-    const loading = false
+    
 
     return (
 

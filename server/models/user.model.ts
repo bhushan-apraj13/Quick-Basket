@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema<UserDocument>({
     profilePicture: {
         type: String,
         default: "",
-        required: true,
+        required: false,
     },
     admin: {
         type: Boolean,
