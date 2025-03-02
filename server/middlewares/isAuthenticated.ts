@@ -18,7 +18,7 @@ export const isAuthenticated = async (req: Request, res: Response, next: NextFun
         }
 
         //verify token
-        const decode = jwt.verify(token, process.env.JWT_SECRET!) as jwt.JwtPayload;
+        const decode = jwt.verify(token, process.env.SECRET_KEY!) as jwt.JwtPayload;
 
         //check if decoding is successful
         if (!decode) {

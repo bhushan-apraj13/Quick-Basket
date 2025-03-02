@@ -154,7 +154,7 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
         await user.save();
 
         //send reset password email
-        await sendResetPasswordEmail(user.email, `${process.env.FRONTEND_URL}reset-password?token=${resetToken}`);
+        await sendResetPasswordEmail(user.email, `${process.env.FRONTEND_URL}/resetpassword/${resetToken}`);
 
         res.status(200).json({ success: true, message: "Password reset link sent successfully" });
         return;
@@ -207,7 +207,7 @@ export const checkAuth = async (req: Request, res: Response): Promise<void> => {
             res.status(404).json({ success: false, message: "User not found" });
             return;
         };
-        res.status(200).json({ success: true, message: "User found", user });
+        res.status(200).json({ success: true, user });
         return;
 
     } catch (error) {
