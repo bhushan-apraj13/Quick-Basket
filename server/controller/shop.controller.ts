@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Shop } from "../models/shop.model";
-import { Multer } from "multer";
 import uploadImageOnCloudinary from "../utils/imageUpload";
 import { User } from "../models/user.model";
 import { Order } from "../models/orders.model";
@@ -8,10 +7,10 @@ import { Order } from "../models/orders.model";
 {/*for creating shop*/}
 export const createShop = async (req: Request, res: Response): Promise<void> => {
     try {
+        console.log("Uploaded File:", req.file);
         const {storeName,city,address,deliveryTime,productCategory} = req.body;
         const file = req.file;
 
-        console.log(storeName,city,address,deliveryTime,productCategory);
 
         const shop = await Shop.findOne({ userId: req.id });
 
@@ -49,9 +48,9 @@ export const createShop = async (req: Request, res: Response): Promise<void> => 
 {/*for getting shop info*/}
 export const getShop = async (req: Request, res: Response): Promise<void> => {
     try {
-        const shop = await Shop.find({ userId: req.id });
+        const shop = await Shop.findOne({ userId: req.id }).populate('products');
         if (!shop) {
-            res.status(404).json({ success: false, message: "Shop not found" });
+            res.status(404).json({ success: false, message: "Shop not found", shop:[] });
             return;
         };
         res.status(200).json({ success: true, shop });
@@ -84,6 +83,7 @@ export const updateShop = async (req: Request, res: Response): Promise<void> => 
             const imageURL = await uploadImageOnCloudinary(file as Express.Multer.File);
             shop.storeBanner = imageURL;
         }
+        
 
         await shop.save();
         res.status(200).json({ success: true, message: "Shop updated successfully",shop});

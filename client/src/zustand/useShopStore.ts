@@ -41,7 +41,7 @@ export const useShopStore = create<any>()(persist((set) => ({
 
             }
         } catch (error: any) {
-            if (error.response.data.status === 404) {
+            if (error.response.status === 404) {
                 set({ shop: null });
             }
             set({ loading: false });
@@ -49,9 +49,13 @@ export const useShopStore = create<any>()(persist((set) => ({
     },
 
     //update shop api implementation
-    updateShop: async (formData: FormData) => {
+    updateShop: async (formData: FormData, existingBanner?: string) => {
         try {
             set({ loading: true });
+            
+            if (!formData.has("storeBanner") && existingBanner) {
+                formData.append("storeBanner", existingBanner);
+            }
             const response = await axios.put(`${API_END_POINT}/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'

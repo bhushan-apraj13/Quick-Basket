@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { StoreInfoSchema, storeSchema } from "@/schema/storeSchema";
 import { useShopStore } from "@/zustand/useShopStore";
 import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Store = () => {
     const [input, setInput] = useState<StoreInfoSchema>({
@@ -17,7 +17,7 @@ const Store = () => {
     });
 
     const [errors, setErrors] = useState<Partial<StoreInfoSchema>>({});
-    const { loading, shop, createShop, updateShop } = useShopStore();
+    const { loading, shop, createShop, updateShop, getShop } = useShopStore();
 
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
@@ -40,12 +40,12 @@ const Store = () => {
             formData.append("deliveryTime", input.deliveryTime.toString());
             formData.append("productCategory", JSON.stringify(input.products));
 
-            if (input.storeBanner) {
+            if (input.storeBanner instanceof File) {
                 formData.append("storeBanner", input.storeBanner);
             }
 
             if (shop) {
-                await updateShop(formData);
+                await updateShop(formData, shop.storeBanner);
             }
             else {
                 await createShop(formData);
@@ -55,12 +55,26 @@ const Store = () => {
         }
     };
 
-    const storeExists = true;
+    useEffect(() => {
+        const fetchShop = async () => {
+            await getShop();
+            setInput({
+                storeName: shop.storeName || "",
+                address: shop.address || "",
+                city: shop.city || "",
+                deliveryTime: shop.deliveryTime || 0,
+                products: shop.productCategory ? shop.productCategory.map((product: string) => product) : [],
+                storeBanner: shop.storeBanner || undefined,
+            });
+        };
+        fetchShop();
+        console.log(shop);
+    }, []);
 
     return (
         <div className="max-w-4xl mx-auto my-10 p-6 bg-white shadow-lg rounded-lg">
             <h1 className="font-extrabold text-3xl text-textPrimary mb-6 text-center">
-                {storeExists ? "Update Store" : "Add New Store"}
+                {shop ? "Update Store" : "Add New Store"}
             </h1>
 
             <form onSubmit={submitHandler} className="grid grid-cols-1 md:grid-cols-2 gap-6 text-start">
@@ -100,7 +114,7 @@ const Store = () => {
                         <Input type="file" accept="image/*" name="storeBanner"
                             onChange={(e) => {
                                 const file = e.target.files?.[0];
-                                setInput((prev) => ({ ...prev, storeBanner: file || undefined }));
+                                setInput((prev) => ({ ...prev, storeBanner: file || prev.storeBanner }));
                             }} />
                         {errors.storeBanner && <span className="text-xs text-error font-medium ">{errors.storeBanner?.name}</span>}
                     </div>
@@ -112,7 +126,7 @@ const Store = () => {
                         </Button>
                     ) : (
                         <Button className="bg-brandGreen hover:bg-brandGreen/80 text-white w-full max-w-xs">
-                            {storeExists ? "Update Store" : "Add Store"}
+                            {shop ? "Update Store" : "Add Store"}
                         </Button>
                     )}
                 </div>
