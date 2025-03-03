@@ -1,5 +1,4 @@
 import './App.css'
-import Login from './auth/Login'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import Signup from './auth/Signup'
 import ForgotPassword from './auth/ForgotPassword'
@@ -18,6 +17,8 @@ import OrderPage from './components/OrderPage'
 import { useUserStore } from './zustand/useUserStore'
 import { useEffect } from 'react'
 import Loading from './components/Loading'
+import Login from './auth/login'
+import NotFound from './components/NotFound'
 
 const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, user } = useUserStore();
@@ -119,6 +120,10 @@ const appRouter = createBrowserRouter([
   {
     path: "/verifyemail",
     element: <VerifyEmail />
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 
 

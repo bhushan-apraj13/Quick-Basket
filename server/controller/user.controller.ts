@@ -55,14 +55,14 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            res.status(400).json({ success: false, message: "Incorrect email or password" });
+            res.status(400).json({ success: false, message: "No user found with this email" });
             return;
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
         if (!isPasswordCorrect) {
-            res.status(400).json({ success: false, message: "Incorrect email or password" });
+            res.status(400).json({ success: false, message: "Incorrect password" });
             return;
         }
 
@@ -120,14 +120,6 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void>=> 
 
 export const logout = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { email } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) {
-            res.status(400).json({ success: false, message: "User not found" });
-            return;
-        }
-        user.lastLogin = new Date();
-        await user.save();
         res.clearCookie("token").status(200).json({ success: true, message: "Logged out successfully" });
         return;
     } catch (error) {
