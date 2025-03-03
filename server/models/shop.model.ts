@@ -5,6 +5,7 @@ export interface IShop {
     storeName: string;
     description: string;
     city: string;
+    address: string;
     deliveryTime: Number;
     productCategory: string;
     storeBanner: string;
@@ -28,7 +29,6 @@ const shopSchema = new mongoose.Schema<ShopDocument>({
     },
     description: {
         type: String,
-        required: true,
     },
     storeBanner: {
         type: String,
@@ -36,6 +36,10 @@ const shopSchema = new mongoose.Schema<ShopDocument>({
 
     },
     city: {
+        type: String,
+        required: true,
+    },
+    address: {
         type: String,
         required: true,
     },

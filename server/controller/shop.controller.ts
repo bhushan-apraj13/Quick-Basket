@@ -8,8 +8,10 @@ import { Order } from "../models/orders.model";
 {/*for creating shop*/}
 export const createShop = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {storeName,city,deliveryTime,productCategory} = req.body;
+        const {storeName,city,address,deliveryTime,productCategory} = req.body;
         const file = req.file;
+
+        console.log(storeName,city,address,deliveryTime,productCategory);
 
         const shop = await Shop.findOne({ userId: req.id });
 
@@ -28,6 +30,7 @@ export const createShop = async (req: Request, res: Response): Promise<void> => 
             userId: req.id,
             storeName,
             city,
+            address,
             deliveryTime,
             productCategory:JSON.parse(productCategory),
             storeBanner,
@@ -51,7 +54,7 @@ export const getShop = async (req: Request, res: Response): Promise<void> => {
             res.status(404).json({ success: false, message: "Shop not found" });
             return;
         };
-        res.status(200).json({ success: true, message: "Shop found", shop });
+        res.status(200).json({ success: true, shop });
         return;
     } catch (error) {
         console.log(error);
@@ -63,7 +66,7 @@ export const getShop = async (req: Request, res: Response): Promise<void> => {
 {/*for updating shop info*/}
 export const updateShop = async (req: Request, res: Response): Promise<void> => {
     try {
-        const {storeName,city,price,deliveryTime,productCategory} = req.body;
+        const {storeName,city,address,deliveryTime,productCategory} = req.body;
         const file = req.file;
         const shop = await Shop.findOne({ userId: req.id });
         if (!shop) {
@@ -73,6 +76,7 @@ export const updateShop = async (req: Request, res: Response): Promise<void> => 
 
         shop.storeName = storeName;
         shop.city = city;
+        shop.address = address;
         shop.deliveryTime = deliveryTime;
         shop.productCategory = JSON.parse(productCategory);
 
@@ -135,7 +139,7 @@ export const updateOrderStatus = async (req: Request, res: Response): Promise<vo
 };
 
 {/*for searching */}
-export const searchOrder = async (req: Request, res: Response): Promise<void> => {
+export const searchProduct = async (req: Request, res: Response): Promise<void> => {
     try {
         const searchText = req.params.searchText || req.query.searchText || "";
         const searchQuery = req.query.searchQuery as string || "";

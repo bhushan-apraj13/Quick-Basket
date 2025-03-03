@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { StoreInfoSchema, storeSchema } from "@/schema/storeSchema";
+import { useShopStore } from "@/zustand/useShopStore";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 
@@ -16,13 +17,14 @@ const Store = () => {
     });
 
     const [errors, setErrors] = useState<Partial<StoreInfoSchema>>({});
+    const { loading, shop, createShop, updateShop } = useShopStore();
 
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value, type } = e.target;
         setInput({ ...input, [name]: type === 'number' ? Number(value) : value });
     };
 
-    const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const result = storeSchema.safeParse(input);
         if (!result.success) {
@@ -30,18 +32,37 @@ const Store = () => {
             setErrors(fieldErrors as Partial<StoreInfoSchema>);
             return;
         }
-        console.log(input);
+        try {
+            const formData = new FormData();
+            formData.append("storeName", input.storeName);
+            formData.append("address", input.address);
+            formData.append("city", input.city);
+            formData.append("deliveryTime", input.deliveryTime.toString());
+            formData.append("productCategory", JSON.stringify(input.products));
+
+            if (input.storeBanner) {
+                formData.append("storeBanner", input.storeBanner);
+            }
+
+            if (shop) {
+                await updateShop(formData);
+            }
+            else {
+                await createShop(formData);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    const loading = false;
     const storeExists = true;
-    
+
     return (
         <div className="max-w-4xl mx-auto my-10 p-6 bg-white shadow-lg rounded-lg">
             <h1 className="font-extrabold text-3xl text-textPrimary mb-6 text-center">
                 {storeExists ? "Update Store" : "Add New Store"}
             </h1>
-            
+
             <form onSubmit={submitHandler} className="grid grid-cols-1 md:grid-cols-2 gap-6 text-start">
                 <div className="flex flex-col">
                     <Label className="mb-2 ml-1">Store Name</Label>
@@ -81,7 +102,7 @@ const Store = () => {
                                 const file = e.target.files?.[0];
                                 setInput((prev) => ({ ...prev, storeBanner: file || undefined }));
                             }} />
-                        {errors.storeBanner && <span className="text-xs text-error font-medium ">{errors.storeBanner?.name || "Banner image is required*"}</span>}
+                        {errors.storeBanner && <span className="text-xs text-error font-medium ">{errors.storeBanner?.name}</span>}
                     </div>
                 </div>
                 <div className="md:col-span-2 flex justify-center mt-4">
