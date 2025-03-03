@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 export interface IProduct {
-    //_id: mongoose.Schema.Types.ObjectId;
     title: string;
     price: number;
     description: string;
     image: string;
+    netQty: string; // Added Net Quantity as a string (e.g., "1kg", "500gms")
 }
 
 export interface ProductDocument extends IProduct, mongoose.Document {
@@ -30,6 +30,10 @@ const productSchema = new mongoose.Schema<ProductDocument>({
         type: String,
         required: true,
     },
-}, {timestamps: true});
+    netQty: {
+        type: String,
+        required: true, // Ensure net quantity is required
+    }
+}, { timestamps: true });
 
-export const Product =  mongoose.model("Product", productSchema);
+export const Product = mongoose.model("Product", productSchema);
