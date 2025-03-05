@@ -223,13 +223,12 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
         cloudResponse = await cloudinary.uploader.upload(profilePicture);
 
         const defaultFullName = fullname.trim();
-        const defaultContact = contact.trim();
         const defaultAddress = address.trim();
         const defaultCity = city.trim();
         const updatedData = {
             fullname: defaultFullName,
             email,
-            contact: Number(defaultContact),
+            contact,
             address: defaultAddress,
             city: defaultCity,
             profilePicture,

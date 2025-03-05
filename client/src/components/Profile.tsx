@@ -4,34 +4,32 @@ import { useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
-import { ProfileInputState, userProfileSchema } from "@/schema/userSchema";
-import { useLocation, useNavigate } from "react-router-dom";
+import { ProfileInputState} from "@/schema/userSchema";
+import { useUserStore } from "@/zustand/useUserStore";
 
 const Profile = () => {
+
+    const {user, updateProfile,} = useUserStore();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
     {/* Profile Data State */ }
     const [profileData, setProfileData] = useState<any>({
-        fullname: "",
-        email: "",
-        contact: "",
-        address: "",
-        city: "",
-        profileImage: "",
+        fullname: user?.fullname || "",
+        email: user?.email||"",
+        contact: user?.contact ||"",
+        address: user?.address || "",
+        city: user?.city || "",
+        profilePicture: user?.profilePicture || "",
     });
 
-    {/* Navigate Handler */ }
-    const navigate = useNavigate();
-    const location = useLocation();
-
     {/* Form Errors State */ }
-    const [errors, setErrors] = useState<Partial<ProfileInputState>>({});
+    const [errors] = useState<Partial<ProfileInputState>>({});
 
     {/* Success Message State */ }
-    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+    const [successMessage] = useState<string | null>(null);
 
     {/* Image Upload State */ }
     const imageRef = useRef<HTMLInputElement | null>(null);
-    const [selectedFile, setSelectedFile] = useState<string>("");
-    const loading = false;
+    const [selectedFile, setSelectedFile] = useState<string>(profileData.profilePicture || "");
 
     {/* Image Upload Handler */ }
     const fileChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,7 +41,7 @@ const Profile = () => {
                 setSelectedFile(result);
                 setProfileData((prevData: any) => ({
                     ...prevData,
-                    profileImage: result,
+                    profilePicture: result,
                 }));
             };
             reader.readAsDataURL(file);
@@ -57,23 +55,15 @@ const Profile = () => {
     };
 
     {/* Form Submit Handler */ }
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const formData = userProfileSchema.safeParse(profileData);
-        if (!formData.success) {
-            setErrors(formData.error.formErrors.fieldErrors as Partial<ProfileInputState>);
-            return;
+        try {
+            setIsLoading(true);
+            await updateProfile(profileData);
+            setIsLoading(false);  
+        } catch (error) {
+            setIsLoading(false);
         }
-
-        // Check if the user navigated from "/cart"
-        if (location.state?.from === "/cart") {
-            navigate("/cart", { state: { successMessage: "Profile updated successfully! ✅" } });
-
-        } else {
-            setSuccessMessage("Profile saved successfully! ✅");
-            setTimeout(() => setSuccessMessage(null), 3000); // Hide message after 3 sec
-        }
-        console.log(profileData);
     };
 
     return (
@@ -130,6 +120,7 @@ const Profile = () => {
                         <Label className="text-textPrimary text-sm">Email</Label>
                     </div>
                     <Input
+                    disabled
                         type="text"
                         name="email"
                         value={profileData.email}
@@ -202,7 +193,7 @@ const Profile = () => {
 
             {/* Submit Button */}
             <div className="mt-8 flex justify-center">
-                {loading ? (
+                {isLoading ? (
                     <Button
                         type="submit"
                         disabled

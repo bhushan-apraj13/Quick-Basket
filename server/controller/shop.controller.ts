@@ -7,7 +7,6 @@ import { Order } from "../models/orders.model";
 {/*for creating shop*/}
 export const createShop = async (req: Request, res: Response): Promise<void> => {
     try {
-        console.log("Uploaded File:", req.file);
         const {storeName,city,address,deliveryTime,productCategory} = req.body;
         const file = req.file;
 
@@ -48,7 +47,6 @@ export const createShop = async (req: Request, res: Response): Promise<void> => 
 
         
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
     }
@@ -108,9 +106,8 @@ export const updateShop = async (req: Request, res: Response): Promise<void> => 
         res.status(200).json({ success: true, message: "Shop updated successfully",shop});
         return;
         
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({ message: "Internal Server Error" });
+    } catch (error:any) {
+        res.status(500).json({ message: "Please make sure all the fields are filled correctly" });
         return;
     }
 };
@@ -160,11 +157,11 @@ export const updateOrderStatus = async (req: Request, res: Response): Promise<vo
 {/*for searching */}
 export const searchProduct = async (req: Request, res: Response): Promise<void> => {
     try {
-        const searchText = req.params.searchText || req.query.searchText || "";
-        const searchQuery = req.query.searchQuery as string || "";
-        // const selectedProducts = (req.query.selectedProducts as string || "")
-        //     .split(",")
-        //     .filter(productCategory => productCategory);
+        const searchText = req.params.searchText.trim()|| "";
+        const searchQuery = req.query.searchQuery as String|| "";
+
+
+        
 
         //  Fetch user to determine their city
         const user = await User.findById(req.id);
@@ -173,44 +170,42 @@ export const searchProduct = async (req: Request, res: Response): Promise<void> 
             return;  
         }
 
-        const userCity = user.city; // Get user's city
+        const userCity = user.city.toLowerCase().trim().replace(/\s+/g, ""); // Get user's city
 
-        //  Ensure shops are only from the user's city
-        const query: any = { city: userCity.toLowerCase().trim().replace(/\s+/g, "") };
-         //const query: any = {};
+        const shops = await Shop.aggregate([
+            { $match: { city: userCity } }, // Filter by user's city
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "products",
+                    foreignField: "_id",
+                    as: "products",
+                },
+            },
+            {
+                $match: {
+                    $or: [
+                        { name: { $regex: searchText, $options: "i" } },
+                        { storeName: { $regex: searchText, $options: "i" } },
+                        { "products.title": { $regex: searchText, $options: "i" } },
+                        { "products.name": { $regex: searchText, $options: "i" } },
+                        { productCategory: { $regex: searchText, $options: "i" } },
+                        { name: { $regex: searchQuery, $options: "i" } },
+                        { storeName: { $regex: searchQuery, $options: "i" } }, 
+                        { "products.title": { $regex: searchQuery, $options: "i" } }, 
+                        { "products.name": { $regex: searchQuery, $options: "i" } },
+                        { productCategory: { $regex: searchQuery, $options: "i" } },
+                    ],
+                },
+            },
+        ]);
 
-        //  Apply search conditions
-        if (searchText) {
-            query.$or = [
-                { storeName: { $regex: searchText, $options: "i" } },// Match shop name
-                { productCategory: { $regex: searchQuery, $options: "i" } },
-                { products: { $elemMatch: { title: { $regex: searchQuery, $options: "i" } } } }, // Match product category
-            ];
-        }
-
-        if (searchQuery) {
-            query.$or = [
-                { StoreName: { $regex: searchQuery, $options: "i" } }, // Match shop name
-                { productCategory: { $regex: searchQuery, $options: "i" } },
-                { products: { $elemMatch: { title: { $regex: searchQuery, $options: "i" } } } } // Match product category
-            ];
-        }
-
-        //  Apply product category filter if selected
-        // if (selectedProducts.length > 0) {
-        //     query.productCategory = { $in: selectedProducts };
-        // }
-
-         
-
-        // Find shops matching the query
-        const shops = await Shop.find(query);
 
         res.status(200).json({ success: true, data: shops });
         return; //  Optional but adds clarity
-    } catch (error) {
+    } catch (error:any) {
         console.error(error);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: error.message });
         return; //  Ensures function stops in case of an error
     }
 };

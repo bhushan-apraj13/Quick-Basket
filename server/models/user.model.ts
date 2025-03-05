@@ -42,11 +42,11 @@ const userSchema = new mongoose.Schema<UserDocument>({
     },
     address: {
         type: String,
-        default: "No Address Provided",
+        default: "",
     },
     city: {
         type: String,
-        default: "No City Provided",
+        default: "",
     },
     profilePicture: {
         type: String,
