@@ -100,11 +100,11 @@ const Navbar = () => {
                         {/* Logout Button (Fixed Size) */}
                         <div>
                             {loading ? (
-                                <Button disabled className="w-28 h-10 bg-brandOrange text-white rounded-md hover:bg-opacity-90 transition border-transparent gap-2">
+                                <Button disabled className="w-28 h-10 bg-error text-white rounded-md hover:bg-opacity-90 transition border-transparent gap-2">
                                     <Loader2 className="animate-spin h-4 w-4" /> Please wait...
                                 </Button>
                             ) : (
-                                <Button onClick={logout} className="w-24 h-10 bg-brandOrange text-white hover:bg-opacity-90 transition">
+                                <Button onClick={logout} className="w-24 h-10 bg-error text-white hover:bg-opacity-90 transition">
                                     Logout
                                 </Button>
                             )}
@@ -235,11 +235,11 @@ const MobileNavbar = () => {
 
                     <SheetClose asChild>
                         {loading ? (
-                            <Button disabled className="bg-brandOrange text-white hover:bg-opacity-90 transition">
+                            <Button disabled className="bg-error text-white hover:bg-opacity-90 transition">
                                 <Loader2 className="animate-spin h-4 w-4" /> Please wait...
                             </Button>
                         ) : (
-                            <Button onClick={logout} className="bg-brandOrange text-white hover:bg-opacity-90 transition">
+                            <Button onClick={logout} className="bg-error text-white hover:bg-opacity-90 transition">
                                 Logout
                             </Button>
                         )}

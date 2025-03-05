@@ -26,7 +26,7 @@ type CheckoutSessionRequest = {
 
 export const getOrders = async (req: Request, res: Response): Promise<void> => {
     try {
-        const orders = await Order.find({ user: req.id }).populate("user").populate("shop");
+        const orders = await Order.find({ user: req.id }).populate('user').populate('shop');
         res.status(200).json({ success: true, orders});
 
     } catch (error) {
@@ -39,7 +39,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
 export const createCheckoutSession = async (req: Request, res: Response): Promise<void> => {
     try {
         const checkoutSessionRequest: CheckoutSessionRequest = req.body;
-        const shop = await Shop.findById(checkoutSessionRequest.shopId).populate("product");
+        const shop = await Shop.findById(checkoutSessionRequest.shopId).populate('product');
 
         if (!shop) {
             res.status(404).json({ success: false, message: "Shop not found" });
@@ -59,9 +59,9 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
         const lineItems = createLineItems(checkoutSessionRequest, productItems);
 
         const checkoutSession = await stripe.checkout.sessions.create({
-            payment_method_types: ["card"],
+            payment_method_types: ['card'],
             shipping_address_collection: {
-                allowed_countries: ["GB", "US", "CA"],
+                allowed_countries: ['GB', 'US', 'CA'],
             },
             line_items: lineItems,
             mode: "payment",

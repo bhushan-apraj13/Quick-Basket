@@ -17,21 +17,40 @@ export const addProduct = async (req: Request, res: Response): Promise<void> => 
             res.status(400).json({ success: false, message: "Net Quantity is required" });
             return;
         }
+        const shop = await Shop.findOne({ userId: req.id });
+        if (!shop) {
+            res.status(404).json({ success: false, message: "Shop not found" });
+            return;
+        }
+
+        const defaultTitle = title.trim();
+        const normalizedTitle = title.toLowerCase().trim().replace(/\s+/g, ""); 
+        const normalizedNetQty = netQty.toLowerCase().trim().replace(/\s+/g, "");
+        
+        const existingProduct = await Product.findOne({
+            _id: { $in: shop.products }, 
+            title: normalizedTitle, // ✅ Case-insensitive & space-normalized
+            netQty: normalizedNetQty // ✅ Case-insensitive & space-normalized
+        });
+        if (existingProduct) {
+            res.status(400).json({ success: false, message: "Product with same title and net quantity already exists in this shop" });
+            return;
+        }
 
         const imageURL = await uploadImageOnCloudinary(file as Express.Multer.File);
 
         const product: any = await Product.create({
-            title,
+            title: normalizedTitle,
+            name: defaultTitle,
             description,
             price,
-            netQty,  // Added netQty field
+            netQty: normalizedNetQty,  
             image: imageURL
         });
-        const shop = await Shop.findOne({ userId: req.id });
-        if (shop) {
-            (shop.products as mongoose.Schema.Types.ObjectId[]).push(product._id);
-            await shop.save();
-        }
+
+        shop.products.push(product._id);
+        await shop.save();
+       
         res.status(201).json({ success: true, message: "Product added successfully", product });
         return;
     } catch (error) {
@@ -46,20 +65,51 @@ export const editProduct = async (req: Request, res: Response): Promise<void> =>
         const { id } = req.params;
         const { title, description, price, netQty } = req.body;
         const file = req.file;
+
+        // ✅ Find the existing product
         const product = await Product.findById(id);
         if (!product) {
             res.status(404).json({ success: false, message: "Product not found" });
             return;
         }
-        if (title) product.title = title;
+        const shop = await Shop.findOne({ userId: req.id });
+        if (!shop) {
+            res.status(404).json({ success: false, message: "Shop not found" });
+            return;
+        }
+
+
+        // ✅ Normalize `title` and `netQty` to maintain consistency
+        const defaultTitle = title.trim();
+        const normalizedTitle = title.toLowerCase().trim().replace(/\s+/g, ""); 
+        const normalizedNetQty = netQty.toLowerCase().trim().replace(/\s+/g, "");
+        
+        const existingProduct = await Product.findOne({
+            _id: { $in: shop.products,  $ne: product._id }, 
+            title: normalizedTitle, // ✅ Case-insensitive & space-normalized
+            netQty: normalizedNetQty // ✅ Case-insensitive & space-normalized
+        });
+        if (existingProduct) {
+            res.status(400).json({ success: false, message: "Product with same title and net quantity already exists in this shop" });
+            return;
+        }
+        if (title) {
+            product.title = normalizedTitle;
+            product.name = defaultTitle;
+        }
         if (description) product.description = description;
         if (price) product.price = price;
-        if (netQty) product.netQty = netQty; // Update netQty
+        if (netQty) product.netQty = normalizedNetQty;
+
+        // ✅ Upload new image if provided
         if (file) {
             const imageURL = await uploadImageOnCloudinary(file as Express.Multer.File);
             product.image = imageURL;
         }
+
+        // ✅ Save updated product
         await product.save();
+
         res.status(200).json({ success: true, message: "Product updated successfully", product });
         return;
     } catch (error) {

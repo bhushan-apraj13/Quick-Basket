@@ -32,7 +32,6 @@ const shopSchema = new mongoose.Schema<ShopDocument>({
     },
     storeBanner: {
         type: String,
-        required: true,
 
     },
     city: {

@@ -2,85 +2,103 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ProductListFormSchema, ProductListSchema } from "@/schema/ProductList";
+import { ProductListFormSchema, ProductListSchema,} from "@/schema/ProductList";
+import { useProductStore } from "@/zustand/useProductStore";
 import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Dispatch, SetStateAction } from "react";
 
-const EditProducts = ({ selectedProduct, editOpen, setEditOpen }: { selectedProduct: ProductListFormSchema, editOpen: boolean, setEditOpen: Dispatch<SetStateAction<boolean>> }) => {
-
+const EditProducts = ({ selectedProduct, editOpen, setEditOpen }: { selectedProduct: ProductListFormSchema | null, editOpen: boolean, setEditOpen: Dispatch<SetStateAction<boolean>> }) => {
     const [input, setInput] = useState<ProductListFormSchema>({
         title: "",
         description: "",
         price: 0,
+        netQty: "",
         image: undefined
     });
-
+    const [unit, setUnit] = useState("kg");
     const [error, setError] = useState<Partial<ProductListFormSchema>>({});
-    const loading = false;
-
-    const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type } = e.target;
-        setInput({ ...input, [name]: type === 'number' ? Number(value) : value });
-    };
-
-    const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const result = ProductListSchema.safeParse(input);
-       if (!result.success) {
-        const fieldErrors = result.error.formErrors.fieldErrors;
-        setError(fieldErrors as Partial<ProductListFormSchema>);
-        return;
-       }
-       console.log(input);
-    };
-
+    const {loading,editProduct} = useProductStore();
 
     useEffect(() => {
         setInput({
             title: selectedProduct?.title || "",
             description: selectedProduct?.description || "",
             price: selectedProduct?.price || 0,
+            netQty: selectedProduct?.netQty.replace(/kg|gms/gi, "") || "",
             image: undefined
         });
-    }, [selectedProduct])
+        setUnit(selectedProduct?.netQty.includes("kg") ? "kg" : "gms");
+    }, [selectedProduct]);
+
+    const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+        const { name, value, type } = e.target;
+        setInput({ ...input, [name]: type === 'number' ? Number(value) : value });
+    };
+
+    const submitHandler =  async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const result = ProductListSchema.safeParse({ ...input, netQty: input.netQty + unit });
+        if (!result.success) {
+            const fieldErrors = result.error.formErrors.fieldErrors;
+            setError(fieldErrors as Partial<ProductListFormSchema>);
+            return;
+        }
+        console.log(input);
+        try {
+            const formData = new FormData();
+            formData.append("title", input.title);
+            formData.append("description", input.description);
+            formData.append("price", input.price.toString());
+            formData.append("netQty", input.netQty + unit);
+            if (input.image) {
+                formData.append("image", input.image);
+            }
+            await editProduct(selectedProduct?._id || "",formData);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <Dialog open={editOpen} onOpenChange={setEditOpen}>
-            <DialogContent>
+            <DialogContent className="p-6 space-y-4">
                 <DialogHeader>
-                    <DialogTitle className="text-xl font-bold">Edit Product
-                    </DialogTitle>
-                    <DialogDescription>Update your product details</DialogDescription>
+                    <DialogTitle className="text-xl font-bold">Edit Product</DialogTitle>
+                    <DialogDescription className="text-sm text-gray-500">Update your product details</DialogDescription>
                 </DialogHeader>
-                <form onSubmit={submitHandler} >
+                <form onSubmit={submitHandler} className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex flex-col">
                             <Label className="mb-1.5 ml-1">Product Name</Label>
                             <Input type="text" name="title" placeholder="Enter product name" value={input.title} onChange={changeEventHandler} />
-                            {
-                                        error && <span className="text-xs font-medium text-error">{error.title}</span>
-                                    }
+                            {error.title && <span className="text-xs font-medium text-error">{error.title}</span>}
                         </div>
                         <div className="flex flex-col">
                             <Label className="mb-1.5 ml-1">Price (Rs)</Label>
                             <Input type="number" name="price" placeholder="Enter product price" value={input.price} onChange={changeEventHandler} />
-                            {
-                                        error && <span className="text-xs font-medium text-error">{error.price}</span>
-                                    }
+                            {error.price && <span className="text-xs font-medium text-error">{error.price}</span>}
                         </div>
                         <div className="flex flex-col md:col-span-2">
                             <Label className="mb-1.5 ml-1">Description</Label>
-                            <Input type="text" name="description" placeholder="Enter product description" value={input.description} onChange={changeEventHandler} />
-                            {
-                                        error && <span className="text-xs font-medium text-error">{error.description}</span>
-                                    }
+                            <textarea name="description" placeholder="Enter product description" value={input.description} onChange={changeEventHandler} className="border rounded-md p-2 h-20 max-h-40 overflow-y-auto resize-none bg-white text-black focus:outline-none focus:ring-2 focus:ring-black" />
+                            {error.description && <span className="text-xs font-medium text-error">{error.description}</span>}
+                        </div>
+                        <div className="flex flex-col md:col-span-2">
+                            <Label className="mb-1.5 ml-1">Net Quantity</Label>
+                            <div className="flex gap-2">
+                                <Input type="number" name="netQty" placeholder="Enter quantity" value={input.netQty} onChange={changeEventHandler} />
+                                <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="border rounded-md p-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-black">
+                                    <option value="kg">kg</option>
+                                    <option value="gms">gms</option>
+                                </select>
+                            </div>
+                            {error.netQty && <span className="text-xs font-medium text-error">{error.netQty}</span>}
                         </div>
                         <div className="flex flex-col md:col-span-2">
                             <Label className="mb-1.5 ml-1">Upload Product Image</Label>
                             <Input type="file" name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
-                            {
-                                        error && <span className="text-xs font-medium text-error">{error.image?.name}</span>
-                                    }
+                            {error.image && <span className="text-xs font-medium text-error">{error.image?.name}</span>}
                         </div>
                     </div>
                     <DialogFooter className="mt-5">

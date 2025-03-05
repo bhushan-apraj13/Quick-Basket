@@ -20,7 +20,7 @@ export const createShop = async (req: Request, res: Response): Promise<void> => 
         }
 
         if (!file) {
-            res.status(400).json({ success: false, message: "Please upload a product image" });
+            res.status(400).json({ success: false, message: "Please upload a image for store Banner" });
             return;
         }
 

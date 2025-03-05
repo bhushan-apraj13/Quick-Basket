@@ -30,7 +30,6 @@ export const useShopStore = create<any>()(persist((set) => ({
             set({ loading: false });
         }
     },
-
     //get shop api implementation
     getShop: async () => {
         try {
@@ -52,7 +51,7 @@ export const useShopStore = create<any>()(persist((set) => ({
     updateShop: async (formData: FormData, existingBanner?: string) => {
         try {
             set({ loading: true });
-            
+
             if (!formData.has("storeBanner") && existingBanner) {
                 formData.append("storeBanner", existingBanner);
             }
@@ -77,16 +76,37 @@ export const useShopStore = create<any>()(persist((set) => ({
             set({ loading: true });
             const params = new URLSearchParams();
             params.set("searchQuery", searchQuery);
-            params.set("selectedProducts",selectedProducts);
+            params.set("selectedProducts", selectedProducts);
             const response = await axios.get(`${API_END_POINT}/search/${searchText}?searchQuery=${searchQuery}?${params.toString()}`);
             if (response.data.success) {
                 console.log(response.data);
-                set({loading:false,searchedShop:response.data});
+                set({ loading: false, searchedShop: response.data });
             }
         } catch (error) {
-            set ({loading:false});
+            set({ loading: false });
         }
     },
+
+    addProductToShop: (product: any) => {
+        set((state: any) => ({
+            shop: state.shop ? {
+                ...state.shop, products: [...state.shop.products, product]
+            } : null,
+        }))
+    },
+
+    updateProductInShop: (updatedProduct: any) => {
+        set((state: any) => {
+            if (state.shop) {
+                updatedProduct = state.shop.products.map((product: any) => product._id === updatedProduct._id ? updatedProduct : product);
+                return {
+                    shop: {
+                        ...state.shop, products: updatedProduct
+                    }
+                }
+            }
+        })
+    }
 }),
     {
         name: "store-name",

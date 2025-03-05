@@ -6,7 +6,7 @@ import { addProduct, editProduct } from '../controller/products.controller';
 const router = express.Router();
 
 router.route("/").post(isAuthenticated, upload.single("image"), addProduct);
-router.route("/:id").post(isAuthenticated, upload.single("image"), editProduct);
+router.route("/:id").put(isAuthenticated, upload.single("image"), editProduct);
 
 
 

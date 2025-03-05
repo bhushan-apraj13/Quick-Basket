@@ -10,6 +10,7 @@ export const ProductListSchema = z.object({
         .instanceof(File)
         .optional()
         .refine((file) => file && file.size !== 0, "Please upload a product image"),
+    _id: z.string().optional()
 });
 
 export type ProductListFormSchema = z.infer<typeof ProductListSchema>;

@@ -2,6 +2,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import {create} from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { useShopStore } from "./useShopStore";
 
 const API_END_POINT = "http://localhost:8000/api/v1/product";
 axios.defaults.withCredentials = true;
@@ -29,9 +30,15 @@ export const useProductStore = create<ProductMenuState>()(persist((set)=>({
                 toast.success(response.data.message);
                 set({loading:false,productmenu:response.data.product});
             }
+            useShopStore.getState().addProductToShop(response.data.product);
+
         } catch (error:any) {
             set({loading:false});
-            toast.error(error.response.data.message);
+            if (error.response?.status === 400) {
+                toast.error(error.response.data.message); // ✅ Show duplicate error message
+            } else {
+                toast.error(error.response.data.message);
+            }
         }
     },
     editProduct: async (productId:string,formData:FormData)=>{
@@ -46,6 +53,8 @@ export const useProductStore = create<ProductMenuState>()(persist((set)=>({
                 toast.success(response.data.message);
                 set({loading:false,productmenu:response.data.product});
             };
+
+            useShopStore.getState().updateProductInShop(response.data.product);
         } catch (error:any) {
             set({loading:false});
             toast.error(error.response.data.message);   

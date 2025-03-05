@@ -28,12 +28,12 @@ export interface IOrder extends mongoose.Document {
 const OrderSchema = new mongoose.Schema<IOrder>({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true
     },
     shop: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Shop",
+        ref: 'Shop',
         required: true,
     },
     deliveryDetails: {
@@ -58,7 +58,7 @@ const OrderSchema = new mongoose.Schema<IOrder>({
         {
             productId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: "Product",
+                ref: 'Product',
                 required: true,
             },
             name: {

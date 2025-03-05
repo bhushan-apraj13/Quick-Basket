@@ -11,7 +11,7 @@ export const storeSchema = z.object({
     storeBanner: z
   .instanceof(File)
   .optional()
-  .refine((file) => file && file.size !== 0, "Please upload a banner image"),
+  .refine((file) => file?.size !== 0,{message:"Please upload a product image"})
 });
 
 export type StoreInfoSchema = z.infer<typeof storeSchema>;
