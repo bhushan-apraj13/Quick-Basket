@@ -3,8 +3,10 @@ import mongoose from "mongoose";
 export interface IShop {
     userId: mongoose.Types.ObjectId;
     storeName: string;
+    name: string;
     description: string;
     city: string;
+    cityName: string;
     address: string;
     deliveryTime: Number;
     productCategory: string;
@@ -27,6 +29,10 @@ const shopSchema = new mongoose.Schema<ShopDocument>({
         type: String,
         required: true,
     },
+    name:{
+        type: String,
+        required: true,
+    },
     description: {
         type: String,
     },
@@ -35,6 +41,10 @@ const shopSchema = new mongoose.Schema<ShopDocument>({
 
     },
     city: {
+        type: String,
+        required: true,
+    },
+    cityName:{
         type: String,
         required: true,
     },

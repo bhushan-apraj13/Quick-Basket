@@ -59,9 +59,9 @@ const Store = () => {
         const fetchShop = async () => {
             await getShop();
             setInput({
-                storeName: shop.storeName || "",
+                storeName: shop.name || "",
                 address: shop.address || "",
-                city: shop.city || "",
+                city: shop.cityName || "",
                 deliveryTime: shop.deliveryTime || 0,
                 products: shop.productCategory ? shop.productCategory.map((product: string) => product) : [],
                 storeBanner: shop.storeBanner || undefined,

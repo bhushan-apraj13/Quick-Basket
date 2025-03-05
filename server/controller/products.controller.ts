@@ -26,6 +26,7 @@ export const addProduct = async (req: Request, res: Response): Promise<void> => 
         const defaultTitle = title.trim();
         const normalizedTitle = title.toLowerCase().trim().replace(/\s+/g, ""); 
         const normalizedNetQty = netQty.toLowerCase().trim().replace(/\s+/g, "");
+        const defaultDescription = description.trim();
         
         const existingProduct = await Product.findOne({
             _id: { $in: shop.products }, 
@@ -42,7 +43,7 @@ export const addProduct = async (req: Request, res: Response): Promise<void> => 
         const product: any = await Product.create({
             title: normalizedTitle,
             name: defaultTitle,
-            description,
+            description: defaultDescription,
             price,
             netQty: normalizedNetQty,  
             image: imageURL
@@ -83,6 +84,7 @@ export const editProduct = async (req: Request, res: Response): Promise<void> =>
         const defaultTitle = title.trim();
         const normalizedTitle = title.toLowerCase().trim().replace(/\s+/g, ""); 
         const normalizedNetQty = netQty.toLowerCase().trim().replace(/\s+/g, "");
+        const defaultDescription = description.trim();
         
         const existingProduct = await Product.findOne({
             _id: { $in: shop.products,  $ne: product._id }, 
@@ -97,7 +99,7 @@ export const editProduct = async (req: Request, res: Response): Promise<void> =>
             product.title = normalizedTitle;
             product.name = defaultTitle;
         }
-        if (description) product.description = description;
+        if (description) product.description = defaultDescription;
         if (price) product.price = price;
         if (netQty) product.netQty = normalizedNetQty;
 

@@ -17,15 +17,18 @@ export const signUp = async (req: Request, res: Response): Promise<void>=> {
             res.status(400).json({ message: "User already exists" });
             return;
         }
+
+        const defaultFullName = fullname.trim();
+        const defaultContact = contact.trim();
         const hashedPassword = await bcrypt.hash(password, 10);
         
         const verificationToken = genVerificationCode();
 
         user = await User.create({
-            fullname,
+            fullname: defaultFullName,
             email,
             password: hashedPassword,
-            contact: Number(contact),
+            contact: Number(defaultContact),
             verificationToken,
             verificationTokenExpires: Date.now() + 60 * 60 * 1000,
         });
@@ -218,12 +221,17 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
         //upload image on cloudinary
         let cloudResponse: any;
         cloudResponse = await cloudinary.uploader.upload(profilePicture);
+
+        const defaultFullName = fullname.trim();
+        const defaultContact = contact.trim();
+        const defaultAddress = address.trim();
+        const defaultCity = city.trim();
         const updatedData = {
-            fullname,
+            fullname: defaultFullName,
             email,
-            contact,
-            address,
-            city,
+            contact: Number(defaultContact),
+            address: defaultAddress,
+            city: defaultCity,
             profilePicture,
         };
 

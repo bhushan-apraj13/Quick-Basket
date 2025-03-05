@@ -24,13 +24,22 @@ export const createShop = async (req: Request, res: Response): Promise<void> => 
             return;
         }
 
+        const defaultName = storeName.trim();
+        const processedStoreName = storeName.toLowerCase().trim().replace(/\s+/g, "");
+        const defaultCityName = city.trim();
+        const processedCityName = city.toLowerCase().trim().replace(/\s+/g, "");
+        const defaultAddress = address.trim();
+        const defaultDeliveryTime = deliveryTime.trim();
+
         const storeBanner = await uploadImageOnCloudinary(file as Express.Multer.File);
         await Shop.create({
             userId: req.id,
-            storeName,
-            city,
-            address,
-            deliveryTime,
+            storeName: processedStoreName,
+            name: defaultName,
+            city: processedCityName,
+            cityName: defaultCityName,
+            address: defaultAddress,
+            deliveryTime: defaultDeliveryTime,
             productCategory:JSON.parse(productCategory),
             storeBanner,
         });
@@ -73,10 +82,20 @@ export const updateShop = async (req: Request, res: Response): Promise<void> => 
             return;
         };
 
-        shop.storeName = storeName;
-        shop.city = city;
-        shop.address = address;
-        shop.deliveryTime = deliveryTime;
+        const defaultName = storeName.trim();
+        const processedStoreName = storeName.toLowerCase().trim().replace(/\s+/g, "");
+        const defaultCityName = city.trim();
+        const processedCityName = city.toLowerCase().trim().replace(/\s+/g, "");
+        const defaultAddress = address.trim();
+        const defaultDeliveryTime = deliveryTime.trim();
+
+        shop.storeName = processedStoreName;
+        shop.name = defaultName;
+        shop.city = processedCityName;
+        shop.cityName = defaultCityName;
+        shop.address = defaultAddress;
+        shop.deliveryTime = defaultDeliveryTime;
+
         shop.productCategory = JSON.parse(productCategory);
 
         if (file) {
