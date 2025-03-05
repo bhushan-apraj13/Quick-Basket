@@ -97,7 +97,7 @@ const EditProducts = ({ selectedProduct, editOpen, setEditOpen }: { selectedProd
                         </div>
                         <div className="flex flex-col md:col-span-2">
                             <Label className="mb-1.5 ml-1">Upload Product Image</Label>
-                            <Input type="file" name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
+                            <Input type="file" name="image" accept=".png, .jpg, .jpeg"  onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
                             {error.image && <span className="text-xs font-medium text-error">{error.image?.name}</span>}
                         </div>
                     </div>

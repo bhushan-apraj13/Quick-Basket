@@ -131,7 +131,7 @@ const AddProducts = () => {
                                 </div>
                                 <div className="flex flex-col md:col-span-2">
                                     <Label className="mb-1.5 ml-1">Upload Product Image</Label>
-                                    <Input type="file" name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
+                                    <Input type="file" accept=".png, .jpg, .jpeg"  name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
                                     {error.image && <span className="text-xs font-medium text-error">{error.image?.name || "*Product image is required"}</span>}
                                 </div>
                             </div>
@@ -205,7 +205,7 @@ const AddProducts = () => {
                                 </div>
                                 <div className="flex flex-col md:col-span-2">
                                     <Label className="mb-1.5 ml-1">Upload Product Image</Label>
-                                    <Input type="file" name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
+                                    <Input type="file" accept=".png, .jpg, .jpeg"  name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
                                     {error.image && <span className="text-xs font-medium text-error">{error.image?.name || "*Product image is required"}</span>}
                                 </div>
                             </div>

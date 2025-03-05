@@ -162,9 +162,9 @@ export const searchProduct = async (req: Request, res: Response): Promise<void> 
     try {
         const searchText = req.params.searchText || req.query.searchText || "";
         const searchQuery = req.query.searchQuery as string || "";
-        const selectedProducts = (req.query.selectedProducts as string || "")
-            .split(",")
-            .filter(productCategory => productCategory);
+        // const selectedProducts = (req.query.selectedProducts as string || "")
+        //     .split(",")
+        //     .filter(productCategory => productCategory);
 
         //  Fetch user to determine their city
         const user = await User.findById(req.id);
@@ -176,28 +176,32 @@ export const searchProduct = async (req: Request, res: Response): Promise<void> 
         const userCity = user.city; // Get user's city
 
         //  Ensure shops are only from the user's city
-        const query: any = { city: userCity };
+        const query: any = { city: userCity.toLowerCase().trim().replace(/\s+/g, "") };
+         //const query: any = {};
 
         //  Apply search conditions
         if (searchText) {
             query.$or = [
-                { Shopname: { $regex: searchText, $options: "i" } }, // Match shop name
+                { storeName: { $regex: searchText, $options: "i" } },// Match shop name
+                { productCategory: { $regex: searchQuery, $options: "i" } },
+                { products: { $elemMatch: { title: { $regex: searchQuery, $options: "i" } } } }, // Match product category
             ];
         }
 
         if (searchQuery) {
             query.$or = [
-                { Shopname: { $regex: searchQuery, $options: "i" } }, // Match shop name
-                { productCategory: { $regex: searchQuery, $options: "i" } }, // Match product category
+                { StoreName: { $regex: searchQuery, $options: "i" } }, // Match shop name
+                { productCategory: { $regex: searchQuery, $options: "i" } },
+                { products: { $elemMatch: { title: { $regex: searchQuery, $options: "i" } } } } // Match product category
             ];
         }
 
         //  Apply product category filter if selected
-        if (selectedProducts.length > 0) {
-            query.productCategory = { $in: selectedProducts };
-        }
+        // if (selectedProducts.length > 0) {
+        //     query.productCategory = { $in: selectedProducts };
+        // }
 
-        console.log(query);
+         
 
         // Find shops matching the query
         const shops = await Shop.find(query);

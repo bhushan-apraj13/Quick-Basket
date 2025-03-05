@@ -1,3 +1,4 @@
+import { ProductItem, ShopState } from "@/types/shopTypes";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
@@ -6,7 +7,9 @@ import { createJSONStorage, persist } from "zustand/middleware";
 const API_END_POINT = "http://localhost:8000/api/v1/shop";
 axios.defaults.withCredentials = true;
 
-export const useShopStore = create<any>()(persist((set) => ({
+
+
+export const useShopStore = create<ShopState>()(persist((set) => ({
     loading: false,
     shop: null,
     searchedShop: null,
@@ -71,15 +74,15 @@ export const useShopStore = create<any>()(persist((set) => ({
     },
 
     //search shop api implementation
-    searchShop: async (searchText: string, searchQuery: string, selectedProducts: any) => {
+    searchShop: async (searchText: string, searchQuery: string, /*selectedProducts: any */) => {
         try {
             set({ loading: true });
             const params = new URLSearchParams();
             params.set("searchQuery", searchQuery);
-            params.set("selectedProducts", selectedProducts);
-            const response = await axios.get(`${API_END_POINT}/search/${searchText}?searchQuery=${searchQuery}?${params.toString()}`);
+            //params.set("selectedProducts", selectedProducts);
+
+            const response = await axios.get(`${API_END_POINT}/search/${searchText}?${params.toString()}`);
             if (response.data.success) {
-                console.log(response.data);
                 set({ loading: false, searchedShop: response.data });
             }
         } catch (error) {
@@ -87,7 +90,7 @@ export const useShopStore = create<any>()(persist((set) => ({
         }
     },
 
-    addProductToShop: (product: any) => {
+    addProductToShop: (product: ProductItem) => {
         set((state: any) => ({
             shop: state.shop ? {
                 ...state.shop, products: [...state.shop.products, product]
@@ -95,7 +98,7 @@ export const useShopStore = create<any>()(persist((set) => ({
         }))
     },
 
-    updateProductInShop: (updatedProduct: any) => {
+    updateProductInShop: (updatedProduct: ProductItem) => {
         set((state: any) => {
             if (state.shop) {
                 updatedProduct = state.shop.products.map((product: any) => product._id === updatedProduct._id ? updatedProduct : product);
@@ -105,7 +108,9 @@ export const useShopStore = create<any>()(persist((set) => ({
                     }
                 }
             }
+            return state;
         })
+       
     }
 }),
     {
