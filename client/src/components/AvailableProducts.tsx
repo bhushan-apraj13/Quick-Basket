@@ -3,9 +3,14 @@ import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { useShopStore } from "@/zustand/useShopStore";
+import { useCartstore } from "@/zustand/useCartstore";
+import { useNavigate } from "react-router-dom";
 
 const AvailableProducts = ({ products }: { products: ProductItem[] }) => {
+    const { addToCart } = useCartstore();
     const { loading } = useShopStore();
+    const navigate = useNavigate();
+
     return loading ? <AvailableProductsSkeleton /> : (
         <div className="md:p-2">
             <h1 className="text-xl md:text-2xl font-semibold mb-6 text-textPrimary">Available Products</h1>
@@ -43,7 +48,11 @@ const AvailableProducts = ({ products }: { products: ProductItem[] }) => {
 
                         {/* Button Footer - Spacing Adjusted */}
                         <CardFooter className="p-4 pt-3">
-                            <Button className="bg-brandGreen text-white hover:bg-brandGreen/80 w-full">
+                            <Button onClick={() => {
+                                addToCart(product);
+                                navigate("/cart");
+                            }
+                            } className="bg-brandGreen text-white hover:bg-brandGreen/80 w-full">
                                 Add to Cart
                             </Button>
                         </CardFooter>

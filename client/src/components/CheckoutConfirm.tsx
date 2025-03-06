@@ -4,22 +4,18 @@ import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { useNavigate } from "react-router-dom";
+import { useUserStore } from "@/zustand/useUserStore";
 
 const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
+    const {user} = useUserStore();
     {/* User Data State */ }
-    const [UserData, getUserData] = useState({
-        fullname: "",
-        contact: "",
-        address: "",
-        city: "",
+    const [UserData] = useState({
+        fullname: user?.fullname || "",
+        contact: user?.contact || "",
+        address: user?.address || "",
+        city: user?.city || "",
     });
 
-    {/* Checkout Handler */ }
-    const CheckoutHandler = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        //api implemnetation starts here
-        console.log(UserData);
-    };
 
     {/* Navigate Handler */ }
     const navigate = useNavigate();
@@ -37,19 +33,19 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                 <div className="grid grid-cols-2 gap-4 ">
                     <div>
                         <Label className="block text-sm text-gray-700 font-semibold">Full Name</Label>
-                        <p className="text-gray-700">John Doe</p>
+                        <p className="text-gray-700">{UserData.fullname}</p>
                     </div>
                     <div>
                         <Label className="block text-sm text-gray-700 font-semibold">Contact</Label>
-                        <p className="text-gray-700">+91 98765 43210</p>
+                        <p className="text-gray-700">+91 {UserData.contact}</p>
                     </div>
                     <div>
                         <Label className="block text-sm text-gray-700 font-semibold">Address</Label>
-                        <p className="text-gray-700">123, Green Avenue, Mumbai</p>
+                        <p className="text-gray-700">{UserData.address}</p>
                     </div>
                     <div>
                         <Label className="block text-sm text-gray-700 font-semibold">City</Label>
-                        <p className="text-gray-700">Mumbai</p>
+                        <p className="text-gray-700">{UserData.city}</p>
                     </div>
                 </div>
 

@@ -2,15 +2,17 @@ import { Link } from "react-router-dom";
 import { Menubar, MenubarContent, MenubarItem, MenubarMenu, MenubarTrigger } from "./ui/menubar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
-import { History, ListChecks, ListTodo, Loader2, LogOut, LucideShoppingCart, Menu, Moon, ShoppingCartIcon, Store, Sun, User, } from "lucide-react";
+import { History, Home, ListChecks, ListTodo, Loader2, LucideShoppingCart, Menu, Moon, ShoppingCartIcon, Store, Sun, User, } from "lucide-react";
 import { Avatar, AvatarImage } from "./ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "./ui/sheet";
 import { Separator } from "./ui/separator";
 import { useUserStore } from "@/zustand/useUserStore";
+import { useCartstore } from "@/zustand/useCartstore";
 
 const Navbar = () => {
     const { user, loading, logout } = useUserStore();
+    const { cartItems } = useCartstore();
 
     return (
         <div className="max-w-7xl mx-auto w-full ">
@@ -84,15 +86,19 @@ const Navbar = () => {
                         {/* Cart Icon */}
                         <Link to="/cart" className="relative cursor-pointer text-textPrimary hover:text-brandGreen">
                             <LucideShoppingCart className="h-6 w-6" />
-                            <Button size={'icon'} className="absolute -inset-y-3 left-2 text-xs font-bold rounded-full h-4 w-2 bg-brandGreen text-white">
-                                1
-                            </Button>
+                            {
+                                cartItems.length > 0 && (
+                                    <Button size={'icon'} className="absolute -inset-y-3 left-2 text-xs font-bold rounded-full h-4 w-2 bg-brandGreen text-white">
+                                        {cartItems.length}
+                                    </Button>)
+                            }
+
                         </Link>
 
                         {/* Avatar (Properly Aligned & Visible) */}
                         <div >
                             <Avatar className="h-9 w-9border border-gray-300">
-                                <AvatarImage />
+                                <AvatarImage src={user?.profilePicture || ""} />
                                 <AvatarFallback className="flex items-center justify-center h-full w-full text-sm font-medium">CN</AvatarFallback>
                             </Avatar>
                         </div>
@@ -124,7 +130,7 @@ const Navbar = () => {
 export default Navbar;
 
 const MobileNavbar = () => {
-    const { user,loading, logout } = useUserStore();
+    const { user, loading, logout } = useUserStore();
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -167,6 +173,15 @@ const MobileNavbar = () => {
                 </SheetHeader>
                 <Separator className="my-2 mt-12" />
                 <SheetDescription className="flex-1">
+                    <Link
+                        to="/"
+                        className="flex items-center gap-4 px-3 py-2 rounded-lg cursor-pointer transition 
+             text-textPrimary hover:bg-[#EAEAEA] active:bg-[#EAEAEA] hover:text-brandGreen 
+             active:text-brandGreen"
+                    >
+                        <Home />
+                        <span>Home</span>
+                    </Link>
                     <Link
                         to="/profile"
                         className="flex items-center gap-4 px-3 py-2 rounded-lg cursor-pointer transition 
