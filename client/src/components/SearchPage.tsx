@@ -105,7 +105,7 @@ const SearchPage = () => {
 
                                             <CardFooter className="p-4 border-t dark:border-t-gray-700 border-t-gray-100 flex justify-center">
                                                 {/* Centered button with increased width */}
-                                                <Link to={`/shop/${123}`} className="w-full max-w-xs">
+                                                <Link to={`/shop/${shop._id}`} className="w-full max-w-xs">
                                                     <Button className="bg-brandGreen text-white hover:bg-opacity-90 font-semibold py-2.5 px-6 rounded-lg shadow-md transition-colors duration-200 w-full">
                                                         View Products
                                                     </Button>

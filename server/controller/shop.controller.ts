@@ -222,7 +222,7 @@ export const getSingleShop = async (req: Request, res: Response): Promise<void> 
             res.status(404).json({ success: false, message: "Shop not found" });
             return; 
         }
-        res.status(200).json(shop);
+        res.status(200).json({success:true,shop});
         return;   
     } catch (error) {
         console.log(error);

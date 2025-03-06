@@ -30,10 +30,12 @@ export type ShopState = {
     loading: boolean;
     shop: Shop |null;
     searchedShop:  searchedShop | null;
+    singleShop: Shop | null;
     createShop: (formData: FormData) => Promise<void>;
     getShop: () => Promise<void>;
     updateShop: (formData: FormData, existingBanner?: string) => Promise<void>;
     searchShop: (searchText: string, searchQuery: string, /*selectedProducts: any */) => Promise<void>;
     addProductToShop: (product: ProductItem) => void;
     updateProductInShop: (updatedProduct: ProductItem) => void;
+    getSingleShop: (shopId:string) => Promise<void>;
 }

@@ -1,4 +1,4 @@
-import { ProductItem, ShopState } from "@/types/shopTypes";
+import { ProductItem, ShopState,} from "@/types/shopTypes";
 import axios from "axios";
 import { toast } from "sonner";
 import { create } from "zustand";
@@ -13,6 +13,7 @@ export const useShopStore = create<ShopState>()(persist((set) => ({
     loading: false,
     shop: null,
     searchedShop: null,
+    singleShop : null,
 
     //create shop api implementation
     createShop: async (formData: FormData) => {
@@ -111,6 +112,19 @@ export const useShopStore = create<ShopState>()(persist((set) => ({
             return state;
         })
        
+    },
+
+    getSingleShop: async (shopId:string) =>{
+        try {
+            set({loading:true});
+            const response = await axios.get(`${API_END_POINT}/${shopId}`);
+            if (response.data.success) {
+                set({loading:false,singleShop:response.data.shop});
+            }
+        } catch (error) {
+            set({loading:false});
+
+        }
     }
 }),
     {
