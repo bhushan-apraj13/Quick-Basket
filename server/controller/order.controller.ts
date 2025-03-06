@@ -39,7 +39,7 @@ export const getOrders = async (req: Request, res: Response): Promise<void> => {
 export const createCheckoutSession = async (req: Request, res: Response): Promise<void> => {
     try {
         const checkoutSessionRequest: CheckoutSessionRequest = req.body;
-        const shop = await Shop.findById(checkoutSessionRequest.shopId).populate('product');
+        const shop = await Shop.findById(checkoutSessionRequest.shopId).populate('products');
 
         if (!shop) {
             res.status(404).json({ success: false, message: "Shop not found" });
@@ -64,7 +64,7 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
                 allowed_countries: ['GB', 'US', 'CA'],
             },
             line_items: lineItems,
-            mode: "payment",
+            mode: 'payment',
             success_url: `${process.env.FRONTEND_URL}/order/status`,
             cancel_url: `${process.env.FRONTEND_URL}/cart`,
             metadata:{
@@ -78,7 +78,7 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
         }
 
         await order.save();
-        res.status(200).json({ success: true, checkoutSession });
+        res.status(200).json({checkoutSession });
         return;
 
     } catch (error) {
@@ -91,7 +91,7 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
 
 export const createLineItems = (checkoutSessionRequest: CheckoutSessionRequest, productItems: any) => {
     const lineItems = checkoutSessionRequest.cartItems.map((cartItem) => {
-        const productItem = productItems.find((item: { _id: string; }) => item._id === cartItem.productId);
+        const productItem = productItems.find((item:any)=> item._id.toString() === cartItem.productId);
 
         if (!productItem) throw new Error("Product item ID not found");
 

@@ -5,16 +5,51 @@ import { Button } from "./ui/button";
 import { Separator } from "./ui/separator";
 import { useNavigate } from "react-router-dom";
 import { useUserStore } from "@/zustand/useUserStore";
+import { CheckoutSessionRequest } from "@/types/orderType";
+import { useCartstore } from "@/zustand/useCartstore";
+import { useShopStore } from "@/zustand/useShopStore";
+import { useOrderstore } from "@/zustand/useOrderstore";
+import { Loader2 } from "lucide-react";
 
 const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
-    const {user} = useUserStore();
+    const { user } = useUserStore();
+    const { shop } = useShopStore();
+    const {createCheckoutSession,loading} = useOrderstore();
     {/* User Data State */ }
     const [UserData] = useState({
         fullname: user?.fullname || "",
-        contact: user?.contact || "",
+        contact: user?.contact.toString() || "",
         address: user?.address || "",
         city: user?.city || "",
+        email: user?.email || "",
     });
+
+    const { cartItems } = useCartstore();
+
+    const checkoutHandler = async () => {
+        try {
+            const checkoutData: CheckoutSessionRequest = {
+                cartItems: cartItems.map((cartItem) => ({
+                    productId: cartItem._id,
+                    name: cartItem.name,
+                    image: cartItem.image,
+                    price: cartItem.price.toString(),
+                    quantity: cartItem.quantity.toString(),
+                })),
+                deliveryDetails: {
+                    name: UserData.fullname,
+                    address: UserData.address,
+                    city: UserData.city,
+                    contact: UserData.contact,
+                    email: UserData.email
+                },
+                shopId: shop?._id as string,
+            };
+            await createCheckoutSession(checkoutData);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
 
     {/* Navigate Handler */ }
@@ -28,7 +63,7 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                     Please verify your details and order summary before proceeding.
                 </DialogDescription>
 
-                
+
                 {/* User Info */}
                 <div className="grid grid-cols-2 gap-4 ">
                     <div>
@@ -51,7 +86,7 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
 
                 {/* Edit Button */}
                 <div className="flex justify-end h-4 mr-4">
-                 <span className="text-brandGreen bg-white hover:bg-white hover:text-brandGreen/80 font-semibold" onClick={() => navigate(`/profile`, { state: { from: "/cart" } })}>Edit</span>
+                    <span className="text-brandGreen bg-white hover:bg-white hover:text-brandGreen/80 font-semibold" onClick={() => navigate(`/profile`, { state: { from: "/cart" } })}>Edit</span>
                 </div>
 
                 <Separator className="my-4" />
@@ -75,9 +110,15 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
 
                 {/* Buttons */}
                 <DialogFooter className="flex justify-end mt-4">
-                    <Button className="bg-brandGreen text-white hover:bg-brandGreen/80">
+                    {loading ? (
+                        <Button disabled className="bg-brandGreen text-white hover:bg-brandGreen/80">
+                            <Loader2 className="animate-spin mr-2 w-4 h-4" /> Please wait...
+                        </Button>
+                    ) : (
+                        <Button onClick={checkoutHandler} className="bg-brandGreen text-white hover:bg-brandGreen/80">
                         Proceed to Payment
                     </Button>
+                    )}
                 </DialogFooter>
             </DialogContent>
         </Dialog>

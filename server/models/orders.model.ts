@@ -5,6 +5,7 @@ type DeliveryDetails = {
     name: string;
     address: string;
     city: string;
+    contact: string;
 }
 
 
