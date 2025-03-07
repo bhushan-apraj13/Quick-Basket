@@ -1,83 +1,132 @@
-import { IndianRupee } from "lucide-react";
-import { Separator } from "./ui/separator";
-import { Link } from "react-router-dom";
-import { Button } from "./ui/button";
+import { useEffect } from "react";
+import { useOrderstore } from "@/zustand/useOrderstore";
+import { IndianRupee, MapPin } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+
 
 const OrderPage = () => {
-    const orders = [1, 2, 3];
+  const { orders, getOrders, loading } = useOrderstore();
+
+  // Fetch orders on mount
+  useEffect(() => {
+    getOrders();
+  }, []);
+
+  if (loading) {
     return (
-        <div className="flex flex-col justify-center items-center min-h-screen bg-background px-4 relative">
-            {orders.length === 0 ? (
-                <div className="flex flex-col items-center">
-                    <h1 className="font-bold text-2xl text-textPrimary dark:text-gray-300">
-                        No Orders Found
-                    </h1>
-                </div>
-            ) : (
-                <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 sm:p-8 max-w-lg w-full mt-[-80px]">
-                    
-                    {/* Order Status Header */}
-                    <div className="text-center mb-6">
-                        <h1 className="text-2xl font-extrabold text-textPrimary dark:text-gray-300">
-                            Order Status:{" "}
-                            <span className="text-brandGreen">CONFIRMED</span>
-                        </h1>
-                    </div>
-    
-                    {/* Order Summary Section */}
-                    <div className="mb-6">
-                        <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-4">
-                            Order Summary
-                        </h2>
-    
-                        <div className="flex flex-col space-y-4">
-                            <div className="flex items-center justify-between">
-                                {/* Product Image & Name */}
-                                <div className="flex items-center space-x-4">
-                                    <img 
-                                        src="https://www.jiomart.com/images/product/original/490830935/tata-sampann-high-protein-unpolished-urad-dal-1-kg-product-images-o490830935-p590032714-0-202203170853.jpg?im=Resize=(1000,1000)" 
-                                        alt="Chana Daal" 
-                                        className="w-16 h-16 rounded-lg object-cover"
-                                    />
-                                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                                        Chana Daal
-                                    </h3>
-                                </div>
-    
-                                {/* Price Section */}
-                                <div className="flex items-center space-x-1 text-gray-800 dark:text-gray-200">
-                                    <IndianRupee className="h-5 w-5" />
-                                    <span className="text-lg font-semibold">200</span>
-                                </div>
-                            </div>
-                            <Separator />
-                        </div>
-                    </div>
-    
-                    {/* Order Total */}
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-                            Total Amount:
-                        </h2>
-                        <div className="flex items-center space-x-1 text-gray-800 dark:text-gray-200">
-                            <IndianRupee className="h-5 w-5" />
-                            <span className="text-lg font-semibold">200</span>
-                        </div>
-                    </div>
-    
-                    {/* Continue Shopping Button */}
-                    <Link to="/">
-                        <Button className="bg-brandGreen text-white hover:bg-brandGreen/80 w-full py-3 rounded-lg shadow-md">
-                            Continue Shopping
-                        </Button>
-                    </Link>
-                </div>
-            )}
-        </div>
+      <div className="flex items-center justify-center min-h-screen">
+        <h1 className="font-bold text-2xl text-textPrimary">Loading Orders...</h1>
+      </div>
     );
-    
-    
-    
+  }
+
+  if (orders.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <h1 className="font-bold text-2xl text-textPrimary">No Orders Found</h1>
+      </div>
+    );
+  }
+
+  return (
+    <div className="max-w-5xl mx-auto my-10 px-4">
+      <h1 className="text-3xl font-extrabold text-textPrimary text-center mb-8">
+        Your Orders
+      </h1>
+
+      <div className="space-y-8">
+        {orders.map((order) => (
+          <div
+            key={order._id}
+            className="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 sm:p-8 border border-gray-200 dark:border-gray-700"
+          >
+            {/* Order Header */}
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                Order ID: <span className="text-textPrimary">{order._id}</span>
+              </h2>
+              <span
+                className={`px-3 py-1 text-sm font-medium rounded-full ${order.status === "confirmed"
+                  ? "bg-green-500 text-white"
+                  : order.status === "outfordelivery"
+                    ? "bg-blue-500 text-white"
+                    : order.status === "preparing"
+                      ? "bg-yellow-500 text-white"
+                      : "bg-gray-400 text-white"
+                  }`}
+              >
+                {order.status.toUpperCase()}
+              </span>
+            </div>
+
+            {/* Delivery Details */}
+            <div className="mb-4 flex items-start gap-3 text-gray-700 dark:text-gray-300">
+              {/* Icon - Aligns at the top */}
+              <MapPin className="h-5 w-5 text-brandGreen mt-0.5" />
+
+              {/* Address Block - Properly aligned */}
+              <div className="text-sm max-w-s break-words">
+                <p className="font-medium flex justify-start">{order.deliveryDetails.name}</p>
+                <p className="flex justify-start">{order.deliveryDetails.address},{" "}
+                  {order.deliveryDetails.city}</p>
+              </div>
+            </div>
+
+            <Separator className="my-4" />
+
+            {/* Order Items */}
+            <div className="space-y-4">
+              {order.cartItems.map((item) => (
+                <div key={item.productId} className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-14 h-14 rounded-lg object-cover"
+                    />
+                    <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                      {item.name} x {item.quantity}
+                    </h3>
+                  </div>
+
+                  <div className="flex items-center space-x-1 text-gray-800 dark:text-gray-200">
+                    <IndianRupee className="h-4 w-4" />
+                    <span className="text-sm font-semibold">
+                      {(Number(item.price) * Number(item.quantity)).toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <Separator className="my-4" />
+
+            {/* Order Total & Actions */}
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+                Total Amount:
+              </h2>
+              <div className="flex items-center space-x-1 text-gray-800 dark:text-gray-200">
+                <IndianRupee className="h-5 w-5" />
+                <span className="text-lg font-semibold">
+                  {order.totalAmount ? order.totalAmount.toFixed(2) : "N/A"}
+                </span>
+              </div>
+            </div>
+
+            {order.status === "outfordelivery" && (
+              <div className="mt-6 flex justify-end">
+                <Button className="bg-blue-500 text-white px-6 py-2 rounded-md">
+                  Track Order
+                </Button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default OrderPage;

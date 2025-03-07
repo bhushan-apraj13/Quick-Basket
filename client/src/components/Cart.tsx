@@ -1,4 +1,4 @@
-import { CheckCircle, Minus, Plus, Trash2, X } from "lucide-react";
+import { CheckCircle, Minus, Plus, X } from "lucide-react";
 import { Button } from "./ui/button";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "./ui/table";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ import { CartItem } from "@/types/CartType";
 
 const Cart = () => {
     const [open, setOpen] = useState<boolean>(false);
-    const { cartItems, decreMentQuantity,increMentQuantity } = useCartstore();
+    const { cartItems, decreMentQuantity,increMentQuantity,clearCart,removeFromCart } = useCartstore();
 
     const location = useLocation();
     const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -85,6 +85,7 @@ const Cart = () => {
                                     {/* Remove Button */}
                                     <TableCell className="text-center">
                                         <Button
+                                            onClick={() => removeFromCart(item._id)}    
                                             className="p-2 text-error hover:text-error/70 hover:bg-error/10 bg-transparent rounded-full transition-colors"
                                             size="icon"
                                             title="Remove item"
@@ -112,7 +113,7 @@ const Cart = () => {
                 <Button onClick={() => setOpen(true)} className="bg-brandGreen text-white hover:bg-brandGreen/70 px-6 py-2 rounded-md h-10">
                     Proceed to Checkout
                 </Button>
-                <Button className="bg-error text-white hover:bg-error/70 px-6 py-2 rounded-md h-10">
+                <Button onClick={clearCart} className="bg-error text-white hover:bg-error/70 px-6 py-2 rounded-md h-10">
                     Clear All
                 </Button>
             </div>

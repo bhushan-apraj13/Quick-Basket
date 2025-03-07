@@ -14,7 +14,7 @@ import { Loader2 } from "lucide-react";
 const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
     const { user } = useUserStore();
     const { shop } = useShopStore();
-    const {createCheckoutSession,loading} = useOrderstore();
+    const { createCheckoutSession, loading } = useOrderstore();
     {/* User Data State */ }
     const [UserData] = useState({
         fullname: user?.fullname || "",
@@ -25,6 +25,7 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
     });
 
     const { cartItems } = useCartstore();
+    const totalAmount = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
     const checkoutHandler = async () => {
         try {
@@ -44,6 +45,7 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                     email: UserData.email
                 },
                 shopId: shop?._id as string,
+                totalAmount,
             };
             await createCheckoutSession(checkoutData);
         } catch (error) {
@@ -94,20 +96,23 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                 {/* Order Summary */}
                 <div className="space-y-2">
                     <h2 className="font-bold text-center">Order Summary</h2>
-                    <div className="flex justify-between text-sm">
-                        <span>Chana Daal x 2</span>
-                        <span>₹200</span>
+
+                    {/* Order Items */}
+                    <div className="space-y-1">
+                        {cartItems.map((item) => (
+                            <div key={item._id} className="flex justify-between text-sm">
+                                <span>{item.name}  x {item.quantity}</span>
+                                <span>₹{(item.price * item.quantity).toFixed(2)}</span>
+                            </div>
+                        ))}
                     </div>
-                    <div className="flex justify-between text-sm">
-                        <span>Basmati Rice x 1</span>
-                        <span>₹150</span>
-                    </div>
+
+                    {/* Total */}
                     <div className="flex justify-between font-semibold text-lg mt-2">
                         <span>Total:</span>
-                        <span>₹350</span>
+                        <span>₹{totalAmount.toFixed(2)}</span>
                     </div>
                 </div>
-
                 {/* Buttons */}
                 <DialogFooter className="flex justify-end mt-4">
                     {loading ? (
@@ -116,8 +121,8 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                         </Button>
                     ) : (
                         <Button onClick={checkoutHandler} className="bg-brandGreen text-white hover:bg-brandGreen/80">
-                        Proceed to Payment
-                    </Button>
+                            Proceed to Payment
+                        </Button>
                     )}
                 </DialogFooter>
             </DialogContent>

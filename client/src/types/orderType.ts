@@ -14,12 +14,12 @@ export type CheckoutSessionRequest = {
         contact: string;
     };
     shopId: string;
+    totalAmount: number;
 }
 
 export interface orderItem extends CheckoutSessionRequest {
     _id: string;
     status: string;
-    totalAmount: number;
 }
 
 export type OrderState = {

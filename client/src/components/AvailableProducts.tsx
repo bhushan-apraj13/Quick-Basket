@@ -5,6 +5,8 @@ import { Skeleton } from "./ui/skeleton";
 import { useShopStore } from "@/zustand/useShopStore";
 import { useCartstore } from "@/zustand/useCartstore";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
 
 const AvailableProducts = ({ products }: { products: ProductItem[] }) => {
     const { addToCart } = useCartstore();
@@ -50,7 +52,18 @@ const AvailableProducts = ({ products }: { products: ProductItem[] }) => {
                         <CardFooter className="p-4 pt-3">
                             <Button onClick={() => {
                                 addToCart(product);
-                                navigate("/cart");
+                                toast.success(
+                                    <div>
+                                        <span>Product added to cart</span>
+                                        <button 
+                                            onClick={() => navigate("/cart")} 
+                                            className=" ml-10 py-1 bg-brandGreen text-white rounded-md text-sm hover:bg-brandGreen/80"
+                                        >
+                                            Go to Cart
+                                        </button>
+                                    </div>,
+                                    { duration: 3000 } // Toast disappears after 3 sec
+                                );
                             }
                             } className="bg-brandGreen text-white hover:bg-brandGreen/80 w-full">
                                 Add to Cart

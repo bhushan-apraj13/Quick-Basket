@@ -13,6 +13,7 @@ type CheckoutSessionRequest = {
         image: string;
         price: number;
         quantity: number;
+        
     }[],
     deliveryDetails: {
         name: string;
@@ -21,12 +22,13 @@ type CheckoutSessionRequest = {
         city: string;
     },
     shopId: string;
+    totalAmount: number;
 
 }
 
 export const getOrders = async (req: Request, res: Response): Promise<void> => {
     try {
-        const orders = await Order.find({ user: req.id }).populate('user').populate('shop');
+        const orders = await Order.find({ user: req.id }).populate('user').populate('shop').sort({createdAt:-1});
         res.status(200).json({ success: true, orders});
 
     } catch (error) {
@@ -51,6 +53,7 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
             user: req.id,
             deliveryDetails: checkoutSessionRequest.deliveryDetails,
             cartItems: checkoutSessionRequest.cartItems,
+            totalAmount: checkoutSessionRequest.totalAmount,
             status: "pending"
         });
 
@@ -87,6 +90,61 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
         return;
     }
 };
+
+export const stripeWebhook = async (req: Request, res: Response) : Promise<void> =>  {
+    let event;
+
+    try {
+        const signature = req.headers["stripe-signature"];
+
+        // Construct the payload string for verification
+        const payloadString = JSON.stringify(req.body, null, 2);
+        const secret = process.env.WEBHOOK_ENDPOINT_SECRET!;
+
+        // Generate test header string for event construction
+        const header = stripe.webhooks.generateTestHeaderString({
+            payload: payloadString,
+            secret,
+        });
+
+        // Construct the event using the payload string and header
+        event = stripe.webhooks.constructEvent(payloadString, header, secret);
+    } catch (error: any) {
+        console.error('Webhook error:', error.message);
+        res.status(400).send(`Webhook error: ${error.message}`);
+        return;
+    }
+
+    // Handle the checkout session completed event
+    if (event.type === "checkout.session.completed") {
+        try {
+            const session = event.data.object as Stripe.Checkout.Session;
+            const order = await Order.findById(session.metadata?.orderId);
+
+            if (!order) {
+             res.status(404).json({ message: "Order not found" });
+             return;
+            }
+
+            // Update the order with the amount and status
+            if (session.amount_total) {
+                order.totalAmount = session.amount_total / 100 ;
+            }
+            order.status = "confirmed";
+
+            await order.save();
+            res.status(200).json({ success: true, message: "Order confirmed", clearCart: true });
+            return;
+        } catch (error) {
+            console.error('Error handling event:', error);
+            res.status(500).json({ message: "Internal Server Error" });
+            return;
+        }
+    }
+    // Send a 200 response to acknowledge receipt of the event
+    res.status(200).send();
+};
+
 
 
 export const createLineItems = (checkoutSessionRequest: CheckoutSessionRequest, productItems: any) => {

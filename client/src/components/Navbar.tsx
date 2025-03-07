@@ -32,7 +32,7 @@ const Navbar = () => {
                             Profile
                         </Link>
                         <Link to="/order/status" className="text-textPrimary hover:text-brandGreen transition">
-                            Order
+                           Orders
                         </Link>
 
                         {user?.admin && (
