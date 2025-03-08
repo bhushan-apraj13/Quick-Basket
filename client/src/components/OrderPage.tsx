@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useOrderstore } from "@/zustand/useOrderstore";
-import { IndianRupee, MapPin } from "lucide-react";
+import { IndianRupee, Loader2, MapPin, PackageX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
@@ -8,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 const OrderPage = () => {
   const { orders, getOrders, loading } = useOrderstore();
 
-  // Fetch orders on mount
   useEffect(() => {
     getOrders();
   }, []);
@@ -16,15 +15,17 @@ const OrderPage = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <h1 className="font-bold text-2xl text-textPrimary">Loading Orders...</h1>
+        <Loader2 className="w-10 h-10 text-brandGreen animate-spin" />
       </div>
     );
   }
 
   if (orders.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <h1 className="font-bold text-2xl text-textPrimary">No Orders Found</h1>
+      <div className="flex flex-col items-center justify-center min-h-screen text-center">
+        <PackageX className="w-16 h-16 text-gray-400" />
+        <h1 className="font-bold text-2xl text-gray-600 mt-4">No Orders Yet!</h1>
+        <p className="text-gray-500 text-sm mt-2">Start shopping now and fill up your basket! 🛒</p>
       </div>
     );
   }
@@ -48,12 +49,14 @@ const OrderPage = () => {
               </h2>
               <span
                 className={`px-3 py-1 text-sm font-medium rounded-full ${order.status === "confirmed"
-                  ? "bg-green-500 text-white"
-                  : order.status === "outfordelivery"
-                    ? "bg-blue-500 text-white"
-                    : order.status === "preparing"
-                      ? "bg-yellow-500 text-white"
-                      : "bg-gray-400 text-white"
+                    ? "bg-[#3A6351] text-white" // Deep Purple
+                    : order.status === "outfordelivery"
+                      ? "bg-[#1E88E5] text-white" // Bright Blue
+                      : order.status === "preparing"
+                        ? "bg-[#D97706] text-white" // Warm Gold
+                        : order.status === "delivered"
+                          ? "bg-[#2E7D32] text-white" // Rich Green
+                          : "bg-gray-400 text-white"
                   }`}
               >
                 {order.status.toUpperCase()}
@@ -62,10 +65,7 @@ const OrderPage = () => {
 
             {/* Delivery Details */}
             <div className="mb-4 flex items-start gap-3 text-gray-700 dark:text-gray-300">
-              {/* Icon - Aligns at the top */}
               <MapPin className="h-5 w-5 text-brandGreen mt-0.5" />
-
-              {/* Address Block - Properly aligned */}
               <div className="text-sm max-w-s break-words">
                 <p className="font-medium flex justify-start">{order.deliveryDetails.name}</p>
                 <p className="flex justify-start">{order.deliveryDetails.address},{" "}
@@ -86,10 +86,9 @@ const OrderPage = () => {
                       className="w-14 h-14 rounded-lg object-cover"
                     />
                     <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
-                      {item.name} x {item.quantity}
+                      {item.name} - {item.netQty} (x{item.quantity})
                     </h3>
                   </div>
-
                   <div className="flex items-center space-x-1 text-gray-800 dark:text-gray-200">
                     <IndianRupee className="h-4 w-4" />
                     <span className="text-sm font-semibold">
@@ -117,7 +116,7 @@ const OrderPage = () => {
 
             {order.status === "outfordelivery" && (
               <div className="mt-6 flex justify-end">
-                <Button className="bg-blue-500 text-white px-6 py-2 rounded-md">
+                <Button className="bg-[#1E88E5] text-white px-6 py-2 rounded-md hover:bg-opacity-80 active:bg-opacity-70">
                   Track Order
                 </Button>
               </div>
@@ -128,5 +127,6 @@ const OrderPage = () => {
     </div>
   );
 };
+
 
 export default OrderPage;

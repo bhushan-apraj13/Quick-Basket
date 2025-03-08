@@ -19,7 +19,7 @@ const StoreOrders = () => {
     return (
         <div className="max-w-5xl mx-auto py-12 px-6">
             <h1 className="text-3xl font-bold text-textPrimary text-center mb-8">Orders Overview</h1>
-            
+
             {/* Loading State */}
             {loading && (
                 <div className="flex justify-center items-center py-20">
@@ -57,10 +57,10 @@ const StoreOrders = () => {
                                     </p>
                                     <ul className="list-disc list-inside text-sm text-gray-600 dark:text-gray-400">
                                         {order.cartItems.map((item, index) => (
-                                            <li key={index}>{item.name} (x{item.quantity})</li>
+                                            <li key={index}>{item.name} - {item.netQty} (x{item.quantity}) </li>
                                         ))}
                                     </ul>
-                                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                                    <p className="text-sm text-gray-600 dark:text-gray-400 font-bold">
                                         <span className="font-medium">Total Amount: </span> ₹{order.totalAmount}
                                     </p>
                                 </div>

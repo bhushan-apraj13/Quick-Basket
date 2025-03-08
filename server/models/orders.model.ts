@@ -14,7 +14,8 @@ type CartItems = {
     name: string;
     image: string;
     price: number;
-    quantity: number;  
+    quantity: number;
+    netQty: string;  
 }
 
 export interface IOrder extends mongoose.Document {
@@ -77,7 +78,11 @@ const OrderSchema = new mongoose.Schema<IOrder>({
             quantity: {
                 type: Number,
                 required: true
-            }
+            },
+            netQty: {
+                type: String,
+                required: true
+            },
         }
     ],
     totalAmount: {

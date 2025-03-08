@@ -13,6 +13,7 @@ type CheckoutSessionRequest = {
         image: string;
         price: number;
         quantity: number;
+        netQty: string;
         
     }[],
     deliveryDetails: {

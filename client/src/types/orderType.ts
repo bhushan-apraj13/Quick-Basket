@@ -5,6 +5,7 @@ export type CheckoutSessionRequest = {
         image: string;
         price: string;
         quantity: string;
+        netQty: string;
     }[];
     deliveryDetails: {
         name: string;

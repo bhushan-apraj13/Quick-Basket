@@ -36,6 +36,7 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                     image: cartItem.image,
                     price: cartItem.price.toString(),
                     quantity: cartItem.quantity.toString(),
+                    netQty: cartItem.netQty
                 })),
                 deliveryDetails: {
                     name: UserData.fullname,
