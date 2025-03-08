@@ -31,7 +31,7 @@ const StoreOrders = () => {
             {!loading && shopOrders.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
                     <PackageX className="w-16 h-16 text-gray-400" />
-                    <p className="text-gray-500 text-lg mt-4">No orders found. Looks like it's time to get selling! 🚀</p>
+                    <p className="text-gray-500 text-lg mt-4">No orders found. Looks like it's time to get selling! </p>
                 </div>
             )}
 

@@ -2,10 +2,11 @@ import { CheckoutSessionRequest, OrderState } from "@/types/orderType";
 import axios from "axios";
 import {create} from "zustand";
 import { persist } from "zustand/middleware";
+import { useCartstore } from "./useCartstore";
 
 const API_END_POINT:string = "http://localhost:8000/api/v1/order";
 axios.defaults.withCredentials = true;
-export const useOrderstore = create<OrderState>()(persist((set=>({
+export const useOrderstore = create<OrderState>()(persist((set)=>({
     loading:false,
     orders:[],
     createCheckoutSession: async(checkoutSession:CheckoutSessionRequest)=>{
@@ -16,8 +17,8 @@ export const useOrderstore = create<OrderState>()(persist((set=>({
                     "Content-Type": "application/json"
                 }
             });
+            set({ orders: [], loading: false }); 
             window.location.href = response.data.checkoutSession.url;
-            set({loading:false});
         } catch (error) {
             set({loading:false});
         }
@@ -27,12 +28,15 @@ export const useOrderstore = create<OrderState>()(persist((set=>({
             set({loading:true});
             const response = await axios.get(`${API_END_POINT}/`);
             set({loading:false,orders:response.data.orders});
+            if (response.data.clearCart) {
+                useCartstore.persist.clearStorage();
+            }
         } catch (error) {
             set({loading:false});
         }
     },
 
-})),{
+}),{
     name:"order-store",
-    //storage:createJSONStorage(()=>localStorage)
+    // storage:createJSONStorage(()=>localStorage)
 }))

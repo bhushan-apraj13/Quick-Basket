@@ -110,17 +110,17 @@ const Cart = () => {
 
             {/* Buttons Container - Right aligned */}
             <div className="flex justify-end items-center gap-4 mt-6">
-                <Button onClick={() => setOpen(true)} className="bg-brandGreen text-white hover:bg-brandGreen/70 px-6 py-2 rounded-md h-10">
+                <Button onClick={() => setOpen(true)} className="bg-brandGreen text-white hover:bg-brandGreen/70 px-6 py-2 rounded-md h-10" disabled={totalAmount === 0}>
                     Proceed to Checkout
                 </Button>
-                <Button onClick={clearCart} className="bg-error text-white hover:bg-error/70 px-6 py-2 rounded-md h-10">
+                <Button onClick={clearCart} className="bg-error text-white hover:bg-error/70 px-6 py-2 rounded-md h-10" >
                     Clear All
                 </Button>
             </div>
 
             {/* Success Alert */}
             {successMessage && (
-                <div className="mt-4 p-3 bg-green-100 text-green-700 rounded-md flex items-center gap-2 border-l-4 border-green-500">
+                <div className="mt-4 p-3 bg-green-100 text-green-700 rounded-md flex items-center gap-2 border-l-4 border-green-500" >
                     <CheckCircle className="w-5 h-5" />
                     <span>{successMessage}</span>
                 </div>

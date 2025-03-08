@@ -10,6 +10,7 @@ const OrderPage = () => {
 
   useEffect(() => {
     getOrders();
+    useOrderstore.persist.clearStorage();
   }, []);
 
   if (loading) {
