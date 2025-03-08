@@ -120,9 +120,9 @@ export const getShopOrder = async (req: Request, res: Response): Promise<void> =
             res.status(404).json({ success: false, message: "Shop not found" });
             return;
         };
-        const shopOrder = await Order.find({ shop: shop._id }).populate("shop").populate("user");
+        const shopOrder = await Order.find({ shop: shop._id }).populate("shop").populate("user").sort({ createdAt: -1 });
 
-        res.status(200).json({ success: true, message: "Shop orders", shopOrder });
+        res.status(200).json({ success: true, shopOrder });
         return;
 
     } catch (error) {
@@ -144,7 +144,7 @@ export const updateOrderStatus = async (req: Request, res: Response): Promise<vo
         };
         shopOrder.status = status;
         await shopOrder.save();
-        res.status(200).json({ success: true, message: "Order status updated",shopOrder});
+        res.status(200).json({ success: true, message: "Order status updated",status: shopOrder.status });
         return;
 
     } catch (error) {

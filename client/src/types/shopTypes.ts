@@ -1,3 +1,5 @@
+import { orderItem } from "./orderType";
+
 export type ProductItem = {
     _id: string;
     title: string;
@@ -31,6 +33,7 @@ export type ShopState = {
     shop: Shop |null;
     searchedShop:  searchedShop | null;
     singleShop: Shop | null;
+    shopOrders : orderItem[];
     createShop: (formData: FormData) => Promise<void>;
     getShop: () => Promise<void>;
     updateShop: (formData: FormData, existingBanner?: string) => Promise<void>;
@@ -38,4 +41,6 @@ export type ShopState = {
     addProductToShop: (product: ProductItem) => void;
     updateProductInShop: (updatedProduct: ProductItem) => void;
     getSingleShop: (shopId:string) => Promise<void>;
+    getShopOrders : () => Promise<void>;
+    updateShopOrders: (orderId:string,orderStatus:string) => Promise<void>;
 }
