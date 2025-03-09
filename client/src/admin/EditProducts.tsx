@@ -91,6 +91,8 @@ const EditProducts = ({ selectedProduct, editOpen, setEditOpen }: { selectedProd
                                 <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="border rounded-md p-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-black">
                                     <option value="kg">kg</option>
                                     <option value="gms">gms</option>
+                                    <option value="Ltr">Ltr</option>
+                                    <option value="mL">ml</option>
                                 </select>
                             </div>
                             {error.netQty && <span className="text-xs font-medium text-error">{error.netQty}</span>}

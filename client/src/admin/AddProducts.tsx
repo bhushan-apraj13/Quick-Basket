@@ -125,6 +125,8 @@ const AddProducts = () => {
                                         >
                                             <option value="kg">kg</option>
                                             <option value="gms">gms</option>
+                                            <option value="Ltr">Ltr</option>
+                                            <option value="mL">ml</option>
                                         </select>
                                     </div>
                                     {error.netQty && <span className="text-xs font-medium text-error">{error.netQty}</span>}
@@ -199,6 +201,8 @@ const AddProducts = () => {
                                         >
                                             <option value="kg">kg</option>
                                             <option value="gms">gms</option>
+                                            <option value="Ltr">Ltr</option>
+                                            <option value="mL">ml</option>
                                         </select>
                                     </div>
                                     {error.netQty && <span className="text-xs font-medium text-error">{error.netQty}</span>}
@@ -243,7 +247,7 @@ const AddProducts = () => {
                                 }; setSelectedProduct(transformedItem); setEditOpen(true);
                             }} size="sm" className="bg-brandGreen text-white hover:bg-brandGreen/80 px-6 py-4 rounded-md">Edit</Button>
                             <Button onClick={() => markOutOfStock(item._id)} size="sm" className={`px-6 py-4 rounded-md ${item.outOfStock ?  'bg-[#988675] hover:bg-[#B19774]':'bg-red-500 hover:bg-red-600'} text-white`}>
-                                {item.outOfStock ? "Make Available" : "Out of Stock"}
+                                {item.outOfStock ? "Re-Stock" : "Out of Stock"}
                             </Button>
                         </div>
                     </div>

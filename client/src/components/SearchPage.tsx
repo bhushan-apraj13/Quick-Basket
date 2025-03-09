@@ -90,7 +90,7 @@ const SearchPage = () => {
                                                 {/* Categories with horizontal scrolling layout */}
                                                 <div className="overflow-x-auto pb-2 -mx-1 px-1">
                                                     <div className="flex gap-2 no-wrap">
-                                                        {shop.productCategory.map((item: string, index: number) => (
+                                                        {shop.productCategory.slice(0, 3).map((item: string, index: number) => (
                                                             <Badge
                                                                 key={index}
                                                                 className="whitespace-nowrap text-xs font-bold px-3 py-1.5 rounded-md shadow-sm bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600"

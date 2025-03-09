@@ -36,7 +36,7 @@ const ShopDetails = () => {
             <div className="mt-8 flex flex-col md:flex-row justify-between items-start md:items-center">
                 {/* Categories - Grid Layout for Better Look */}
                 <div className="flex flex-wrap gap-2">
-                    {singleShop?.productCategory.map((item: string, index: number) => (
+                    {singleShop?.productCategory.slice(0, 4).map((item: string, index: number) => (
                         <Badge
                             key={index}
                             className="text-sm font-medium px-3 py-1 rounded-md bg-background dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-textPrimary hover:bg-opacity-90 transition-colors duration-200 shadow-sm"

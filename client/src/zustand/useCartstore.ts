@@ -12,7 +12,7 @@ export const useCartstore = create<CartState>()(persist((set) => ({
 
             if (existingProduct) {
                 return {
-                    cartItems: state.cartItems.map((cartItem) => cartItem._id === product._id ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem)
+                    cartItems: state.cartItems.map((cartItem) => cartItem._id === product._id ? { ...cartItem, quantity: Math.min(cartItem.quantity + 1, 10) } : cartItem)
                 };
             }
             else {
@@ -36,7 +36,7 @@ export const useCartstore = create<CartState>()(persist((set) => ({
     },
     increMentQuantity: (productId: string) => {
         set((state) => ({
-            cartItems: state.cartItems.map((cartItem) => cartItem._id === productId ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem)
+            cartItems: state.cartItems.map((cartItem) => cartItem._id === productId ? { ...cartItem, quantity: Math.min(cartItem.quantity + 1, 10)} : cartItem)
         }))
     },
     decreMentQuantity: (productId: string) => {

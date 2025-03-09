@@ -149,7 +149,7 @@ export const removeProduct = async (req: Request, res: Response): Promise<void> 
         product.outOfStock = !product.outOfStock;
         await product.save();
         
-        res.status(200).json({ success: true, message: product.outOfStock ? "Product marked as out of stock successfully" : "Product marked as in stock successfully", product });
+        res.status(200).json({ success: true, message: product.outOfStock ? "Product set as Out of Stock" : "Product added Back in Stock", product });
         return;
     } catch (error) {
         console.log(error);

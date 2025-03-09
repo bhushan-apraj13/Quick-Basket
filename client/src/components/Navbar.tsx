@@ -96,12 +96,14 @@ const Navbar = () => {
                         </Link>
 
                         {/* Avatar (Properly Aligned & Visible) */}
+                        <Link to="/profile">
                         <div >
                             <Avatar className="h-9 w-9border border-gray-300">
                                 <AvatarImage src={user?.profilePicture || ""} />
                                 <AvatarFallback className="flex items-center justify-center h-full w-full text-sm font-medium">CN</AvatarFallback>
                             </Avatar>
                         </div>
+                        </Link>
 
                         {/* Logout Button (Fixed Size) */}
                         <div>
