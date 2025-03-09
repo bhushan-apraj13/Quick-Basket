@@ -8,6 +8,7 @@ export type ProductItem = {
     description: string;
     image: string;
     netQty: string;
+    outOfStock: boolean;
 }
  export type Shop = {
     _id: string;

@@ -58,14 +58,17 @@ const Store = () => {
     useEffect(() => {
         const fetchShop = async () => {
             await getShop();
-            setInput({
-                storeName: shop.name || "",
-                address: shop.address || "",
-                city: shop.cityName || "",
-                deliveryTime: shop.deliveryTime || 0,
-                products: shop.productCategory ? shop.productCategory.map((product: string) => product) : [],
-                storeBanner: shop.storeBanner || undefined,
-            });
+            if (shop){
+                setInput({
+                    storeName: shop.name || "",
+                    address: shop.address || "",
+                    city: shop.cityName || "",
+                    deliveryTime: shop.deliveryTime || 0,
+                    products: shop.productCategory ? shop.productCategory.map((product: string) => product) : [],
+                    storeBanner: typeof shop.storeBanner === "string" ? undefined : shop.storeBanner,
+                });
+            }
+            
         };
         fetchShop();
         console.log(shop);

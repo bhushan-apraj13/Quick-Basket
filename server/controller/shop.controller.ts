@@ -47,6 +47,7 @@ export const createShop = async (req: Request, res: Response): Promise<void> => 
 
         
     } catch (error) {
+        console.error("Error creating shop:", error); 
         res.status(500).json({ message: "Internal Server Error" });
         return;
     }
@@ -56,6 +57,10 @@ export const createShop = async (req: Request, res: Response): Promise<void> => 
 export const getShop = async (req: Request, res: Response): Promise<void> => {
     try {
         const shop = await Shop.findOne({ userId: req.id }).populate('products');
+        // const shop = await Shop.findOne({ userId: req.id }).populate({
+        //     path: "products",
+        //     match: { outOfStock: { $ne: true } }, // ✅ Exclude out-of-stock products
+        // });
         if (!shop) {
             res.status(404).json({ success: false, message: "Shop not found", shop:[] });
             return;
@@ -159,10 +164,6 @@ export const searchProduct = async (req: Request, res: Response): Promise<void> 
     try {
         const searchText = req.params.searchText.trim()|| "";
         const searchQuery = req.query.searchQuery as String|| "";
-
-
-        
-
         //  Fetch user to determine their city
         const user = await User.findById(req.id);
         if (!user) {
@@ -184,6 +185,7 @@ export const searchProduct = async (req: Request, res: Response): Promise<void> 
             },
             {
                 $match: {
+                    // "products.outOfStock": { $ne: true },   
                     $or: [
                         { name: { $regex: searchText, $options: "i" } },
                         { storeName: { $regex: searchText, $options: "i" } },

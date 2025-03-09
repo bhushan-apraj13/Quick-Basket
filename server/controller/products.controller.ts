@@ -120,3 +120,42 @@ export const editProduct = async (req: Request, res: Response): Promise<void> =>
         return;
     }
 };
+
+export const removeProduct = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { id } = req.params;
+        
+        // ✅ Find the product
+        const product:any = await Product.findById(id);
+        if (!product) {
+            res.status(404).json({ success: false, message: "Product not found" });
+            return;
+        }
+        
+        // ✅ Find the shop of the authenticated user
+        const shop = await Shop.findOne({ userId: req.id });
+        if (!shop) {
+            res.status(404).json({ success: false, message: "Shop not found" });
+            return;
+        }
+        
+        // ✅ Ensure the product belongs to the shop
+        if (!shop.products.some(prodId => prodId.toString() === product._id.toString())) {
+            res.status(403).json({ success: false, message: "Unauthorized to update this product" });
+            return;
+        }
+        
+        // ✅ Set product as out of stock instead of deleting
+        product.outOfStock = !product.outOfStock;
+        await product.save();
+        
+        res.status(200).json({ success: true, message: product.outOfStock ? "Product marked as out of stock successfully" : "Product marked as in stock successfully", product });
+        return;
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+        return;
+    }
+};
+
+

@@ -24,7 +24,7 @@ const AddProducts = () => {
     const [open, setOpen] = useState<boolean>(false);
     const [error, setError] = useState<Partial<ProductListFormSchema>>({});
     const [editOpen, setEditOpen] = useState<boolean>(false);
-    const { loading, createProduct } = useProductStore();
+    const { loading, createProduct, markOutOfStock} = useProductStore();
     const { shop } = useShopStore();
 
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -234,13 +234,18 @@ const AddProducts = () => {
                             <h2 className="text-md font-semibold mt-2 text-start">Net Qty: <span className="text-gray-600">{item.netQty}</span></h2>
                             <h2 className="text-md font-semibold mt-2 text-start">Price: <span className="text-brandGreen">₹{item.price}</span></h2>
                         </div>
-                        <Button onClick={() => {
-                            const transformedItem = {
-                                ...item,
-                                title: item.name,
-                                _id: item._id
-                            }; setSelectedProduct(transformedItem); setEditOpen(true);
-                        }} size="sm" className="absolute top-2 right-2 bg-brandGreen text-white hover:bg-brandGreen/80 px-6 py-4 rounded-md">Edit</Button>
+                        <div className="absolute top-2 right-2 flex gap-2">
+                            <Button onClick={() => {
+                                const transformedItem = {
+                                    ...item,
+                                    title: item.name,
+                                    _id: item._id
+                                }; setSelectedProduct(transformedItem); setEditOpen(true);
+                            }} size="sm" className="bg-brandGreen text-white hover:bg-brandGreen/80 px-6 py-4 rounded-md">Edit</Button>
+                            <Button onClick={() => markOutOfStock(item._id)} size="sm" className={`px-6 py-4 rounded-md ${item.outOfStock ?  'bg-[#988675] hover:bg-[#B19774]':'bg-red-500 hover:bg-red-600'} text-white`}>
+                                {item.outOfStock ? "Make Available" : "Out of Stock"}
+                            </Button>
+                        </div>
                     </div>
                 ))}
                 <EditProducts selectedProduct={seletedProduct} editOpen={editOpen} setEditOpen={setEditOpen} />

@@ -3,21 +3,22 @@ import { toast } from "sonner";
 import {create} from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { useShopStore } from "./useShopStore";
+import { ProductItem } from "@/types/shopTypes";
 
 const API_END_POINT = "http://localhost:8000/api/v1/product";
 axios.defaults.withCredentials = true;
 
 type ProductMenuState = {
     loading : boolean,
-    productmenu : null,
+    productmenu : ProductItem[],
     createProduct: (formData:FormData)=>Promise<void>;
     editProduct: (productId:string,formData:FormData)=>Promise<void>;
-
+    markOutOfStock: (productId:string)=>Promise<void>;
 }
 
 export const useProductStore = create<ProductMenuState>()(persist((set)=>({
     loading: false,
-    productmenu : null,
+    productmenu : [],
     createProduct: async (formData:FormData)=>{
         try {
             set({loading:true});
@@ -58,6 +59,29 @@ export const useProductStore = create<ProductMenuState>()(persist((set)=>({
         } catch (error:any) {
             set({loading:false});
             toast.error(error.response.data.message);   
+        }
+    },
+    markOutOfStock: async (productId: string) => {
+        try {
+            set({ loading: true });
+            const response = await axios.patch(`${API_END_POINT}/${productId}`, {});
+            if (response.data.success) {
+                toast.success(response.data.message);
+                set((state) => ({
+                    loading: false,
+                    productmenu: (state.productmenu ?? []).map((product: ProductItem) =>
+                        product._id === productId ? response.data.product : product
+                    )
+                }));
+                set((state)=> ({productmenu: [...state.productmenu]}))
+                useShopStore.getState().updateProductInShop(response.data.product);
+                setTimeout(() => {
+                    useProductStore.persist.rehydrate();
+                }, 100);
+            }
+        } catch (error: any) {
+            set({ loading: false });
+            toast.error(error.response.data.message);
         }
     },
 }),{

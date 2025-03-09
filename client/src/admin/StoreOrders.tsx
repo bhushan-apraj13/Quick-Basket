@@ -1,12 +1,15 @@
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useShopStore } from "@/zustand/useShopStore";
-import { Loader2, PackageX } from "lucide-react";
+import { Loader2, PackageX, Store } from "lucide-react";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const StoreOrders = () => {
     const { getShopOrders, updateShopOrders, shopOrders, loading } = useShopStore();
+    const {shop} = useShopStore();
 
     useEffect(() => {
         getShopOrders();
@@ -15,6 +18,23 @@ const StoreOrders = () => {
     const handleStatusChange = async (orderId: string, status: string) => {
         await updateShopOrders(orderId, status);
     };
+
+    if (!shop) {
+        return (
+            <div className="max-w-6xl mx-auto my-10 p-6 bg-white rounded-lg flex flex-col items-center justify-center min-h-[400px] text-center">
+                <div className="rounded-full bg-brandOrange/10 p-4 mb-4">
+                    <Store className="h-12 w-12 text-brandOrange" />
+                </div>
+                <h1 className="font-extrabold text-2xl text-textPrimary mb-2">Create Your Store First</h1>
+                <p className="text-gray-600 max-w-md mb-6">You need to set up your store before you can add products. Let's get started!</p>
+                <Link to="/admin/store">
+                    <Button className="bg-brandGreen hover:bg-brandGreen/80 text-white">
+                        Create Your Store
+                    </Button>
+                </Link>
+            </div>
+        );
+    }
 
     return (
         <div className="max-w-5xl mx-auto py-12 px-6">
