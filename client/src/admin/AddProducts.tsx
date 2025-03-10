@@ -125,8 +125,8 @@ const AddProducts = () => {
                                         >
                                             <option value="kg">kg</option>
                                             <option value="gms">gms</option>
-                                            <option value="Ltr">Ltr</option>
-                                            <option value="mL">ml</option>
+                                            <option value="ltr">ltr</option>
+                                            <option value="ml">ml</option>
                                         </select>
                                     </div>
                                     {error.netQty && <span className="text-xs font-medium text-error">{error.netQty}</span>}
@@ -201,8 +201,8 @@ const AddProducts = () => {
                                         >
                                             <option value="kg">kg</option>
                                             <option value="gms">gms</option>
-                                            <option value="Ltr">Ltr</option>
-                                            <option value="mL">ml</option>
+                                            <option value="ltr">ltr</option>
+                                            <option value="ml">ml</option>
                                         </select>
                                     </div>
                                     {error.netQty && <span className="text-xs font-medium text-error">{error.netQty}</span>}

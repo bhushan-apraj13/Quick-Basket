@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import axios from "axios";
-import { LoginInputState, SignupInputState } from "@/schema/userSchema";
+import { LoginInputState, SignupInputState, ProfileInputState } from "@/schema/userSchema";
 import { toast } from "sonner";
 
 const API_END_POINT = "http://localhost:8000/api/v1/user"
@@ -31,7 +31,7 @@ type UserState = {
     logout: () => Promise<void>;
     forgotPassword: (email: string) => Promise<void>;
     resetPassword: (token: string, newPassword: string) => Promise<void>;
-    updateProfile: (input: any) => Promise<void>;
+    updateProfile: (input: ProfileInputState) => Promise<void>;
 }
 
 export const useUserStore = create<UserState>()(persist((set) => ({
@@ -170,7 +170,7 @@ export const useUserStore = create<UserState>()(persist((set) => ({
     },
 
     //update user profile api implementation
-    updateProfile: async (input:any) => {
+    updateProfile: async (input:ProfileInputState) => {
         try {
             const response = await axios.put(`${API_END_POINT}/profile/update`, input,{
                 headers: {

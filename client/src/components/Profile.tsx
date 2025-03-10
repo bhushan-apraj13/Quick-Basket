@@ -4,15 +4,16 @@ import { useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
-import { ProfileInputState} from "@/schema/userSchema";
+import { ProfileInputState, userProfileSchema} from "@/schema/userSchema";
 import { useUserStore } from "@/zustand/useUserStore";
+import { toast } from "sonner";
 
 const Profile = () => {
-
-    const {user, updateProfile,} = useUserStore();
+    const {user} = useUserStore();
+    
     const [isLoading, setIsLoading] = useState<boolean>(false);
     {/* Profile Data State */ }
-    const [profileData, setProfileData] = useState<any>({
+    const [profileData, setProfileData] = useState<ProfileInputState>({
         fullname: user?.fullname || "",
         email: user?.email||"",
         contact: user?.contact ||"",
@@ -20,9 +21,10 @@ const Profile = () => {
         city: user?.city || "",
         profilePicture: user?.profilePicture || "",
     });
-
+   
+    const updateProfile = useUserStore((state) => state.updateProfile);
     {/* Form Errors State */ }
-    const [errors] = useState<Partial<ProfileInputState>>({});
+    const [errors , setErrors] = useState<Partial<ProfileInputState>>({});
 
     {/* Success Message State */ }
     const [successMessage] = useState<string | null>(null);
@@ -57,9 +59,18 @@ const Profile = () => {
     {/* Form Submit Handler */ }
     const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const validationResult = userProfileSchema.safeParse(profileData);
+
+    if (!validationResult.success) {
+        // Extract errors and update state
+        const fieldErrors = validationResult.error.formErrors.fieldErrors;
+        setErrors(fieldErrors as Partial<ProfileInputState>);
+        toast.error("Please fill all the details correctly before submitting.");
+        return;
+    }
         try {
             setIsLoading(true);
-            await updateProfile(profileData);
+            await updateProfile(validationResult.data);
             setIsLoading(false);  
         } catch (error) {
             setIsLoading(false);
@@ -94,8 +105,8 @@ const Profile = () => {
                 {/* Full Name Input */}
                 <div className="flex flex-col w-full md:w-2/5">
                     <div className="flex items-center gap-2 mb-1">
-                        <User className="w-5 h-5 text-textPrimary" />
-                        <Label className="text-textPrimary text-sm">Full Name</Label>
+                        <User className="w-5 h-5 text-textPrimary dark:text-white" />
+                        <Label className="text-textPrimary text-sm dark:text-white">Full Name</Label>
                     </div>
                     <Input
                         type="text"
@@ -116,8 +127,8 @@ const Profile = () => {
                 {/* Email Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
-                        <Mail className="w-5 h-5 text-textPrimary" />
-                        <Label className="text-textPrimary text-sm">Email</Label>
+                        <Mail className="w-5 h-5 text-textPrimary dark:text-white" />
+                        <Label className="text-textPrimary text-sm dark:text-white">Email</Label>
                     </div>
                     <Input
                     disabled
@@ -136,8 +147,8 @@ const Profile = () => {
                 {/* Phone Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
-                        <Phone className="w-5 h-5 text-textPrimary" />
-                        <Label className="text-textPrimary text-sm">Phone</Label>
+                        <Phone className="w-5 h-5 text-textPrimary dark:text-white" />
+                        <Label className="text-textPrimary text-sm dark:text-white">Phone</Label>
                     </div>
                     <Input
                         type="text"
@@ -148,7 +159,7 @@ const Profile = () => {
                         className="w-full border-b border-gray-400 outline-none focus:ring-0"
                     />
                     {
-                        errors && <span className="text-xs text-error">{errors.contact}</span>
+                        errors && <span className="text-xs text-error ">{errors.contact}</span>
                     }
                 </div>
 

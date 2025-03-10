@@ -9,10 +9,12 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import { Separator } from "./ui/separator";
 import { useUserStore } from "@/zustand/useUserStore";
 import { useCartstore } from "@/zustand/useCartstore";
+import { useThemeStore } from "@/zustand/useThemeStore";
 
 const Navbar = () => {
     const { user, loading, logout } = useUserStore();
     const { cartItems } = useCartstore();
+    const {setTheme} = useThemeStore();
 
     return (
         <div className="max-w-7xl mx-auto w-full ">
@@ -25,36 +27,36 @@ const Navbar = () => {
                 {/* Right-aligned Navbar Links */}
                 <div className="hidden md:flex items-center gap-4">
                     <div className="hidden md:flex items-center gap-6">
-                        <Link to="/" className="text-textPrimary hover:text-brandGreen transition">
+                        <Link to="/" className="text-textPrimary hover:text-brandGreen transition dark:text-white">
                             Home
                         </Link>
-                        <Link to="/profile" className="text-textPrimary hover:text-brandGreen transition">
+                        <Link to="/profile" className="text-textPrimary hover:text-brandGreen transition dark:text-white">
                             Profile
                         </Link>
-                        <Link to="/order/status" className="text-textPrimary hover:text-brandGreen transition">
+                        <Link to="/order/status" className="text-textPrimary hover:text-brandGreen transition dark:text-white">
                            Orders
                         </Link>
 
                         {user?.admin && (
                             <Menubar>
                                 <MenubarMenu>
-                                    <MenubarTrigger className="bg-transparent text-textPrimary hover:bg-brandGreen hover:text-white data-[state=open]:bg-brandGreen data-[state=open]:text-white transition">
+                                    <MenubarTrigger className="bg-transparent text-textPrimary dark:text-white hover:bg-brandGreen  hover:text-white data-[state=open]:bg-brandGreen data-[state=open]:text-white transition">
                                         Dashboard
                                     </MenubarTrigger>
 
-                                    <MenubarContent className="bg-white shadow-lg rounded-md">
+                                    <MenubarContent className="bg-white dark:bg-gray-800 shadow-lg rounded-md">
                                         <Link to="/admin/store">
-                                            <MenubarItem className="px-3 py-2 text-textPrimary hover:bg-brandOrange hover:text-white transition">
+                                            <MenubarItem className="px-3 py-2 text-textPrimary  dark:text-white hover:bg-brandOrange dark:hover:bg-brandGreen hover:text-white transition">
                                                 Store
                                             </MenubarItem>
                                         </Link>
                                         <Link to="/admin/products">
-                                            <MenubarItem className="px-3 py-2 text-textPrimary hover:bg-brandOrange hover:text-white transition">
+                                            <MenubarItem className="px-3 py-2 text-textPrimary dark:text-white hover:bg-brandOrange dark:hover:bg-brandGreen hover:text-white transition">
                                                 Products
                                             </MenubarItem>
                                         </Link>
                                         <Link to="/admin/storeOrders">
-                                            <MenubarItem className="px-3 py-2 text-textPrimary hover:bg-brandOrange hover:text-white transition">
+                                            <MenubarItem className="px-3 py-2 text-textPrimary dark:text-white hover:bg-brandOrange dark:hover:bg-brandGreen hover:text-white transition">
                                                 Orders
                                             </MenubarItem>
                                         </Link>
@@ -70,21 +72,21 @@ const Navbar = () => {
                         <div>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="icon">
+                                    <Button variant="outline" size="icon" className="dark:border-gray-600 dark:bg-gray-800 dark:text-white">
                                         <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                                         <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
                                         <span className="sr-only">Toggle theme</span>
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuItem>Light</DropdownMenuItem>
-                                    <DropdownMenuItem>Dark</DropdownMenuItem>
+                                <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:text-white">
+                                    <DropdownMenuItem onClick={()=>setTheme("light")}>Light</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={()=>setTheme("dark")}>Dark</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
 
                         {/* Cart Icon */}
-                        <Link to="/cart" className="relative cursor-pointer text-textPrimary hover:text-brandGreen">
+                        <Link to="/cart" className="relative cursor-pointer text-textPrimary dark:text-white hover:text-brandGreen">
                             <LucideShoppingCart className="h-6 w-6" />
                             {
                                 cartItems.length > 0 && (
@@ -133,7 +135,9 @@ export default Navbar;
 
 const MobileNavbar = () => {
     const { user, loading, logout } = useUserStore();
+    const {setTheme} = useThemeStore();
     return (
+        
         <Sheet>
             <SheetTrigger asChild>
                 <Button size={"icon"} className="rounded-full bg-gray-200 text-textPrimary hover:bg-gray-300 transition">
@@ -165,8 +169,8 @@ const MobileNavbar = () => {
                             <DropdownMenuContent
                                 align="end"
                             >
-                                <DropdownMenuItem>Light</DropdownMenuItem>
-                                <DropdownMenuItem>Dark</DropdownMenuItem>
+                                <DropdownMenuItem onClick={()=>setTheme("light")}>Light</DropdownMenuItem>
+                                <DropdownMenuItem onClick={()=>setTheme("dark")}>Dark</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>

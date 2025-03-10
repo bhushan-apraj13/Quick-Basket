@@ -25,10 +25,15 @@ const EditProducts = ({ selectedProduct, editOpen, setEditOpen }: { selectedProd
             title: selectedProduct?.title || "",
             description: selectedProduct?.description || "",
             price: selectedProduct?.price || 0,
-            netQty: selectedProduct?.netQty.replace(/kg|gms/gi, "") || "",
+            netQty: selectedProduct?.netQty.replace(/kg|gms|ltr|ml/gi, "") || "",
             image: undefined
         });
-        setUnit(selectedProduct?.netQty.includes("kg") ? "kg" : "gms");
+        const units = ["kg", "gms", "ltr", "ml"];
+    
+        // Find which unit exists in the netQty string
+        const detectedUnit = units.find(unit => selectedProduct?.netQty.includes(unit)) || "";
+    
+        setUnit(detectedUnit);
     }, [selectedProduct]);
 
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -91,8 +96,8 @@ const EditProducts = ({ selectedProduct, editOpen, setEditOpen }: { selectedProd
                                 <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="border rounded-md p-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-black">
                                     <option value="kg">kg</option>
                                     <option value="gms">gms</option>
-                                    <option value="Ltr">Ltr</option>
-                                    <option value="mL">ml</option>
+                                    <option value="ltr">ltr</option>
+                                    <option value="ml">ml</option>
                                 </select>
                             </div>
                             {error.netQty && <span className="text-xs font-medium text-error">{error.netQty}</span>}

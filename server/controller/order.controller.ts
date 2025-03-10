@@ -61,6 +61,10 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
         {/*line items*/ }
         const productItems = shop.products;
         const lineItems = createLineItems(checkoutSessionRequest, productItems);
+        const images = productItems
+        .map((item: any) => item.image?.split("?")[0]) // ✅ Removes query params
+        .filter(Boolean)
+        .slice(0, 5); 
 
         const checkoutSession = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
@@ -71,10 +75,12 @@ export const createCheckoutSession = async (req: Request, res: Response): Promis
             mode: 'payment',
             success_url: `${process.env.FRONTEND_URL}/order/status`,
             cancel_url: `${process.env.FRONTEND_URL}/cart`,
-            metadata:{
-                orderId: order._id.toString(),
-                images: JSON.stringify(productItems.map((item:any) => item.image))
-            }
+           // ✅ Limit to 5 images
+        
+        metadata: {
+            orderId: order._id.toString(),
+            images: JSON.stringify(images)
+        }
         });
         if (!checkoutSession.url) {
             res.status(400).json({ success: false, message: "Failed to create checkout session" });

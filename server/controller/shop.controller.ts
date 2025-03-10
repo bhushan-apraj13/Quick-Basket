@@ -56,7 +56,10 @@ export const createShop = async (req: Request, res: Response): Promise<void> => 
 {/*for getting shop info*/}
 export const getShop = async (req: Request, res: Response): Promise<void> => {
     try {
-        const shop = await Shop.findOne({ userId: req.id }).populate('products');
+        const shop = await Shop.findOne({ userId: req.id }).populate({
+            path: 'products',
+            options: { sort: { createdAt: -1 } } // ✅ Sort products by newest first
+        });
         // const shop = await Shop.findOne({ userId: req.id }).populate({
         //     path: "products",
         //     match: { outOfStock: { $ne: true } }, // ✅ Exclude out-of-stock products
@@ -217,7 +220,7 @@ export const searchProduct = async (req: Request, res: Response): Promise<void> 
 export const getSingleShop = async (req: Request, res: Response): Promise<void> => {
     try {
         const shopId = req.params.id;
-        const shop = await Shop.findById(shopId).populate({path:'products', options:{createdAt:-1}
+        const shop = await Shop.findById(shopId).populate({path:'products', options:{sort: { createdAt: -1 }}
         });
         
         if (!shop) {

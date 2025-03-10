@@ -56,7 +56,8 @@ const ShopDetails = () => {
 
             {/* Available Products Section */}
             <div className="mt-8">
-                <AvailableProducts products={singleShop?.products!} />
+                {/* <AvailableProducts products={singleShop?.products!} /> */}
+                {singleShop?.products &&<AvailableProducts products={singleShop?.products!} />}
             </div>
         </div>
     );

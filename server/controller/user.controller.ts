@@ -240,7 +240,7 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
         
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Please make sure all the fields are filled correctly" });
         return;
     }
 };
