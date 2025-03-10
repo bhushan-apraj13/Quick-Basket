@@ -75,8 +75,8 @@ const Store = () => {
     }, []);
 
     return (
-        <div className="max-w-4xl mx-auto my-10 p-6 bg-white shadow-lg rounded-lg">
-            <h1 className="font-extrabold text-3xl text-textPrimary mb-6 text-center">
+        <div className="max-w-4xl mx-auto my-10 p-6 bg-white dark:bg-gray-800 shadow-lg rounded-lg">
+            <h1 className="font-extrabold text-3xl text-textPrimary dark:text-white mb-6 text-center">
                 {shop ? "Update Store" : "Add New Store"}
             </h1>
 

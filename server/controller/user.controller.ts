@@ -186,7 +186,6 @@ export const resetPassword = async (req: Request, res: Response): Promise<void> 
         return;
         
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
     }
@@ -206,7 +205,6 @@ export const checkAuth = async (req: Request, res: Response): Promise<void> => {
         return;
 
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
     }
@@ -239,7 +237,6 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
         return;
         
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Please make sure all the fields are filled correctly" });
         return;
     }

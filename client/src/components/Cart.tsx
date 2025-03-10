@@ -86,7 +86,7 @@ const Cart = () => {
                                     <TableCell className="text-center">
                                         <Button
                                             onClick={() => removeFromCart(item._id)}    
-                                            className="p-2 text-error hover:text-error/70 hover:bg-error/10 bg-transparent rounded-full transition-colors"
+                                            className="p-2 text-error hover:text-error/70 hover:bg-error/10 dark:hover:bg-error/20 bg-transparent rounded-full transition-colors"
                                             size="icon"
                                             title="Remove item"
                                         >

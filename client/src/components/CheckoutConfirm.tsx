@@ -62,7 +62,7 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent className="p-4 space-y-2">
                 <DialogTitle className="text-extrabold mt-1">Review Your Order</DialogTitle>
-                <DialogDescription className="text-sm text-gray-500">
+                <DialogDescription className="text-sm text-gray-500 dark:text-gray-400">
                     Please verify your details and order summary before proceeding.
                 </DialogDescription>
 
@@ -70,26 +70,26 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                 {/* User Info */}
                 <div className="grid grid-cols-2 gap-4 ">
                     <div>
-                        <Label className="block text-sm text-gray-700 font-semibold">Full Name</Label>
-                        <p className="text-gray-700">{UserData.fullname}</p>
+                        <Label className="block text-sm text-gray-700 dark:text-white font-semibold">Full Name</Label>
+                        <p className="text-gray-700 dark:text-gray-400">{UserData.fullname}</p>
                     </div>
                     <div>
-                        <Label className="block text-sm text-gray-700 font-semibold">Contact</Label>
-                        <p className="text-gray-700">+91 {UserData.contact}</p>
+                        <Label className="block text-sm text-gray-700 dark:text-white font-semibold">Contact</Label>
+                        <p className="text-gray-700 dark:text-gray-400">+91 {UserData.contact}</p>
                     </div>
                     <div>
-                        <Label className="block text-sm text-gray-700 font-semibold">Address</Label>
-                        <p className="text-gray-700">{UserData.address}</p>
+                        <Label className="block text-sm text-gray-700 dark:text-white font-semibold">Address</Label>
+                        <p className="text-gray-700 dark:text-gray-400">{UserData.address}</p>
                     </div>
                     <div>
-                        <Label className="block text-sm text-gray-700 font-semibold">City</Label>
-                        <p className="text-gray-700">{UserData.city}</p>
+                        <Label className="block text-sm text-gray-700 dark:text-white font-semibold">City</Label>
+                        <p className="text-gray-700 dark:text-gray-400">{UserData.city}</p>
                     </div>
                 </div>
 
                 {/* Edit Button */}
                 <div className="flex justify-end h-4 mr-4">
-                    <span className="text-brandGreen bg-white hover:bg-white hover:text-brandGreen/80 font-semibold" onClick={() => navigate(`/profile`, { state: { from: "/cart" } })}>Edit</span>
+                    <span className="text-brandGreen bg-white dark:bg-transparent hover:bg-white dark:hover:bg-transparent  hover:text-brandGreen/80 font-semibold" onClick={() => navigate(`/profile`, { state: { from: "/cart" } })}>Edit</span>
                 </div>
 
                 <Separator className="my-4" />

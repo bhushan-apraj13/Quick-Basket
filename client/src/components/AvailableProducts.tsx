@@ -22,15 +22,15 @@ const AvailableProducts = ({ products }: { products: ProductItem[] }) => {
                     <div className="bg-brandOrange/10 p-4 rounded-full">
                         <Package className="h-12 w-12 text-brandOrange" />
                     </div>
-                    <h2 className="text-2xl font-semibold text-textPrimary mt-4">
+                    <h2 className="text-2xl font-semibold text-textPrimary dark:text-white mt-4">
                         This shop has no products yet!
                     </h2>
-                    <p className="text-gray-600 mt-2">Check back later to see amazing products.</p>
+                    <p className="text-gray-600 mt-2 dark:text-gray-400">Check back later to see amazing products.</p>
                 </div>
             ) : (
                 // ✅ Show products if available, including the title
                 <>
-                    <h1 className="text-xl md:text-2xl font-semibold mb-6 text-textPrimary">Available Products</h1>
+                    <h1 className="text-xl md:text-2xl font-semibold mb-6 text-textPrimary dark:text-white">Available Products</h1>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                         {products.map((product: ProductItem) => (
                             <Card key={product._id} className="w-full max-w-xs mx-auto shadow-lg rounded-lg overflow-hidden flex flex-col">

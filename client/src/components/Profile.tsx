@@ -166,8 +166,8 @@ const Profile = () => {
                 {/* Address Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
-                        <Home className="w-5 h-5 text-textPrimary" />
-                        <Label className="text-textPrimary text-sm">Address</Label>
+                        <Home className="w-5 h-5 text-textPrimary dark:text-white" />
+                        <Label className="text-textPrimary text-sm dark:text-white">Address</Label>
                     </div>
                     <Input
                         type="text"
@@ -185,8 +185,8 @@ const Profile = () => {
                 {/* City Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
-                        <MapPin className="w-5 h-5 text-textPrimary" />
-                        <Label className="text-textPrimary text-sm">City</Label>
+                        <MapPin className="w-5 h-5 text-textPrimary dark:text-white" />
+                        <Label className="text-textPrimary text-sm dark:text-white">City</Label>
                     </div>
                     <Input
                         type="text"

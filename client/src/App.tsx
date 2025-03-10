@@ -19,6 +19,7 @@ import { useEffect } from 'react'
 import Loading from './components/Loading'
 import Login from './auth/login'
 import NotFound from './components/NotFound'
+import { useThemeStore } from './zustand/useThemeStore'
 
 const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, user } = useUserStore();
@@ -129,10 +130,17 @@ const appRouter = createBrowserRouter([
 
 ])
 function App() {
+  const initializeTheme = useThemeStore((state:any) => state.initializeTheme);
   const { checkAuthentication, isCheckingAuth } = useUserStore();
   useEffect(() => {
+    try {
+      initializeTheme(); // ✅ Call theme initialization safely
+    } catch (error) {
+      console.error("Error initializing theme:", error);
+    }
     checkAuthentication();
-  }, [checkAuthentication])
+
+  }, [initializeTheme, checkAuthentication])
   if (isCheckingAuth) return <Loading/>
   return (
     <main>

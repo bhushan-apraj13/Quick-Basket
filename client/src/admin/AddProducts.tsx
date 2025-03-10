@@ -62,8 +62,8 @@ const AddProducts = () => {
                 <div className="rounded-full bg-brandOrange/10 p-4 mb-4">
                     <Store className="h-12 w-12 text-brandOrange" />
                 </div>
-                <h1 className="font-extrabold text-2xl text-textPrimary mb-2">Create Your Store First</h1>
-                <p className="text-gray-600 max-w-md mb-6">You need to set up your store before you can add products. Let's get started!</p>
+                <h1 className="font-extrabold text-2xl text-textPrimary  dark:text-white mb-2">Create Your Store First</h1>
+                <p className="text-gray-600 dark:text-gray-400 max-w-md mb-6">You need to set up your store before you can add products. Let's get started!</p>
                 <Link to="/admin/store">
                     <Button className="bg-brandGreen hover:bg-brandGreen/80 text-white">
                         Create Your Store
@@ -80,8 +80,8 @@ const AddProducts = () => {
                 <div className="rounded-full bg-brandOrange/10 p-4 mb-4">
                     <ShoppingBag className="h-12 w-12 text-brandOrange" />
                 </div>
-                <h1 className="font-extrabold text-2xl text-textPrimary mb-2">Your Store Shelves Are Empty</h1>
-                <p className="text-gray-600 max-w-md mb-6">Time to add your first product! Showcase what makes your store special.</p>
+                <h1 className="font-extrabold text-2xl text-textPrimary mb-2 dark:text-white">Your Store Shelves Are Empty</h1>
+                <p className="text-gray-600 max-w-md mb-6 dark:text-gray-400">Time to add your first product! Showcase what makes your store special.</p>
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-brandGreen hover:bg-brandGreen/80 text-white flex items-center">
@@ -112,7 +112,7 @@ const AddProducts = () => {
                                         placeholder="Enter product description"
                                         value={input.description}
                                         onChange={changeEventHandler}
-                                        className="border rounded-md p-2 h-20 max-h-40 overflow-y-auto resize-none bg-white text-black focus:outline-none focus:ring-2 focus:ring-black"
+                                        className="border rounded-md p-2 h-20 max-h-40 overflow-y-auto resize-none bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black"
                                     />
                                     {error.description && <span className="text-xs font-medium text-error">{error.description}</span>}
                                 </div>
@@ -121,7 +121,7 @@ const AddProducts = () => {
                                     <Label className="mb-1.5 ml-1">Net Quantity</Label>
                                     <div className="flex gap-2">
                                         <Input type="number" name="netQty" placeholder="Enter quantity" value={input.netQty} onChange={changeEventHandler} />
-                                        <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="border rounded-md p-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-black"
+                                        <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="border rounded-md p-2 bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black"
                                         >
                                             <option value="kg">kg</option>
                                             <option value="gms">gms</option>
@@ -155,9 +155,9 @@ const AddProducts = () => {
 
     // If shop exists and has products, display the original UI
     return (
-        <div className="max-w-6xl mx-auto my-10 p-6 bg-white rounded-lg">
+        <div className="max-w-6xl mx-auto my-10 p-6 bg-white dark:bg-gray-800 rounded-lg">
             <div className="flex justify-between items-center mb-6">
-                <h1 className="font-extrabold text-2xl text-textPrimary">Available Products</h1>
+                <h1 className="font-extrabold text-2xl text-textPrimary dark:text-white">Available Products</h1>
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-brandOrange hover:bg-brandOrange/80 text-white flex items-center ">
@@ -188,7 +188,7 @@ const AddProducts = () => {
                                         placeholder="Enter product description"
                                         value={input.description}
                                         onChange={changeEventHandler}
-                                        className="border rounded-md p-2 h-20 max-h-40 overflow-y-auto resize-none bg-white text-black focus:outline-none focus:ring-2 focus:ring-black"
+                                        className="border rounded-md p-2 h-20 max-h-40 overflow-y-auto resize-none bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black"
                                     />
                                     {error.description && <span className="text-xs font-medium text-error">{error.description}</span>}
                                 </div>
@@ -197,7 +197,7 @@ const AddProducts = () => {
                                     <Label className="mb-1.5 ml-1">Net Quantity</Label>
                                     <div className="flex gap-2">
                                         <Input type="number" name="netQty" placeholder="Enter quantity" value={input.netQty} onChange={changeEventHandler} />
-                                        <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="border rounded-md p-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-black"
+                                        <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="border rounded-md p-2 bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black"
                                         >
                                             <option value="kg">kg</option>
                                             <option value="gms">gms</option>
@@ -228,14 +228,14 @@ const AddProducts = () => {
             </div>
             <div className="space-y-6">
                 {shop.products.map((item: any, index: number) => (
-                    <div key={index} className="relative flex flex-col md:flex-row items-start p-4 shadow-md rounded-lg border bg-white space-y-4 md:space-y-0 md:items-start">
+                    <div key={index} className="relative flex flex-col md:flex-row items-start p-4 shadow-md rounded-lg border bg-white dark:bg-gray-700 space-y-4 md:space-y-0 md:items-start">
                         <img src={item.image} alt={item.name} className="h-24 w-24 object-cover rounded-lg" />
                         <div className="flex-1 ml-4 flex flex-col justify-start">
-                            <h1 className="text-lg font-semibold text-gray-800 text-start">{item.name}</h1>
-                            <p className="text-sm text-gray-600 mt-1 text-start max-w-xs md:max-w-sm line-clamp-2 break-words">
+                            <h1 className="text-lg font-semibold text-gray-800  dark:text-white text-start">{item.name}</h1>
+                            <p className="text-sm text-gray-600 dark:text-gray-100 mt-1 text-start max-w-xs md:max-w-sm line-clamp-2 break-words">
                                 {item.description}
                             </p>
-                            <h2 className="text-md font-semibold mt-2 text-start">Net Qty: <span className="text-gray-600">{item.netQty}</span></h2>
+                            <h2 className="text-md font-semibold mt-2 text-start">Net Qty: <span className="text-gray-600 dark:text-gray-100">{item.netQty}</span></h2>
                             <h2 className="text-md font-semibold mt-2 text-start">Price: <span className="text-brandGreen">₹{item.price}</span></h2>
                         </div>
                         <div className="absolute top-2 right-2 flex gap-2">

@@ -27,7 +27,7 @@ export const useThemeStore = create<ThemeStore>()(
       initializeTheme: () => {
         if (typeof window !== "undefined") {
           const storedTheme = localStorage.getItem("vite-ui-theme") as Theme;
-          const themeToApply = storedTheme;
+          const themeToApply = storedTheme ?? "light";
 
           // Apply the theme to the HTML root element
           const root = window.document.documentElement;

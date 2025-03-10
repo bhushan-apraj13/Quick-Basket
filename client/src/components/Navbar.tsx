@@ -78,7 +78,7 @@ const Navbar = () => {
                                         <span className="sr-only">Toggle theme</span>
                                     </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end" className="dark:bg-gray-800 dark:text-white">
+                                <DropdownMenuContent align="end" className="dark:bg-red dark:text-white">
                                     <DropdownMenuItem onClick={()=>setTheme("light")}>Light</DropdownMenuItem>
                                     <DropdownMenuItem onClick={()=>setTheme("dark")}>Dark</DropdownMenuItem>
                                 </DropdownMenuContent>

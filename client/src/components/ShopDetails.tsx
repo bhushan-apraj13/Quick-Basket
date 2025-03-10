@@ -39,7 +39,7 @@ const ShopDetails = () => {
                     {singleShop?.productCategory.slice(0, 4).map((item: string, index: number) => (
                         <Badge
                             key={index}
-                            className="text-sm font-medium px-3 py-1 rounded-md bg-background dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-textPrimary hover:bg-opacity-90 transition-colors duration-200 shadow-sm"
+                            className="text-sm font-medium px-3 py-1 rounded-md bg-background dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-textPrimary dark:text-white hover:bg-opacity-90 transition-colors duration-200 shadow-sm"
                         >
                             {item}
                         </Badge>
@@ -48,8 +48,8 @@ const ShopDetails = () => {
                 {/* Delivery Time */}
                 <div className="flex items-center gap-2 mt-6 md:mt-0 mr-3">
                     <Timer className="w-6 h-6 text-brandGreen" />
-                    <h1 className="text-lg font-medium text-textPrimary">
-                        Delivery Time: <span className="text-textSecondary">{singleShop?.deliveryTime} mins</span>
+                    <h1 className="text-lg font-medium text-textPrimary dark:text-white">
+                        Delivery Time: <span className="text-textSecondary dark:text-white">{singleShop?.deliveryTime} mins</span>
                     </h1>
                 </div>
             </div>

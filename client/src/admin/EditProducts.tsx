@@ -86,14 +86,14 @@ const EditProducts = ({ selectedProduct, editOpen, setEditOpen }: { selectedProd
                         </div>
                         <div className="flex flex-col md:col-span-2">
                             <Label className="mb-1.5 ml-1">Description</Label>
-                            <textarea name="description" placeholder="Enter product description" value={input.description} onChange={changeEventHandler} className="border rounded-md p-2 h-20 max-h-40 overflow-y-auto resize-none bg-white text-black focus:outline-none focus:ring-2 focus:ring-black" />
+                            <textarea name="description" placeholder="Enter product description" value={input.description} onChange={changeEventHandler} className="border rounded-md p-2 h-20 max-h-40 overflow-y-auto resize-none bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black" />
                             {error.description && <span className="text-xs font-medium text-error">{error.description}</span>}
                         </div>
                         <div className="flex flex-col md:col-span-2">
                             <Label className="mb-1.5 ml-1">Net Quantity</Label>
                             <div className="flex gap-2">
                                 <Input type="number" name="netQty" placeholder="Enter quantity" value={input.netQty} onChange={changeEventHandler} />
-                                <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="border rounded-md p-2 bg-white text-black focus:outline-none focus:ring-2 focus:ring-black">
+                                <select name="unit" value={unit} onChange={(e) => setUnit(e.target.value)} className="border rounded-md p-2 bg-white dark:bg-gray-800 text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-black">
                                     <option value="kg">kg</option>
                                     <option value="gms">gms</option>
                                     <option value="ltr">ltr</option>

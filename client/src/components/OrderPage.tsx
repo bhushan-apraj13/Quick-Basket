@@ -25,15 +25,15 @@ const OrderPage = () => {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen text-center">
         <PackageX className="w-16 h-16 text-gray-400" />
-        <h1 className="font-bold text-2xl text-gray-600 mt-4">No Orders Yet!</h1>
-        <p className="text-gray-500 text-sm mt-2">Start shopping now and fill up your basket! 🛒</p>
+        <h1 className="font-bold text-2xl text-gray-600 mt-4 dark:text-white">No Orders Yet!</h1>
+        <p className="text-gray-500 text-sm mt-2 dark:text-gray-400">Start shopping now and fill up your basket! 🛒</p>
       </div>
     );
   }
 
   return (
     <div className="max-w-5xl mx-auto my-10 px-4">
-      <h1 className="text-3xl font-extrabold text-textPrimary text-center mb-8">
+      <h1 className="text-3xl font-extrabold text-textPrimary text-center mb-8 dark:text-white">
         Your Orders
       </h1>
 
@@ -45,8 +45,8 @@ const OrderPage = () => {
           >
             {/* Order Header */}
             <div className="flex justify-between items-center mb-3">
-              <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                Order ID: <span className="text-textPrimary">{order._id}</span>
+              <h2 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+                Order ID: <span className="text-textPrimary dark:text-gray-400">{order._id}</span>
               </h2>
               <span
                 className={`px-3 py-1 text-sm font-medium rounded-full ${order.status === "confirmed"

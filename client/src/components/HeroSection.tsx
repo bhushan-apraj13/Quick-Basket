@@ -20,7 +20,7 @@ const HeroSection = () => {
                     <h1 className="font-bold md:font-extrabold md:text-4xl text-3xl">
                         Bringing What You Need, Exactly When You Need
                     </h1>
-                    <p className="text-textSecondary">Fast, fresh, and at your doorstep!</p>
+                    <p className="text-textSecondary dark:text-white">Fast, fresh, and at your doorstep!</p>
                 </div>
                 <div className="relative flex items-center gap-2 w-full">
                     <div className="relative flex-1">

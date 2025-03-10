@@ -25,8 +25,8 @@ const StoreOrders = () => {
                 <div className="rounded-full bg-brandOrange/10 p-4 mb-4">
                     <Store className="h-12 w-12 text-brandOrange" />
                 </div>
-                <h1 className="font-extrabold text-2xl text-textPrimary mb-2">Create Your Store First</h1>
-                <p className="text-gray-600 max-w-md mb-6">You need to set up your store before you can add products. Let's get started!</p>
+                <h1 className="font-extrabold text-2xl text-textPrimary dark:text-white mb-2">Create Your Store First</h1>
+                <p className="text-gray-600 dark:text-gray-400 max-w-md mb-6">You need to set up your store before you can add products. Let's get started!</p>
                 <Link to="/admin/store">
                     <Button className="bg-brandGreen hover:bg-brandGreen/80 text-white">
                         Create Your Store
@@ -38,7 +38,7 @@ const StoreOrders = () => {
 
     return (
         <div className="max-w-5xl mx-auto py-12 px-6">
-            <h1 className="text-3xl font-bold text-textPrimary text-center mb-8">Orders Overview</h1>
+            <h1 className="text-3xl font-bold text-textPrimary dark:text-white text-center mb-8">Orders Overview</h1>
 
             {/* Loading State */}
             {loading && (
@@ -50,8 +50,8 @@ const StoreOrders = () => {
             {/* No Orders Found */}
             {!loading && shopOrders.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-20 text-center">
-                    <PackageX className="w-16 h-16 text-gray-400" />
-                    <p className="text-gray-500 text-lg mt-4">No orders found. Looks like it's time to get selling! </p>
+                    <PackageX className="w-16 h-16 text-gray-400 dark:text-gray-400" />
+                    <p className="text-gray-500 text-lg mt-4 dark:text-gray-400">No orders found. Looks like it's time to get selling! </p>
                 </div>
             )}
 
@@ -91,7 +91,7 @@ const StoreOrders = () => {
                                         Order Status
                                     </Label>
                                     <Select onValueChange={(newStatus) => handleStatusChange(order._id, newStatus)} defaultValue={order.status}>
-                                        <SelectTrigger className="w-full">
+                                        <SelectTrigger className="w-full dark:bg-gray-700">
                                             <SelectValue placeholder="Select Status" />
                                         </SelectTrigger>
                                         <SelectContent>
