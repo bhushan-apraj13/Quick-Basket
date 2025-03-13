@@ -5,7 +5,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { useShopStore } from "./useShopStore";
 import { ProductItem } from "@/types/shopTypes";
 
-const API_END_POINT = "http://localhost:8000/api/v1/product";
+const API_END_POINT = "https://quick-basket-ichw.onrender.com/api/v1/product";
 axios.defaults.withCredentials = true;
 
 type ProductMenuState = {

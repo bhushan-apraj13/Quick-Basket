@@ -44,7 +44,6 @@ export const signUp = async (req: Request, res: Response): Promise<void>=> {
 
     }
     catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
 
@@ -79,7 +78,6 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
         return;
 
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
     }
@@ -112,7 +110,6 @@ export const verifyEmail = async (req: Request, res: Response): Promise<void>=> 
         return;
 
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
     }
@@ -126,7 +123,6 @@ export const logout = async (req: Request, res: Response): Promise<void> => {
         res.clearCookie("token").status(200).json({ success: true, message: "Logged out successfully" });
         return;
     } catch (error) {
-        console.log(error);
          res.status(500).json({ message: "Internal Server Error" });
          return;
     }
@@ -155,7 +151,6 @@ export const forgotPassword = async (req: Request, res: Response): Promise<void>
         return;
 
     } catch (error) {
-        console.log(error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
     }

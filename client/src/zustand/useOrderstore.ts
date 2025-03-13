@@ -4,7 +4,7 @@ import {create} from "zustand";
 import { persist } from "zustand/middleware";
 import { useCartstore } from "./useCartstore";
 
-const API_END_POINT:string = "http://localhost:8000/api/v1/order";
+const API_END_POINT:string = "https://quick-basket-ichw.onrender.com/api/v1/order";
 axios.defaults.withCredentials = true;
 export const useOrderstore = create<OrderState>()(persist((set)=>({
     loading:false,
