@@ -241,3 +241,26 @@ export const updateUserProfile = async (req: Request, res: Response): Promise<vo
         return;
     }
 };
+
+export const toggleAdminStatus = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const userId = req.id; // Get user ID from authentication middleware
+
+        const user = await User.findById(userId);
+        if (!user) {
+            res.status(404).json({ success: false, message: "User not found" });
+            return;
+        }
+
+        user.admin = !user.admin; // ✅ Toggle the admin status
+        await user.save(); // ✅ Save the updated user
+
+        res.status(200).json({ 
+            success: true, 
+            message: `User is now ${user.admin ? "an Admin" : "a Normal User"}`, 
+            user 
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Something went wrong. Please try again later." });
+    }
+};

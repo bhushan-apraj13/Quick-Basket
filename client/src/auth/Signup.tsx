@@ -58,7 +58,7 @@ const Signup = () => {
 
             <form onSubmit={loginSubmitHandler} className="md:p-8 w-full max-w-md  rounded-lg md:border border-gray-200 mx-4 ">
                 <div className="mb-4">
-                    <h1 className="font-bold text-2xl text-textPrimary">QuickBasket</h1>
+                    <h1 className="font-bold text-2xl text-textPrimary dark:text-white">QuickBasket</h1>
                 </div>
                 {/* Full name Input */}
                 <div className="mb-4">

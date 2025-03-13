@@ -17,36 +17,46 @@ const Navbar = () => {
     const {setTheme} = useThemeStore();
 
     return (
-        <div className="max-w-7xl mx-auto w-full ">
-            <div className={`flex items-center justify-between h-16 w-full ${user?.admin ? "gap-[25rem]" : "gap-[33rem]"}`}>
+        <div className="max-w-7xl mx-auto w-full">
+            <div className={`flex items-center justify-between h-16 w-full ${user?.admin ? "gap-[40rem]" : "gap-[35rem]"}`}>
                 {/* Left-aligned Brand Logo */}
-                <Link to="/"><h1 className="text-brandOrange font-extrabold text-3xl
-                md:text-4xl hover:text-brandGreen">QuickBasket</h1>
+                <Link to="/">
+                    <h1 className="text-brandOrange font-extrabold text-3xl md:text-4xl hover:text-brandGreen">
+                        QuickBasket
+                    </h1>
                 </Link>
-
+    
                 {/* Right-aligned Navbar Links */}
                 <div className="hidden md:flex items-center gap-4">
                     <div className="hidden md:flex items-center gap-6">
-                        <Link to="/" className="text-textPrimary hover:text-brandGreen transition dark:text-white">
-                            Home
-                        </Link>
+                        {/* ✅ Show Home & Orders only for normal users */}
+                        {!user?.admin && (
+                            <>
+                                <Link to="/" className="text-textPrimary hover:text-brandGreen transition dark:text-white">
+                                    Home
+                                </Link>
+                                <Link to="/order/status" className="text-textPrimary hover:text-brandGreen transition dark:text-white">
+                                    Orders
+                                </Link>
+                            </>
+                        )}
+    
+                        {/* ✅ Profile Link (Accessible by Both) */}
                         <Link to="/profile" className="text-textPrimary hover:text-brandGreen transition dark:text-white">
                             Profile
                         </Link>
-                        <Link to="/order/status" className="text-textPrimary hover:text-brandGreen transition dark:text-white">
-                           Orders
-                        </Link>
-
+    
+                        {/* ✅ Admin Dashboard (Only for Admins) */}
                         {user?.admin && (
                             <Menubar>
                                 <MenubarMenu>
-                                    <MenubarTrigger className="bg-transparent text-textPrimary dark:text-white hover:bg-brandGreen  hover:text-white data-[state=open]:bg-brandGreen data-[state=open]:text-white transition">
+                                    <MenubarTrigger className="bg-transparent text-textPrimary dark:text-white hover:bg-brandGreen hover:text-white data-[state=open]:bg-brandGreen data-[state=open]:text-white transition">
                                         Dashboard
                                     </MenubarTrigger>
-
+    
                                     <MenubarContent className="bg-white dark:bg-gray-800 shadow-lg rounded-md">
                                         <Link to="/admin/store">
-                                            <MenubarItem className="px-3 py-2 text-textPrimary  dark:text-white hover:bg-brandOrange dark:hover:bg-brandGreen hover:text-white transition">
+                                            <MenubarItem className="px-3 py-2 text-textPrimary dark:text-white hover:bg-brandOrange dark:hover:bg-brandGreen hover:text-white transition">
                                                 Store
                                             </MenubarItem>
                                         </Link>
@@ -62,11 +72,10 @@ const Navbar = () => {
                                         </Link>
                                     </MenubarContent>
                                 </MenubarMenu>
-
                             </Menubar>
-                        )
-                        }
+                        )}
                     </div>
+    
                     <div className="flex items-center gap-6 h-10">
                         {/* Theme Toggle */}
                         <div>
@@ -79,35 +88,35 @@ const Navbar = () => {
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end" className="dark:bg-red dark:text-white">
-                                    <DropdownMenuItem onClick={()=>setTheme("light")}>Light</DropdownMenuItem>
-                                    <DropdownMenuItem onClick={()=>setTheme("dark")}>Dark</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
-
-                        {/* Cart Icon */}
-                        <Link to="/cart" className="relative cursor-pointer text-textPrimary dark:text-white hover:text-brandGreen">
-                            <LucideShoppingCart className="h-6 w-6" />
-                            {
-                                cartItems.length > 0 && (
-                                    <Button size={'icon'} className="absolute -inset-y-3 left-2 text-xs font-bold rounded-full h-4 w-2 bg-brandGreen text-white">
+    
+                        {/* ✅ Hide Cart for Admins */}
+                        {!user?.admin && (
+                            <Link to="/cart" className="relative cursor-pointer text-textPrimary dark:text-white hover:text-brandGreen">
+                                <LucideShoppingCart className="h-6 w-6" />
+                                {cartItems.length > 0 && (
+                                    <Button size="icon" className="absolute -inset-y-3 left-2 text-xs font-bold rounded-full h-4 w-2 bg-brandGreen text-white">
                                         {cartItems.length}
-                                    </Button>)
-                            }
-
-                        </Link>
-
-                        {/* Avatar (Properly Aligned & Visible) */}
+                                    </Button>
+                                )}
+                            </Link>
+                        )}
+    
+                        {/* Avatar */}
                         <Link to="/profile">
-                        <div >
-                            <Avatar className="h-9 w-9border border-gray-300">
+                            <Avatar className="h-9 w-9 border border-gray-300">
                                 <AvatarImage src={user?.profilePicture || ""} />
-                                <AvatarFallback className="flex items-center justify-center h-full w-full text-sm font-medium">CN</AvatarFallback>
+                                <AvatarFallback className="flex items-center justify-center h-full w-full text-sm font-medium">
+                                    CN
+                                </AvatarFallback>
                             </Avatar>
-                        </div>
                         </Link>
-
-                        {/* Logout Button (Fixed Size) */}
+    
+                        {/* Logout Button */}
                         <div>
                             {loading ? (
                                 <Button disabled className="w-28 h-10 bg-error text-white rounded-md hover:bg-opacity-90 transition border-transparent gap-2">
@@ -121,9 +130,9 @@ const Navbar = () => {
                         </div>
                     </div>
                 </div>
-
+    
+                {/* Mobile Navbar */}
                 <div className="absolute right-4 md:hidden lg:hidden">
-                    {/* Mobile Respond */}
                     <MobileNavbar />
                 </div>
             </div>

@@ -32,6 +32,7 @@ type UserState = {
     forgotPassword: (email: string) => Promise<void>;
     resetPassword: (token: string, newPassword: string) => Promise<void>;
     updateProfile: (input: ProfileInputState) => Promise<void>;
+    toggleAdmin: () => Promise<void>;
 }
 
 export const useUserStore = create<UserState>()(persist((set) => ({
@@ -183,6 +184,26 @@ export const useUserStore = create<UserState>()(persist((set) => ({
             }
         } catch (error: any) {
             toast.error(error.response.data.message);
+        }
+    },
+
+    toggleAdmin: async () => {
+        try {
+            const response = await axios.patch(`${API_END_POINT}/profile/toggle-admin`, {}, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+    
+            if (response.data.success) {
+                toast.success(response.data.message);
+                set((state) => ({
+                    ...state, // ✅ Ensure we're spreading the entire state
+                    user: state.user
+                        ? { ...state.user, admin: !state.user.admin } // ✅ Ensure user object is fully updated
+                        : null, // ✅ Handle case where user might be null
+                })); // ✅ Toggle admin status in state
+            }
+        } catch (error: any) {
+            toast.error(error.response?.data?.message || "Failed to toggle admin status.");
         }
     },
 }),

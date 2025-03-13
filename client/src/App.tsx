@@ -30,13 +30,17 @@ const ProtectedRoutes = ({ children }: { children: React.ReactNode }) => {
   if (!user?.isverified) {
     return <Navigate to="/verifyemail" replace={true} />
   }
+
+  if (user?.admin) {
+    return <Navigate to="/admin/store" replace />;
+  }
   return children;
 };
 
 const AuthenticatedUser = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, user } = useUserStore();
   if (isAuthenticated && user?.isverified) {
-    return <Navigate to="/" replace={true} />
+    return <Navigate to="/profile" replace={true} />
   }
   return children;
 };
@@ -58,77 +62,90 @@ const AdminRoutes = ({ children }: { children: React.ReactNode }) => {
 const appRouter = createBrowserRouter([
   {
     path: "/",
+    element: <MainLayout />,  // ✅ Navbar always stays
+    children: [
+      {
+        path: "/profile",
+        element: <Profile />, // ✅ Profile inside MainLayout (Navbar stays)
+      },
+    ],
+  },
+
+  // ✅ Normal User Routes
+  {
+    path: "/",
     element: <ProtectedRoutes><MainLayout /></ProtectedRoutes>,
     children: [
       {
-        path: "/",
-        element: <HeroSection />
+        index: true,
+        element: <HeroSection />,
       },
       {
-        path: "/profile",
-        element: <Profile />
-      }, 
-      {
         path: "/search/:text",
-        element: <SearchPage />
+        element: <SearchPage />,
       },
       {
         path: "/shop/:id",
-        element: <ShopDetails />
+        element: <ShopDetails />,
       },
       {
         path: "/cart",
-        element: <Cart />
+        element: <Cart />,
       },
       {
         path: "/order/status",
-        element: <OrderPage />
+        element: <OrderPage />,
       },
+    ],
+  },
 
-      {/* Admin Routes */},
-
+  // ✅ Admin Routes
+  {
+    path: "/admin",
+    element: <AdminRoutes><MainLayout /></AdminRoutes>,
+    children: [
       {
         path: "/admin/store",
-        element: <AdminRoutes><Store /></AdminRoutes>
+        element: <Store />,
       },
       {
         path: "/admin/products",
-        element: <AdminRoutes><AddProducts /></AdminRoutes>
+        element: <AddProducts />,
       },
       {
         path: "/admin/storeOrders",
-        element: <AdminRoutes><StoreOrders /></AdminRoutes>
+        element: <StoreOrders />,
       },
-
-    ]
+    ],
   },
+
+  // ✅ Authentication Routes
   {
     path: "/login",
-    element: <AuthenticatedUser><Login /></AuthenticatedUser>
+    element: <AuthenticatedUser><Login /></AuthenticatedUser>,
   },
   {
     path: "/signup",
-    element: <AuthenticatedUser><Signup /></AuthenticatedUser>
+    element: <AuthenticatedUser><Signup /></AuthenticatedUser>,
   },
   {
     path: "/forgotpassword",
-    element: <AuthenticatedUser><ForgotPassword /></AuthenticatedUser>
+    element: <AuthenticatedUser><ForgotPassword /></AuthenticatedUser>,
   },
   {
     path: "/resetpassword",
-    element: <ResetPassword />
+    element: <ResetPassword />,
   },
   {
     path: "/verifyemail",
-    element: <VerifyEmail />
+    element: <VerifyEmail />,
   },
+
   {
     path: "*",
     element: <NotFound />,
   },
-
-
-])
+]);
 function App() {
   const initializeTheme = useThemeStore((state:any) => state.initializeTheme);
   const { checkAuthentication, isCheckingAuth } = useUserStore();

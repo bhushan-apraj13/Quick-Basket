@@ -9,7 +9,7 @@ import { useUserStore } from "@/zustand/useUserStore";
 import { toast } from "sonner";
 
 const Profile = () => {
-    const {user} = useUserStore();
+    const {user,toggleAdmin} = useUserStore();
     
     const [isLoading, setIsLoading] = useState<boolean>(false);
     {/* Profile Data State */ }
@@ -79,49 +79,64 @@ const Profile = () => {
 
     return (
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto my-10 border border-gray-300 p-8 rounded-lg">
-            {/* Profile Header */}
-            <div className="flex flex-col md:flex-row items-center gap-8">
-                {/* Avatar Section */}
-                <div className="relative w-24 h-24 md:w-32 md:h-32">
-                    <Avatar className="w-full h-full">
-                        <AvatarImage src={selectedFile || ""} />
-                        <AvatarFallback>BP</AvatarFallback>
-                    </Avatar>
-                    <input
-                        ref={imageRef}
-                        type="file"
-                        className="hidden"
-                        accept="image/*"
-                        onChange={fileChangeHandler}
-                    />
-                    <div
-                        onClick={() => imageRef.current?.click()}
-                        className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-50 rounded-full cursor-pointer"
+            {/* Profile Header with Admin Toggle Button moved to top-right */}
+            <div className="relative">
+                {/* Admin Toggle Button */}
+                <div className="absolute top-0 right-0">
+                    <Button
+                        type="button"
+                        onClick={toggleAdmin}
+                        className={`px-6 py-2 rounded-md text-white transition ${
+                            user?.admin ? "bg-green-600 hover:bg-green-700" : "bg-green-600 hover:bg-green-700"
+                        }`}
                     >
-                        <Plus className="h-8 w-8 text-white" />
-                    </div>
+                        {user?.admin ? "Switch to Normal User" : "Be an Admin"}
+                    </Button>
                 </div>
-
-                {/* Full Name Input */}
-                <div className="flex flex-col w-full md:w-2/5">
-                    <div className="flex items-center gap-2 mb-1">
-                        <User className="w-5 h-5 text-textPrimary dark:text-white" />
-                        <Label className="text-textPrimary text-sm dark:text-white">Full Name</Label>
+                
+                <div className="flex flex-col md:flex-row items-center gap-8 mt-12 md:mt-0">
+                    {/* Avatar Section */}
+                    <div className="relative w-24 h-24 md:w-32 md:h-32">
+                        <Avatar className="w-full h-full">
+                            <AvatarImage src={selectedFile || ""} />
+                            <AvatarFallback>BP</AvatarFallback>
+                        </Avatar>
+                        <input
+                            ref={imageRef}
+                            type="file"
+                            className="hidden"
+                            accept="image/*"
+                            onChange={fileChangeHandler}
+                        />
+                        <div
+                            onClick={() => imageRef.current?.click()}
+                            className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 bg-black bg-opacity-50 rounded-full cursor-pointer"
+                        >
+                            <Plus className="h-8 w-8 text-white" />
+                        </div>
                     </div>
-                    <Input
-                        type="text"
-                        name="fullname"
-                        value={profileData.fullname}
-                        onChange={changeHandler}
-                        placeholder="Enter Full Name"
-                        className="w-full border-b border-gray-400 outline-none focus:ring-0"
-                    />
-                    {
-                        errors && <span className="text-xs text-error">{errors.fullname}</span>
-                    }
+    
+                    {/* Full Name Input */}
+                    <div className="flex flex-col w-full md:w-2/5">
+                        <div className="flex items-center gap-2 mb-1">
+                            <User className="w-5 h-5 text-textPrimary dark:text-white" />
+                            <Label className="text-textPrimary text-sm dark:text-white">Full Name</Label>
+                        </div>
+                        <Input
+                            type="text"
+                            name="fullname"
+                            value={profileData.fullname}
+                            onChange={changeHandler}
+                            placeholder="Enter Full Name"
+                            className="w-full border-b border-gray-400 outline-none focus:ring-0"
+                        />
+                        {
+                            errors && <span className="text-xs text-error">{errors.fullname}</span>
+                        }
+                    </div>
                 </div>
             </div>
-
+    
             {/* Profile Details (Now in 2x2 Grid) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 {/* Email Field */}
@@ -143,7 +158,7 @@ const Profile = () => {
                         errors && <span className="text-xs text-error">{errors.email}</span>
                     }
                 </div>
-
+    
                 {/* Phone Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
@@ -162,7 +177,7 @@ const Profile = () => {
                         errors && <span className="text-xs text-error ">{errors.contact}</span>
                     }
                 </div>
-
+    
                 {/* Address Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
@@ -181,7 +196,7 @@ const Profile = () => {
                         errors && <span className="text-xs text-error">{errors.address}</span>
                     }
                 </div>
-
+    
                 {/* City Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
@@ -201,7 +216,7 @@ const Profile = () => {
                     }
                 </div>
             </div>
-
+    
             {/* Submit Button */}
             <div className="mt-8 flex justify-center">
                 {isLoading ? (

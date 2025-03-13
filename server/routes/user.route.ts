@@ -1,5 +1,5 @@
 import express from 'express';
-import { checkAuth, forgotPassword, Login, logout, resetPassword, signUp, updateUserProfile, verifyEmail } from '../controller/user.controller';
+import { checkAuth, forgotPassword, Login, logout, resetPassword, signUp, toggleAdminStatus, updateUserProfile, verifyEmail } from '../controller/user.controller';
 import { isAuthenticated } from '../middlewares/isAuthenticated';
 
 const router = express.Router();
@@ -12,5 +12,6 @@ router.route('/verifyemail').post(verifyEmail);
 router.route('/forgotpassword').post(forgotPassword);
 router.route('/resetpassword/:token').post(resetPassword);
 router.route('/profile/update').put(isAuthenticated,updateUserProfile);
+router.route('/profile/toggle-admin').patch(isAuthenticated, toggleAdminStatus);
 
 export default router;
