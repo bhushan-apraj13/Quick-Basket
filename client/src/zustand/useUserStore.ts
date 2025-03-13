@@ -183,6 +183,7 @@ export const useUserStore = create<UserState>()(persist((set) => ({
 
     toggleAdmin: async () => {
         try {
+            set({ loading: true });
             const response = await axios.patch(`${API_END_POINT}/profile/toggle-admin`, {}, {
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -190,14 +191,18 @@ export const useUserStore = create<UserState>()(persist((set) => ({
             if (response.data.success) {
                 toast.success(response.data.message);
                 set((state) => ({
-                    ...state, // ✅ Ensure we're spreading the entire state
+                    ...state,
+                    loading: false, // ✅ Ensure we're spreading the entire state
                     user: state.user
                         ? { ...state.user, admin: !state.user.admin } // ✅ Ensure user object is fully updated
                         : null, // ✅ Handle case where user might be null
                 })); // ✅ Toggle admin status in state
+            } else {
+                set({ loading: false }); // ✅ Ensure loading is reset if request fails
             }
         } catch (error: any) {
             toast.error(error.response?.data?.message || "Failed to toggle admin status.");
+            set({ loading: false }); // ✅ Reset loading state on error
         }
     },
 }),

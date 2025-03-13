@@ -4,27 +4,27 @@ import { useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
-import { ProfileInputState, userProfileSchema} from "@/schema/userSchema";
+import { ProfileInputState, userProfileSchema } from "@/schema/userSchema";
 import { useUserStore } from "@/zustand/useUserStore";
 import { toast } from "sonner";
 
 const Profile = () => {
-    const {user,toggleAdmin} = useUserStore();
-    
+    const { user, toggleAdmin, loading } = useUserStore();
+
     const [isLoading, setIsLoading] = useState<boolean>(false);
     {/* Profile Data State */ }
     const [profileData, setProfileData] = useState<ProfileInputState>({
         fullname: user?.fullname || "",
-        email: user?.email||"",
-        contact: user?.contact ||"",
+        email: user?.email || "",
+        contact: user?.contact || "",
         address: user?.address || "",
         city: user?.city || "",
         profilePicture: user?.profilePicture || "",
     });
-   
+
     const updateProfile = useUserStore((state) => state.updateProfile);
     {/* Form Errors State */ }
-    const [errors , setErrors] = useState<Partial<ProfileInputState>>({});
+    const [errors, setErrors] = useState<Partial<ProfileInputState>>({});
 
     {/* Success Message State */ }
     const [successMessage] = useState<string | null>(null);
@@ -57,21 +57,21 @@ const Profile = () => {
     };
 
     {/* Form Submit Handler */ }
-    const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const validationResult = userProfileSchema.safeParse(profileData);
 
-    if (!validationResult.success) {
-        // Extract errors and update state
-        const fieldErrors = validationResult.error.formErrors.fieldErrors;
-        setErrors(fieldErrors as Partial<ProfileInputState>);
-        toast.error("Please fill all the details correctly before submitting.");
-        return;
-    }
+        if (!validationResult.success) {
+            // Extract errors and update state
+            const fieldErrors = validationResult.error.formErrors.fieldErrors;
+            setErrors(fieldErrors as Partial<ProfileInputState>);
+            toast.error("Please fill all the details correctly before submitting.");
+            return;
+        }
         try {
             setIsLoading(true);
             await updateProfile(validationResult.data);
-            setIsLoading(false);  
+            setIsLoading(false);
         } catch (error) {
             setIsLoading(false);
         }
@@ -86,14 +86,16 @@ const Profile = () => {
                     <Button
                         type="button"
                         onClick={toggleAdmin}
-                        className={`px-6 py-2 rounded-md text-white transition ${
-                            user?.admin ? "bg-green-600 hover:bg-green-700" : "bg-green-600 hover:bg-green-700"
-                        }`}
+                        disabled={loading} // ✅ Disable button when loading
+                        className={`px-4 py-2 text-sm md:px-6 md:py-2 rounded-md text-white transition ${loading
+                                ? "bg-gray-400 cursor-not-allowed" // ✅ Loading state styling
+                                : "bg-green-600 hover:bg-green-700"
+                            } w-full sm:w-auto`} // ✅ Make button responsive
                     >
-                        {user?.admin ? "Switch to Normal User" : "Be an Admin"}
+                        {loading ? "Processing..." : user?.admin ? "Switch to Normal User" : "Be an Admin"}
                     </Button>
                 </div>
-                
+
                 <div className="flex flex-col md:flex-row items-center gap-8 mt-12 md:mt-0">
                     {/* Avatar Section */}
                     <div className="relative w-24 h-24 md:w-32 md:h-32">
@@ -115,7 +117,7 @@ const Profile = () => {
                             <Plus className="h-8 w-8 text-white" />
                         </div>
                     </div>
-    
+
                     {/* Full Name Input */}
                     <div className="flex flex-col w-full md:w-2/5">
                         <div className="flex items-center gap-2 mb-1">
@@ -136,7 +138,7 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
-    
+
             {/* Profile Details (Now in 2x2 Grid) */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 {/* Email Field */}
@@ -146,7 +148,7 @@ const Profile = () => {
                         <Label className="text-textPrimary text-sm dark:text-white">Email</Label>
                     </div>
                     <Input
-                    disabled
+                        disabled
                         type="text"
                         name="email"
                         value={profileData.email}
@@ -158,7 +160,7 @@ const Profile = () => {
                         errors && <span className="text-xs text-error">{errors.email}</span>
                     }
                 </div>
-    
+
                 {/* Phone Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
@@ -177,7 +179,7 @@ const Profile = () => {
                         errors && <span className="text-xs text-error ">{errors.contact}</span>
                     }
                 </div>
-    
+
                 {/* Address Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
@@ -196,7 +198,7 @@ const Profile = () => {
                         errors && <span className="text-xs text-error">{errors.address}</span>
                     }
                 </div>
-    
+
                 {/* City Field */}
                 <div className="flex flex-col">
                     <div className="flex items-center gap-2 mb-1">
@@ -216,7 +218,7 @@ const Profile = () => {
                     }
                 </div>
             </div>
-    
+
             {/* Submit Button */}
             <div className="mt-8 flex justify-center">
                 {isLoading ? (
@@ -236,8 +238,8 @@ const Profile = () => {
                     </Button>
                 )}
             </div>
-             {/* Success Alert */}
-             {successMessage && (
+            {/* Success Alert */}
+            {successMessage && (
                 <div className="mt-4 p-2 bg-green-100 text-green-700 rounded">
                     {successMessage}
                 </div>

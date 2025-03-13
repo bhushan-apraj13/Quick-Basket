@@ -17,14 +17,14 @@ const AddProducts = () => {
         price: 0,
         image: undefined,
         netQty: "",
-         _id: ""
+        _id: ""
     });
     const [unit, setUnit] = useState("kg");
     const [seletedProduct, setSelectedProduct] = useState<ProductListFormSchema | null>(null);
     const [open, setOpen] = useState<boolean>(false);
     const [error, setError] = useState<Partial<ProductListFormSchema>>({});
     const [editOpen, setEditOpen] = useState<boolean>(false);
-    const { loading, createProduct, markOutOfStock} = useProductStore();
+    const { loading, createProduct, markOutOfStock } = useProductStore();
     const { shop } = useShopStore();
 
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -133,7 +133,7 @@ const AddProducts = () => {
                                 </div>
                                 <div className="flex flex-col md:col-span-2">
                                     <Label className="mb-1.5 ml-1">Upload Product Image</Label>
-                                    <Input type="file" accept=".png, .jpg, .jpeg"  name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
+                                    <Input type="file" accept=".png, .jpg, .jpeg" name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
                                     {error.image && <span className="text-xs font-medium text-error">{error.image?.name || "*Product image is required"}</span>}
                                 </div>
                             </div>
@@ -209,7 +209,7 @@ const AddProducts = () => {
                                 </div>
                                 <div className="flex flex-col md:col-span-2">
                                     <Label className="mb-1.5 ml-1">Upload Product Image</Label>
-                                    <Input type="file" accept=".png, .jpg, .jpeg"  name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
+                                    <Input type="file" accept=".png, .jpg, .jpeg" name="image" onChange={(e) => setInput({ ...input, image: e.target.files?.[0] || undefined })} />
                                     {error.image && <span className="text-xs font-medium text-error">{error.image?.name || "*Product image is required"}</span>}
                                 </div>
                             </div>
@@ -246,8 +246,13 @@ const AddProducts = () => {
                                     _id: item._id
                                 }; setSelectedProduct(transformedItem); setEditOpen(true);
                             }} size="sm" className="bg-brandGreen text-white hover:bg-brandGreen/80 px-6 py-4 rounded-md">Edit</Button>
-                            <Button onClick={() => markOutOfStock(item._id)} size="sm" className={`px-6 py-4 rounded-md ${item.outOfStock ?  'bg-[#988675] hover:bg-[#B19774]':'bg-red-500 hover:bg-red-600'} text-white`}>
-                                {item.outOfStock ? "Re-Stock" : "Out of Stock"}
+                            <Button onClick={() => markOutOfStock(item._id)} size="sm" disabled={loading} className={`px-6 py-4 rounded-md ${loading
+                                    ? "bg-gray-400 cursor-not-allowed"  // ✅ Loading state styling
+                                    : item.outOfStock
+                                        ? "bg-[#988675] hover:bg-[#B19774]"
+                                        : "bg-red-500 hover:bg-red-600"
+                                } text-white`}>
+                                 {loading ? "Processing..." : item.outOfStock ? "Re-Stock" : "Out of Stock"}
                             </Button>
                         </div>
                     </div>
