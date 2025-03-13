@@ -45,16 +45,13 @@ export const useUserStore = create<UserState>()(persist((set) => ({
     signup: async (input: SignupInputState) => {
 
         try {
-            console.log("Signup API called", input);
             set({ loading: true });
             const response = await axios.post(`${API_END_POINT}/signup`, input, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log("Signup response:", response.data);
             if (response.data.success) {
-                console.log(response.data);
                 toast.success(response.data.message);
                 set({ loading: false, user: response.data.user, isAuthenticated: true });
             }
@@ -71,16 +68,13 @@ export const useUserStore = create<UserState>()(persist((set) => ({
     //login api implementation
     login: async (input: LoginInputState) => {
         try {
-            console.log("Signup API called", input);
             set({ loading: true });
             const response = await axios.post(`${API_END_POINT}/login`, input, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
             });
-            console.log("Signup response:", response.data);
             if (response.data.success) {
-                console.log(response.data);
                 toast.success(response.data.message);
                 set({ loading: false, user: response.data.user, isAuthenticated: true });
             }

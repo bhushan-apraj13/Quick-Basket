@@ -71,7 +71,6 @@ const Store = () => {
             
         };
         fetchShop();
-        console.log(shop);
     }, []);
 
     return (

@@ -11,7 +11,6 @@ const ShopDetails = () => {
     const params = useParams();
     useEffect(() => {
         getSingleShop(params.id!);
-        console.log(singleShop);
 
     }, [params.id]);
     return loading ? <ShopDetailsSkeleton /> : (

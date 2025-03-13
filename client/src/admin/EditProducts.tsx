@@ -49,7 +49,6 @@ const EditProducts = ({ selectedProduct, editOpen, setEditOpen }: { selectedProd
             setError(fieldErrors as Partial<ProductListFormSchema>);
             return;
         }
-        console.log(input);
         try {
             const formData = new FormData();
             formData.append("title", input.title);
