@@ -13,7 +13,7 @@ import { Loader2 } from "lucide-react";
 
 const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<SetStateAction<boolean>> }) => {
     const { user } = useUserStore();
-    const { shop } = useShopStore();
+    const { singleShop } = useShopStore();
     const { createCheckoutSession, loading } = useOrderstore();
     {/* User Data State */ }
     const [UserData] = useState({
@@ -45,7 +45,7 @@ const CheckoutConfirm = ({ open, setOpen }: { open: boolean, setOpen: Dispatch<S
                     contact: UserData.contact,
                     email: UserData.email
                 },
-                shopId: shop?._id as string,
+                shopId: singleShop?._id as string,
                 totalAmount,
             };
             await createCheckoutSession(checkoutData);

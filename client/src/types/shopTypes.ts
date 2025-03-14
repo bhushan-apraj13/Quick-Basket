@@ -44,4 +44,5 @@ export type ShopState = {
     getSingleShop: (shopId:string) => Promise<void>;
     getShopOrders : () => Promise<void>;
     updateShopOrders: (orderId:string,orderStatus:string) => Promise<void>;
+    clearShop: () => void;
 }

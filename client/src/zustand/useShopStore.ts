@@ -10,7 +10,7 @@ axios.defaults.withCredentials = true;
 
 
 
-export const useShopStore = create<ShopState>()(persist((set,get) => ({
+export const useShopStore = create<ShopState>()(persist((set, get) => ({
     loading: false,
     shop: null,
     searchedShop: null,
@@ -141,31 +141,37 @@ export const useShopStore = create<ShopState>()(persist((set,get) => ({
             console.log(error);
         }
     },
-        updateShopOrders: async (orderId: string, orderStatus: string) => {
-            try {
-                const response = await axios.put(`${API_END_POINT}/order/${orderId}/status`, 
-                    { status: orderStatus },
-                    { headers: { "Content-Type": "application/json" } }
-                );
-                if (response.data.success) {
-                    try {
-                        const updatedOrders = get().shopOrders.map((order: orderItem) =>
-                            order._id === orderId ? { ...order, status: response.data.status } : order
-                        );
-        
-                        set({ shopOrders: updatedOrders });
-                    } catch (error) {
-                        console.error(" Zustand state update failed:", error);
-                    }
-                    setTimeout(() => {
-                        toast.success(response.data.message);
-                    }, 100);
+    updateShopOrders: async (orderId: string, orderStatus: string) => {
+        try {
+            const response = await axios.put(`${API_END_POINT}/order/${orderId}/status`,
+                { status: orderStatus },
+                { headers: { "Content-Type": "application/json" } }
+            );
+            if (response.data.success) {
+                try {
+                    const updatedOrders = get().shopOrders.map((order: orderItem) =>
+                        order._id === orderId ? { ...order, status: response.data.status } : order
+                    );
+
+                    set({ shopOrders: updatedOrders });
+                } catch (error) {
+                    console.error(" Zustand state update failed:", error);
                 }
-            } catch (error: any) {
-                console.error("❌ API CALL FAILED:", error);
-                toast.error(error.response?.data?.message || "Something went wrong");
+                setTimeout(() => {
+                    toast.success(response.data.message);
+                }, 100);
             }
-        },
+        } catch (error: any) {
+            console.error("❌ API CALL FAILED:", error);
+            toast.error(error.response?.data?.message || "Something went wrong");
+        }
+    },
+
+    clearShop: () => {
+        localStorage.removeItem("cart-name"); 
+        set({ shop: null, singleShop: null });
+    },
+
 }),
     {
         name: "store-name",
