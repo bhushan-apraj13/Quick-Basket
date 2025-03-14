@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import { Package } from "lucide-react";
 
 
-const AvailableProducts = ({ products }: { products: ProductItem[] }) => {
+const AvailableProducts = ({ products, shopId }: { products: ProductItem[], shopId: string }) => {
     const { addToCart } = useCartstore();
     const { loading } = useShopStore();
     const navigate = useNavigate();
@@ -68,19 +68,22 @@ const AvailableProducts = ({ products }: { products: ProductItem[] }) => {
                                     <Button
                                         onClick={() => {
                                             if (!product.outOfStock) {
-                                                addToCart(product);
-                                                toast.success(
-                                                    <div>
-                                                        <span>Product added to cart</span>
-                                                        <button
-                                                            onClick={() => navigate("/cart")}
-                                                            className=" ml-10 py-1 bg-brandGreen text-white rounded-md text-sm hover:bg-brandGreen/80"
-                                                        >
-                                                            Go to Cart
-                                                        </button>
-                                                    </div>,
-                                                    { duration: 3000 } // Toast disappears after 3 sec
-                                                );
+                                                const added = addToCart(product, shopId); // ✅ Check if item was added
+
+                                                if (added) { // ✅ Show toast only if item was added
+                                                    toast.success(
+                                                        <div>
+                                                            <span>Product added to cart</span>
+                                                            <button
+                                                                onClick={() => navigate("/cart")}
+                                                                className=" ml-10 py-1 bg-brandGreen text-white rounded-md text-sm hover:bg-brandGreen/80"
+                                                            >
+                                                                Go to Cart
+                                                            </button>
+                                                        </div>,
+                                                        { duration: 3000 } // Toast disappears after 3 sec
+                                                    );
+                                                }
                                             }
                                         }}
                                         disabled={product.outOfStock}

@@ -1,13 +1,24 @@
-import { CartState } from "@/types/CartType";
+import { CartItem, CartState } from "@/types/CartType";
 import { ProductItem } from "@/types/shopTypes";
+import { toast } from "sonner";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 
 export const useCartstore = create<CartState>()(persist((set) => ({
     cartItems: [],
-    addToCart: (product: ProductItem) => {
+    addToCart: (product: ProductItem, shopId: string) => {
+        let itemAdded = false;
         set((state) => {
+            if (state.cartItems.length > 0) {
+                const existingShopId = state.cartItems[0].shopId; // ✅ Get the shopId of first item in cart
+    
+                if (existingShopId !== shopId) {
+                    toast.error("Cart has products from a different shop"); // ❌ Show error if different shop
+                    return state; // ❌ Do not add product
+                }
+            }
+            
             const existingProduct = state.cartItems.find((cartItem) => cartItem._id === product._id);
 
             if (existingProduct) {
@@ -16,15 +27,24 @@ export const useCartstore = create<CartState>()(persist((set) => ({
                 };
             }
             else {
+                const newProduct: CartItem = {
+                    ...product, // ✅ Spread product properties
+                    shopId, // ✅ Add shopId (ensures it matches CartItem type)
+                    quantity: 1,
+                };
+                itemAdded = true;
                 // ADd new product
                 return {
-                    cartItems: [...state.cartItems, { ...product, quantity: 1 }]
+                    cartItems: [...state.cartItems, newProduct]
                 }
             }
         });
+
+        return itemAdded;
     },
 
     clearCart: () => {
+        localStorage.removeItem("cart-name"); 
         set({ cartItems: [] });
     },
 

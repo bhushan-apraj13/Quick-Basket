@@ -1,62 +1,57 @@
 import { generatePasswordResetEmailHtml, generateResetSuccessEmailHtml, generateWelcomeEmailHtml, htmlContent } from "./emailDesign";
-import { client, sender } from "./mailtrap";
+import { transporter, sender } from "../smtp/smtp";
 
 {/* for sending verification email */ }
 export const sendVerificationEmail = async (email: string, verificationToken: string) => {
-    const recipient = [ {email} ];
+    console.log(`📩 Sending verification email to: ${email}`);
     try {
-        const res = await client.send({
-            from: sender,
-            to: recipient,
-            subject: "Verify your EMail",
+        const mailOptions = {
+            from: `"${sender.name}" <${sender.email}>`,
+            to: email,
+            subject: "Verify Your Email",
             html: htmlContent.replace("{verificationToken}", verificationToken),
-            category: " Email verification",
-        });
-        
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`✅ Email sent: ${info.messageId}`);
     } catch (error) {
-        console.log(error);
-        throw new Error("Error sending verification email");
+        console.error("Error sending verification email:", error);
+        throw new Error("Failed to send verification email");
     }
 }
 
 {/* for sending welcome email */ }
 export const sendWellcomeEmail = async (email: string, fullname: string) => {
-    const recipient = [ {email} ];
-    const htmlContent = generateWelcomeEmailHtml(fullname);
     try {
-        const res = await client.send({
-            from: sender,
-            to: recipient,
-            subject: "Welcome to Quick-Basket",
+        const htmlContent = generateWelcomeEmailHtml(fullname);
+        const mailOptions = {
+            from: `"${sender.name}" <${sender.email}>`,
+            to: email,
+            subject: "Welcome to QuickBasket",
             html: htmlContent,
-            template_variables:{
-                company_info_name:"Qucik-Basket",
-                fullname
-            }
-        });
-        
+        };
+
+        await transporter.sendMail(mailOptions);
     } catch (error) {
-        console.log(error);
+        console.error("Error sending welcome email:", error);
         throw new Error("Failed to send welcome email");
     }
 };
 
 {/* for sending forgot password email */ }
 export const sendResetPasswordEmail = async (email: string, resetPasswordLink: string) => {
-    const recipient = [ {email} ];
-    const htmlContent = generatePasswordResetEmailHtml(resetPasswordLink);
     try {
-        const res = await client.send({
-            from: sender,
-            to: recipient,
+        const htmlContent = generatePasswordResetEmailHtml(resetPasswordLink);
+        const mailOptions = {
+            from: `"${sender.name}" <${sender.email}>`,
+            to: email,
             subject: "Reset Password",
             html: htmlContent,
-            category: "Password reset"
-        });
-        
-    }
-     catch (error) {
-        console.log(error);
+        };
+
+        await transporter.sendMail(mailOptions);
+    } catch (error) {
+        console.error("Error sending reset password email:", error);
         throw new Error("Failed to send reset password email");
     }
 };
@@ -64,19 +59,18 @@ export const sendResetPasswordEmail = async (email: string, resetPasswordLink: s
 
 {/* for sending success reset password email */ }
 export const sendSuccessResetPasswordEmail = async (email: string) => {
-    const recipient = [ {email} ];
-    const htmlContent = generateResetSuccessEmailHtml();
     try {
-        const res = await client.send({
-            from: sender,
-            to: recipient,
-            subject: "Password reset successfully",
+        const htmlContent = generateResetSuccessEmailHtml();
+        const mailOptions = {
+            from: `"${sender.name}" <${sender.email}>`,
+            to: email,
+            subject: "Password Reset Successfully",
             html: htmlContent,
-            category: "Reset Password",
-        });
-        
+        };
+
+        await transporter.sendMail(mailOptions);
     } catch (error) {
-        console.log(error);
-        throw new Error("Failed to send reset password success email");
+        console.error("Error sending success reset email:", error);
+        throw new Error("Failed to send reset success email");
     }
 };

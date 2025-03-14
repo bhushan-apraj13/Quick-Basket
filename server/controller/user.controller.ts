@@ -34,9 +34,7 @@ export const signUp = async (req: Request, res: Response): Promise<void>=> {
         });
 
         generateToken(res,user);
-
         await sendVerificationEmail(email, verificationToken);
-
         const userWithoutPassword = await User.findOne({ email }).select("-password");
 
         res.status(201).json({ success: true, message: "Account created successfully", user: userWithoutPassword });
@@ -44,6 +42,7 @@ export const signUp = async (req: Request, res: Response): Promise<void>=> {
 
     }
     catch (error) {
+        console.error("❌ SignUp Error:", error);
         res.status(500).json({ message: "Internal Server Error" });
         return;
 

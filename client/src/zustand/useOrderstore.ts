@@ -29,7 +29,7 @@ export const useOrderstore = create<OrderState>()(persist((set)=>({
             const response = await axios.get(`${API_END_POINT}/`);
             set({loading:false,orders:response.data.orders});
             if (response.data.clearCart) {
-                useCartstore.persist.clearStorage();
+                useCartstore.getState().clearCart();
             }
         } catch (error) {
             set({loading:false});

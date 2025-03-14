@@ -23,7 +23,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(express.json());
 app.use(cookieParser());
 const corsOptions = {
-    origin: "https://quick-basket-ichw.onrender.com",
+    origin: ["https://quick-basket-ichw.onrender.com", "http://localhost:5173"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"], 
     allowedHeaders: ["Content-Type", "Authorization"]

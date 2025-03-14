@@ -3,6 +3,7 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import axios from "axios";
 import { LoginInputState, SignupInputState, ProfileInputState } from "@/schema/userSchema";
 import { toast } from "sonner";
+import { useCartstore } from "./useCartstore";
 
 const API_END_POINT = "https://quick-basket-ichw.onrender.com/api/v1/user"
 axios.defaults.withCredentials = true;
@@ -127,6 +128,7 @@ export const useUserStore = create<UserState>()(persist((set) => ({
             const response = await axios.post(`${API_END_POINT}/logout`);
             if (response.data.success) {
                 toast.success(response.data.message);
+                useCartstore.getState().clearCart();
                 set({ loading: false, user: null, isAuthenticated: false });
             }
         } catch (error) {
