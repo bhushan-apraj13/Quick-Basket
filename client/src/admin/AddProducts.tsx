@@ -24,12 +24,24 @@ const AddProducts = () => {
     const [open, setOpen] = useState<boolean>(false);
     const [error, setError] = useState<Partial<ProductListFormSchema>>({});
     const [editOpen, setEditOpen] = useState<boolean>(false);
+    const [loadingItemId, setLoadingItemId] = useState<string | null>(null);
     const { loading, createProduct, markOutOfStock } = useProductStore();
     const { shop } = useShopStore();
 
     const changeEventHandler = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
         setInput({ ...input, [name]: type === 'number' ? Number(value) : value });
+    };
+
+    const handleMarkOutOfStock = async (id: string) => {
+        try {
+            setLoadingItemId(id); // ✅ Set loading only for the clicked item
+            await markOutOfStock(id);
+        } catch (error) {
+            console.error("Failed to update stock status", error);
+        } finally {
+            setLoadingItemId(null); // ✅ Reset loading after operation
+        }
     };
 
     const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -54,6 +66,8 @@ const AddProducts = () => {
             console.log(error);
         }
     };
+
+
 
     // If shop is null, display a message and button to create a store
     if (!shop) {
@@ -246,13 +260,16 @@ const AddProducts = () => {
                                     _id: item._id
                                 }; setSelectedProduct(transformedItem); setEditOpen(true);
                             }} size="sm" className="bg-brandGreen text-white hover:bg-brandGreen/80 px-6 py-4 rounded-md">Edit</Button>
-                            <Button onClick={() => markOutOfStock(item._id)} size="sm" disabled={loading} className={`px-6 py-4 rounded-md ${loading
-                                    ? "bg-gray-400 cursor-not-allowed"  // ✅ Loading state styling
+                            <Button  onClick={() => handleMarkOutOfStock(item._id)} size="sm" 
+                            disabled={loadingItemId === item._id} 
+                            className={`px-6 py-4 rounded-md ${
+                                loadingItemId === item._id 
+                                    ? "bg-gray-400 cursor-not-allowed"  // ✅ Loading state only for clicked item
                                     : item.outOfStock
                                         ? "bg-[#988675] hover:bg-[#B19774]"
                                         : "bg-red-500 hover:bg-red-600"
-                                } text-white`}>
-                                 {loading ? "Processing..." : item.outOfStock ? "Re-Stock" : "Out of Stock"}
+                            } text-white`}>
+                                 {loadingItemId === item._id ? "Processing..." : item.outOfStock ? "Re-Stock" : "Out of Stock"}
                             </Button>
                         </div>
                     </div>

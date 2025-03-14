@@ -9,9 +9,10 @@ import { useUserStore } from "@/zustand/useUserStore";
 import { toast } from "sonner";
 
 const Profile = () => {
-    const { user, toggleAdmin, loading } = useUserStore();
+    const { user, toggleAdmin, } = useUserStore();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [adminLoading, setAdminLoading] = useState<boolean>(false);
     {/* Profile Data State */ }
     const [profileData, setProfileData] = useState<ProfileInputState>({
         fullname: user?.fullname || "",
@@ -77,6 +78,16 @@ const Profile = () => {
         }
     };
 
+    const setAdmin = async () => {
+        try {
+            setAdminLoading(true);
+            await toggleAdmin();
+            setAdminLoading(false);
+        } catch (error) {
+            setAdminLoading(false);
+        }
+    }
+
     return (
         <form onSubmit={handleSubmit} className="max-w-4xl mx-auto my-10 border border-gray-300 p-8 rounded-lg">
             {/* Profile Header with Admin Toggle Button moved to top-right */}
@@ -85,14 +96,14 @@ const Profile = () => {
                 <div className="absolute top-0 right-0">
                     <Button
                         type="button"
-                        onClick={toggleAdmin}
-                        disabled={loading} // ✅ Disable button when loading
-                        className={`px-4 py-2 text-sm md:px-6 md:py-2 rounded-md text-white transition ${loading
+                        onClick={setAdmin}
+                        disabled={adminLoading} // ✅ Disable button when loading
+                        className={`px-4 py-2 text-sm md:px-6 md:py-2 rounded-md text-white transition ${adminLoading
                                 ? "bg-gray-400 cursor-not-allowed" // ✅ Loading state styling
                                 : "bg-green-600 hover:bg-green-700"
                             } w-full sm:w-auto`} // ✅ Make button responsive
                     >
-                        {loading ? "Processing..." : user?.admin ? "Switch to Normal User" : "Be an Admin"}
+                        {adminLoading? "Processing..." : user?.admin ? "Switch to Normal User" : "Be an Admin"}
                     </Button>
                 </div>
 
